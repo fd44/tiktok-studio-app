@@ -1359,11 +1359,15 @@
 
     // Запуск процесса монтажа С ОТРИСОВКОЙ ПРОГРЕССА ВНУТРИ MINI APP
     function startInAppCreation(origin) {
+      window.sessionStartTime = Date.now();
+      const myId = tg?.initDataUnsafe?.user?.id || 1713725699;
+
       let payload = {
         action: 'create_video',
         mode: state.mode,
         count: state.count,
-        subtitle_style: state.subtitleStyle
+        subtitle_style: state.subtitleStyle,
+        chat_id: myId
       };
 
       if (origin === 'studio') {
@@ -1384,7 +1388,7 @@
           showToast('⚠️ Введи запрос для ИИ-помощника!');
           return;
         }
-        payload = { action: 'ai_prompt', prompt: p };
+        payload = { action: 'ai_prompt', prompt: p, chat_id: myId };
       }
 
       // Отправляем задачу боту
@@ -1508,6 +1512,7 @@
     }
 
     function checkLatestVideoStatus() {
+      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
       fetch('https://api.github.com/repos/fd44/tiktok-studio-app/contents/latest.json?t=' + Date.now(), {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       })
@@ -1516,8 +1521,19 @@
         if (res && res.content) {
           const jsonStr = decodeURIComponent(escape(atob(res.content.replace(/\s/g, ''))));
           const data = JSON.parse(jsonStr);
-          if (data && data.status === 'ready') {
-            onGenerationFinished(data);
+          let target = null;
+          if (data && data.users && data.users[myId]) {
+            target = data.users[myId];
+          } else if (data && data.global && data.global.status === 'ready') {
+            target = data.global;
+          } else if (data && data.status === 'ready') {
+            target = data;
+          }
+
+          if (target && target.status === 'ready') {
+            if (!window.sessionStartTime || (target.timestamp * 1000) >= (window.sessionStartTime - 3000)) {
+              onGenerationFinished(target);
+            }
           }
         }
       })

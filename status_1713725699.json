@@ -1,1 +1,1 @@
-{"status": "error", "stage": 1, "percent": 0, "title": "❌ Ошибка", "log": "Не удалось найти или скачать видео-исходник.", "video_name": "", "download_url": null, "duration": 0, "size_mb": 0.0, "chat_id": 1713725699, "timestamp": 1792525320, "time_str": "2026-10-20 22:42:00"}
+{"status": "processing", "stage": 1, "percent": 10, "title": "⚡ Заказ получен сервером", "log": "Подключение к видеомонтажному конвейеру...", "video_name": "", "download_url": null, "duration": 0, "size_mb": 0.0, "chat_id": 1713725699, "timestamp": 1792525902, "time_str": "2026-10-20 22:51:42"}

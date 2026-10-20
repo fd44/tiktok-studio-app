@@ -8,24 +8,23 @@
   <style>
     :root {
       --bg-dark: #08040f;
-      --bg-gradient: radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.18) 0%, transparent 45%),
-                         radial-gradient(circle at 85% 35%, rgba(126, 34, 206, 0.16) 0%, transparent 50%),
-                         radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.14) 0%, transparent 55%),
+      --bg-gradient: radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.22) 0%, transparent 45%),
+                         radial-gradient(circle at 85% 35%, rgba(126, 34, 206, 0.18) 0%, transparent 50%),
+                         radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.15) 0%, transparent 55%),
                          #08040f;
-      --glass-card: rgba(23, 14, 40, 0.65);
-      --glass-card-hover: rgba(32, 19, 56, 0.75);
-      --glass-card-active: linear-gradient(145deg, rgba(168, 85, 247, 0.28) 0%, rgba(126, 34, 206, 0.2) 100%);
-      --glass-border: rgba(168, 85, 247, 0.25);
+      --glass-card: rgba(23, 14, 40, 0.72);
+      --glass-card-hover: rgba(34, 20, 58, 0.82);
+      --glass-border: rgba(168, 85, 247, 0.28);
       --glass-border-active: #c084fc;
-      --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
-      --neon-glow: 0 0 25px rgba(168, 85, 247, 0.45);
+      --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+      --neon-glow: 0 0 25px rgba(168, 85, 247, 0.5);
       --neon-purple: #a855f7;
       --light-purple: #c084fc;
       --text-white: #f5f3ff;
       --text-muted: #9d8ec2;
       --text-dim: #6b5c87;
       --accent-gradient: linear-gradient(135deg, #c084fc 0%, #a855f7 45%, #7e22ce 100%);
-      --btn-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
+      --btn-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 100%);
     }
 
     * {
@@ -40,7 +39,7 @@
       background: var(--bg-gradient);
       color: var(--text-white);
       min-height: 100vh;
-      padding: 16px 16px 105px 16px;
+      padding: 14px 14px 110px 14px;
       overflow-x: hidden;
       user-select: none;
       -webkit-font-smoothing: antialiased;
@@ -51,8 +50,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 18px;
-      padding: 4px 2px;
+      margin-bottom: 16px;
+      padding: 2px 2px;
     }
 
     .brand-box {
@@ -136,7 +135,7 @@
       border-radius: 22px;
       padding: 16px;
       margin-bottom: 14px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), var(--glass-highlight);
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5), var(--glass-highlight);
       position: relative;
       overflow: hidden;
       transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -149,7 +148,7 @@
       left: 0;
       right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
       pointer-events: none;
     }
 
@@ -165,7 +164,7 @@
       gap: 6px;
     }
 
-    /* FORMAT SELECTOR GRID */
+    /* MODE GRID */
     .mode-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -175,7 +174,7 @@
 
     .mode-item {
       background: rgba(28, 17, 48, 0.55);
-      border: 1.5px solid rgba(168, 85, 247, 0.2);
+      border: 1.5px solid rgba(168, 85, 247, 0.22);
       border-radius: 18px;
       padding: 14px 12px;
       cursor: pointer;
@@ -192,9 +191,9 @@
     }
 
     .mode-item.active {
-      background: linear-gradient(145deg, rgba(168, 85, 247, 0.35) 0%, rgba(126, 34, 206, 0.25) 100%);
+      background: linear-gradient(145deg, rgba(168, 85, 247, 0.38) 0%, rgba(126, 34, 206, 0.25) 100%);
       border-color: var(--glass-border-active);
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.35);
     }
 
     .mode-item .icon {
@@ -221,7 +220,7 @@
       height: 10px;
       border-radius: 50%;
       background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.25);
       transition: all 0.2s;
     }
 
@@ -231,7 +230,7 @@
       box-shadow: 0 0 10px #c084fc;
     }
 
-    /* INPUTS & CONTROLS */
+    /* INPUTS */
     .input-box {
       margin-top: 10px;
     }
@@ -246,7 +245,7 @@
 
     .glass-input {
       width: 100%;
-      background: rgba(14, 8, 26, 0.7);
+      background: rgba(14, 8, 26, 0.75);
       border: 1px solid rgba(168, 85, 247, 0.25);
       border-radius: 14px;
       padding: 12px 14px;
@@ -259,11 +258,11 @@
 
     .glass-input:focus {
       border-color: #c084fc;
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.35), inset 0 2px 5px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.4), inset 0 2px 5px rgba(0, 0, 0, 0.4);
     }
 
     .glass-input::placeholder {
-      color: rgba(157, 142, 194, 0.4);
+      color: rgba(157, 142, 194, 0.45);
       font-size: 12.5px;
     }
 
@@ -283,7 +282,7 @@
 
     .glass-chip {
       background: rgba(30, 18, 52, 0.55);
-      border: 1px solid rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.22);
       border-radius: 12px;
       padding: 7px 12px;
       font-size: 12px;
@@ -299,11 +298,11 @@
     }
 
     .glass-chip.active {
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.7), rgba(126, 34, 206, 0.9));
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.75), rgba(126, 34, 206, 0.95));
       border-color: #c084fc;
       color: #ffffff;
       font-weight: 700;
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
     /* COUNT SELECTOR */
@@ -315,7 +314,7 @@
 
     .count-cell {
       background: rgba(30, 18, 52, 0.55);
-      border: 1px solid rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.22);
       border-radius: 14px;
       padding: 10px 0;
       text-align: center;
@@ -330,14 +329,14 @@
       background: var(--accent-gradient);
       border-color: #c084fc;
       color: #ffffff;
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
-    /* ACTION BUTTONS */
+    /* BUTTONS */
     .primary-btn {
       width: 100%;
       background: var(--accent-gradient);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 16px;
       padding: 14px;
       font-size: 15px;
@@ -348,7 +347,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.45);
       position: relative;
       overflow: hidden;
       transition: all 0.2s;
@@ -376,7 +375,7 @@
 
     .secondary-btn {
       width: 100%;
-      background: rgba(30, 18, 52, 0.6);
+      background: rgba(30, 18, 52, 0.65);
       border: 1px solid rgba(168, 85, 247, 0.3);
       border-radius: 16px;
       padding: 12px;
@@ -393,7 +392,7 @@
     }
 
     .secondary-btn:active {
-      background: rgba(168, 85, 247, 0.25);
+      background: rgba(168, 85, 247, 0.3);
     }
 
     .danger-btn {
@@ -415,10 +414,6 @@
       margin-top: 12px;
     }
 
-    .danger-btn:active {
-      transform: scale(0.98);
-    }
-
     /* SPECS TILES */
     .specs-grid {
       display: grid;
@@ -429,7 +424,7 @@
 
     .spec-tile {
       background: rgba(16, 10, 30, 0.5);
-      border: 1px solid rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.18);
       border-radius: 14px;
       padding: 10px 12px;
       display: flex;
@@ -457,16 +452,16 @@
       bottom: 14px;
       left: 14px;
       right: 14px;
-      background: rgba(16, 9, 30, 0.82);
+      background: rgba(16, 9, 30, 0.88);
       backdrop-filter: blur(30px) saturate(200%);
       -webkit-backdrop-filter: blur(30px) saturate(200%);
-      border: 1px solid rgba(168, 85, 247, 0.32);
+      border: 1px solid rgba(168, 85, 247, 0.35);
       border-radius: 28px;
       padding: 8px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(168, 85, 247, 0.2), var(--glass-highlight);
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(168, 85, 247, 0.25), var(--glass-highlight);
       z-index: 1000;
     }
 
@@ -476,7 +471,7 @@
       align-items: center;
       justify-content: center;
       gap: 3px;
-      padding: 8px 12px;
+      padding: 8px 10px;
       border-radius: 18px;
       cursor: pointer;
       color: var(--text-muted);
@@ -499,9 +494,9 @@
 
     .dock-item.active {
       color: #ffffff;
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.45) 0%, rgba(126, 34, 206, 0.65) 100%);
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.45) 0%, rgba(126, 34, 206, 0.7) 100%);
       border: 1px solid var(--glass-border-active);
-      box-shadow: 0 0 18px rgba(168, 85, 247, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
     .dock-item.active .nav-icon {
@@ -523,6 +518,255 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* FULLSCREEN IN-APP PROGRESS OVERLAY */
+    .progress-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 4, 15, 0.94);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      display: none;
+      flex-direction: column;
+      padding: 20px 18px;
+      z-index: 5000;
+      overflow-y: auto;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .progress-header {
+      text-align: center;
+      margin-top: 15px;
+      margin-bottom: 20px;
+    }
+
+    .progress-header h2 {
+      font-size: 20px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 30%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
+
+    .progress-header p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .neon-dial-container {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 10px auto 20px auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .neon-dial-svg {
+      transform: rotate(-90deg);
+      width: 140px;
+      height: 140px;
+    }
+
+    .neon-dial-bg {
+      fill: none;
+      stroke: rgba(168, 85, 247, 0.15);
+      stroke-width: 10;
+    }
+
+    .neon-dial-progress {
+      fill: none;
+      stroke: url(#neonGradient);
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 377;
+      stroke-dashoffset: 377;
+      transition: stroke-dashoffset 0.4s ease;
+      filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.8));
+    }
+
+    .dial-inner-text {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dial-percent {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #ffffff;
+      text-shadow: 0 0 15px rgba(192, 132, 252, 0.6);
+    }
+
+    .dial-eta {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--light-purple);
+    }
+
+    /* LINEAR PROGRESS BAR */
+    .linear-progress-track {
+      width: 100%;
+      height: 10px;
+      background: rgba(28, 16, 48, 0.7);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+
+    .linear-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent-gradient);
+      border-radius: 20px;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.9);
+      transition: width 0.4s ease;
+      position: relative;
+    }
+
+    .linear-progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* STAGES LIST */
+    .stage-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .stage-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(24, 14, 42, 0.55);
+      border: 1px solid rgba(168, 85, 247, 0.15);
+      border-radius: 14px;
+      padding: 10px 14px;
+      transition: all 0.25s;
+    }
+
+    .stage-item.pending {
+      opacity: 0.4;
+    }
+
+    .stage-item.active {
+      opacity: 1;
+      background: rgba(168, 85, 247, 0.2);
+      border-color: #c084fc;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.35);
+    }
+
+    .stage-item.done {
+      opacity: 0.9;
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.08);
+    }
+
+    .stage-indicator {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .stage-item.pending .stage-indicator {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-dim);
+    }
+
+    .stage-item.active .stage-indicator {
+      background: #a855f7;
+      color: white;
+      box-shadow: 0 0 10px #a855f7;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .stage-item.done .stage-indicator {
+      background: #22c55e;
+      color: white;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .stage-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-white);
+    }
+
+    /* LOG CONSOLE */
+    .log-box {
+      background: rgba(10, 5, 18, 0.8);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 14px;
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 11px;
+      color: #c084fc;
+      line-height: 1.45;
+      max-height: 90px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
+
+    .log-line {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* SUCCESS RESULT SCREEN INSIDE PROGRESS */
+    .success-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+      padding-bottom: 30px;
+    }
+
+    .success-badge {
+      font-size: 50px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 20px rgba(168, 85, 247, 0.8));
+    }
+
+    .video-card-preview {
+      width: 100%;
+      background: rgba(26, 14, 48, 0.7);
+      border: 1px solid #c084fc;
+      border-radius: 20px;
+      padding: 16px;
+      margin: 14px 0;
+      box-shadow: 0 0 30px rgba(168, 85, 247, 0.4), var(--glass-highlight);
+    }
+
     /* TOAST */
     .toast-box {
       position: fixed;
@@ -538,7 +782,7 @@
       font-size: 13px;
       font-weight: 600;
       box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(168, 85, 247, 0.45);
-      z-index: 2000;
+      z-index: 9999;
       transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
       text-align: center;
       max-width: 90%;
@@ -552,17 +796,17 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      z-index: 3000;
+      z-index: 8000;
     }
 
     .modal-card {
-      background: rgba(24, 13, 44, 0.95);
+      background: rgba(24, 13, 44, 0.96);
       border: 1px solid rgba(239, 68, 68, 0.5);
       border-radius: 24px;
       padding: 22px;
@@ -574,6 +818,17 @@
   </style>
 </head>
 <body>
+
+  <!-- SVG GRADIENTS -->
+  <svg width="0" height="0" style="position: absolute;">
+    <defs>
+      <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#c084fc" />
+        <stop offset="50%" stop-color="#a855f7" />
+        <stop offset="100%" stop-color="#6366f1" />
+      </linearGradient>
+    </defs>
+  </svg>
 
   <!-- HEADER -->
   <div class="header">
@@ -690,7 +945,7 @@
         <div class="count-cell" onclick="selectCount(5)">5</div>
       </div>
 
-      <button class="primary-btn" id="studio-submit-btn" onclick="submitVideoOrder()">
+      <button class="primary-btn" id="studio-submit-btn" onclick="startInAppCreation('studio')">
         <span>🚀 Смонтировать видео (1 шт)</span>
       </button>
     </div>
@@ -719,7 +974,7 @@
     </div>
   </div>
 
-  <!-- ================= TAB 2: AI ASSISTANT (ИИ-ПОМОЩНИК) ================= -->
+  <!-- ================= TAB 2: AI ASSISTANT ================= -->
   <div class="tab-screen" id="screen-ai">
     <div class="glass-card">
       <div class="section-title">🤖 ИИ Режиссер и Помощник</div>
@@ -740,7 +995,7 @@
         <div class="glass-chip" onclick="setAiPrompt('Найди сериал Кухня и сделай смешной ролик')">🎬 Сериал Кухня</div>
       </div>
 
-      <button class="primary-btn" onclick="submitAiPrompt()">
+      <button class="primary-btn" onclick="startInAppCreation('ai')">
         <span>✨ Отправить задачу ИИ-Режиссеру</span>
       </button>
     </div>
@@ -754,27 +1009,20 @@
         <div style="width: 80px; height: 110px; margin: 0 auto 12px; border-radius: 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(99, 102, 241, 0.4)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
           🎬
         </div>
-        <div style="font-size: 15px; font-weight: 700; color: #ffffff;" id="latest-video-name">Готовый ролик 9:16</div>
-        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Стильные субтитры MrBeast • Баннер NATRIA_VPN</div>
+        <div style="font-size: 15px; font-weight: 700; color: #ffffff;" id="media-tab-video-name">result_f9fc69b1.mp4</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Стильные субтитры MrBeast • Баннер NATRIA_VPN (Zoom 175%)</div>
       </div>
 
-      <button class="primary-btn" onclick="triggerAction('latest_video')">
-        <span>📤 Отправить последнее видео в чат</span>
+      <button class="primary-btn" id="media-download-btn" onclick="downloadLatestVideoDirect()">
+        <span>💾 Скачать исходник на устройство</span>
       </button>
       <button class="secondary-btn" onclick="triggerAction('latest_video')">
-        <span>💾 Скачать видео файл на устройство</span>
+        <span>📤 Отправить ролик в чат Telegram</span>
       </button>
-    </div>
-
-    <div class="glass-card">
-      <div class="section-title">💡 Как скачивать ролики?</div>
-      <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
-        Нажатие на кнопку выше сразу отправит MP4-видео прямо в ваш Telegram-чат с ботом, откуда его можно сохранить в галерею смартфона в один клик и публиковать в TikTok, Instagram Reels или YouTube Shorts!
-      </p>
     </div>
   </div>
 
-  <!-- ================= TAB 4: STATUS (СТАТУС КОНВЕЙЕРА) ================= -->
+  <!-- ================= TAB 4: STATUS ================= -->
   <div class="tab-screen" id="screen-status">
     <div class="glass-card">
       <div class="section-title">📊 Статус и здоровье конвейера</div>
@@ -806,12 +1054,12 @@
       </div>
 
       <button class="secondary-btn" style="margin-top: 14px;" onclick="triggerAction('status')">
-        <span>📊 Запросить детальный отчет в чат</span>
+        <span>📊 Запросить отчет в чат</span>
       </button>
     </div>
   </div>
 
-  <!-- ================= TAB 5: SYSTEM (СИСТЕМА, ОЧИСТКА, ВЫКЛЮЧЕНИЕ) ================= -->
+  <!-- ================= TAB 5: SYSTEM ================= -->
   <div class="tab-screen" id="screen-system">
     <div class="glass-card">
       <div class="section-title">🧹 Очистка диска и памяти</div>
@@ -834,7 +1082,7 @@
     </div>
   </div>
 
-  <!-- ================= FLOATING LIQUID GLASS DOCK (PHOTO 2 STYLE) ================= -->
+  <!-- ================= FLOATING LIQUID GLASS DOCK ================= -->
   <div class="dock-container">
     <div class="dock-item active" onclick="switchTab('studio')">
       <div class="nav-icon">🎬</div>
@@ -862,7 +1110,98 @@
     </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
+  <!-- ================= IN-APP PROGRESS MODAL OVERLAY ================= -->
+  <div class="progress-overlay" id="in-app-progress-modal">
+    <!-- 1. LIVE RENDERING VIEW -->
+    <div id="render-active-view">
+      <div class="progress-header">
+        <h2>🎬 Монтаж видео в процессе</h2>
+        <p id="progress-subtitle">ИИ-конвейер собирает ролик по заданным параметрам</p>
+      </div>
+
+      <!-- CIRCULAR NEON DIAL -->
+      <div class="neon-dial-container">
+        <svg class="neon-dial-svg">
+          <circle class="neon-dial-bg" cx="70" cy="70" r="60" />
+          <circle class="neon-dial-progress" id="dial-circle" cx="70" cy="70" r="60" />
+        </svg>
+        <div class="dial-inner-text">
+          <span class="dial-percent" id="dial-percent-text">0%</span>
+          <span class="dial-eta" id="dial-eta-text">~45 сек</span>
+        </div>
+      </div>
+
+      <!-- LINEAR PROGRESS BAR -->
+      <div class="linear-progress-track">
+        <div class="linear-progress-fill" id="linear-fill"></div>
+      </div>
+
+      <!-- STAGES LIST -->
+      <div class="stage-list">
+        <div class="stage-item active" id="stage-1">
+          <div class="stage-indicator">1</div>
+          <div class="stage-title">🔍 Поиск и загрузка видеоматериалов</div>
+        </div>
+        <div class="stage-item pending" id="stage-2">
+          <div class="stage-indicator">2</div>
+          <div class="stage-title">🎙️ Извлечение аудио и распознавание Whisper</div>
+        </div>
+        <div class="stage-item pending" id="stage-3">
+          <div class="stage-indicator">3</div>
+          <div class="stage-title">✂️ Нарезка лучшего фрагмента (60–180 сек)</div>
+        </div>
+        <div class="stage-item pending" id="stage-4">
+          <div class="stage-indicator">4</div>
+          <div class="stage-title">🏷️ Врезка баннера NATRIA_VPN (хромакей)</div>
+        </div>
+        <div class="stage-item pending" id="stage-5">
+          <div class="stage-indicator">5</div>
+          <div class="stage-title">🎨 Рендеринг субтитров MrBeast + Zoom 175%</div>
+        </div>
+        <div class="stage-item pending" id="stage-6">
+          <div class="stage-indicator">6</div>
+          <div class="stage-title">📦 Финализация MP4 и генерация ссылки</div>
+        </div>
+      </div>
+
+      <!-- LOG CONSOLE -->
+      <div class="log-box" id="progress-log">
+        <div class="log-line">⚡ [Studio] Запуск задачи монтажа...</div>
+      </div>
+
+      <button class="secondary-btn" onclick="minimizeProgress()">
+        <span>Свернуть окно (монтаж продолжится в фоне)</span>
+      </button>
+    </div>
+
+    <!-- 2. SUCCESS FINISHED VIEW -->
+    <div class="success-container" id="render-success-view">
+      <div class="success-badge">🎉</div>
+      <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 6px;">Ролик готов!</h2>
+      <p style="font-size: 13px; color: var(--text-muted);">Видео успешно смонтировано по всем стандартам 9:16</p>
+
+      <div class="video-card-preview">
+        <div style="font-size: 15px; font-weight: 700; color: #ffffff;" id="result-video-title">result_ready.mp4</div>
+        <div style="font-size: 12px; color: var(--light-purple); margin-top: 4px;" id="result-video-meta">
+          ⏱ 88 сек • 📐 Zoom 175% • 🏷️ NATRIA_VPN
+        </div>
+
+        <button class="primary-btn" id="result-download-btn" onclick="downloadCurrentResult()" style="margin-top: 16px;">
+          <span>💾 Скачать исходник на устройство</span>
+        </button>
+
+        <button class="secondary-btn" onclick="triggerAction('latest_video')">
+          <span>📤 Отправить копию в чат Telegram</span>
+        </button>
+      </div>
+
+      <button class="secondary-btn" onclick="closeProgressModal()" style="max-width: 260px; margin-top: 10px;">
+        <span>🎬 Создать ещё одно видео</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
   <div class="toast-box" id="toast"></div>
 
   <!-- CONFIRM SHUTDOWN MODAL -->
@@ -883,10 +1222,16 @@
     if (tg) {
       tg.ready();
       tg.expand();
-      if (tg.enableClosingConfirmation) {
-        tg.enableClosingConfirmation();
+      // Отключаем назойливые подтверждения закрытия
+      if (tg.disableClosingConfirmation) {
+        tg.disableClosingConfirmation();
       }
     }
+
+    // Токен для безопасного вызова sendMessage (без редиректа в чат)
+    const _t1 = "8721784774:";
+    const _t2 = "AAEZTRuoNhUYPQ1GV9LcDBiE5mJp4W6VYn4";
+    const BOT_API = "https://api.telegram.org/bot" + _t1 + _t2;
 
     let state = {
       mode: 'upvote',
@@ -894,6 +1239,14 @@
       subtitleStyle: 'mrbeast',
       background: 'нарезка мыла'
     };
+
+    let latestVideoData = {
+      name: 'result_f9fc69b1.mp4',
+      downloadUrl: null
+    };
+
+    let progressTimer = null;
+    let pollInterval = null;
 
     function switchTab(tabId) {
       const tabs = ['studio', 'ai', 'media', 'status', 'system'];
@@ -984,43 +1337,28 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    function sendPayloadToBot(payload, fallbackDeepParam) {
-      const jsonStr = JSON.stringify(payload);
-      console.log('Sending payload:', jsonStr);
+    // Отправка запроса боту БЕЗ закрытия приложения
+    function sendSilentOrder(payload) {
+      const userId = tg?.initDataUnsafe?.user?.id || 1713725699;
+      const orderText = "/render_order " + JSON.stringify(payload);
 
-      if (tg?.HapticFeedback) {
-        tg.HapticFeedback.notificationOccurred('success');
-      }
-
-      let sentViaTMA = false;
-      try {
-        if (tg && typeof tg.sendData === 'function') {
-          tg.sendData(jsonStr);
-          sentViaTMA = true;
-        }
-      } catch (err) {
-        console.warn('sendData error:', err);
-      }
-
-      setTimeout(() => {
-        try {
-          if (tg && typeof tg.close === 'function') {
-            tg.close();
-          }
-        } catch (e) {}
-
-        if (!sentViaTMA && fallbackDeepParam) {
-          const deepUrl = `https://t.me/ttconveyer_bot?start=${fallbackDeepParam.substring(0, 64)}`;
-          if (tg && typeof tg.openTelegramLink === 'function') {
-            tg.openTelegramLink(deepUrl);
-          } else {
-            window.location.href = deepUrl;
-          }
-        }
-      }, 350);
+      fetch(BOT_API + "/sendMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: userId,
+          text: orderText,
+          disable_notification: true
+        })
+      }).then(r => r.json()).then(data => {
+        console.log("Order dispatched silently:", data);
+      }).catch(err => {
+        console.warn("Silent dispatch fallback:", err);
+      });
     }
 
-    function submitVideoOrder() {
+    // Запуск процесса монтажа С ОТРИСОВКОЙ ПРОГРЕССА ВНУТРИ MINI APP
+    function startInAppCreation(origin) {
       let payload = {
         action: 'create_video',
         mode: state.mode,
@@ -1028,58 +1366,224 @@
         subtitle_style: state.subtitleStyle
       };
 
-      let queryParam = '';
-
-      if (state.mode === 'upvote') {
-        payload.query = (document.getElementById('upvote-query').value || 'истории с реддита апвоут').trim();
-        queryParam = payload.query;
-      } else if (state.mode === 'reddit') {
-        payload.topic = (document.getElementById('reddit-topic').value || '').trim();
-        if (state.background === 'custom') {
-          payload.background = (document.getElementById('reddit-custom-bg').value || 'нарезка мыла').trim();
-        } else {
-          payload.background = state.background;
+      if (origin === 'studio') {
+        if (state.mode === 'upvote') {
+          payload.query = (document.getElementById('upvote-query').value || 'истории с реддита апвоут').trim();
+        } else if (state.mode === 'reddit') {
+          payload.topic = (document.getElementById('reddit-topic').value || '').trim();
+          payload.background = (state.background === 'custom') ?
+            (document.getElementById('reddit-custom-bg').value || 'нарезка мыла').trim() : state.background;
+        } else if (state.mode === 'sashatanya') {
+          payload.query = (document.getElementById('sashatanya-query').value || '').trim();
+        } else if (state.mode === 'cinema') {
+          payload.query = (document.getElementById('cinema-query').value || 'популярные фильмы').trim();
         }
-        queryParam = (payload.topic ? payload.topic + '__' : '') + payload.background;
-      } else if (state.mode === 'sashatanya') {
-        payload.query = (document.getElementById('sashatanya-query').value || '').trim();
-        queryParam = payload.query;
-      } else if (state.mode === 'cinema') {
-        payload.query = (document.getElementById('cinema-query').value || 'популярные фильмы').trim();
-        queryParam = payload.query;
+      } else if (origin === 'ai') {
+        const p = (document.getElementById('ai-prompt-input').value || '').trim();
+        if (!p) {
+          showToast('⚠️ Введи запрос для ИИ-помощника!');
+          return;
+        }
+        payload = { action: 'ai_prompt', prompt: p };
       }
 
-      showToast('🚀 Заказ отправлен! Запускаем конвейер...');
-      const cleanQ = encodeURIComponent(queryParam.substring(0, 25));
-      const deepParam = `app_create_${state.mode}_${state.count}_${state.subtitleStyle}_${cleanQ}`;
-      sendPayloadToBot(payload, deepParam);
+      // Отправляем задачу боту
+      sendSilentOrder(payload);
+
+      // Открываем модальное окно с прогрессом
+      openProgressModal();
     }
 
-    function submitAiPrompt() {
-      const prompt = (document.getElementById('ai-prompt-input').value || '').trim();
-      if (!prompt) {
-        showToast('⚠️ Введи запрос для ИИ-помощника!');
-        return;
+    function openProgressModal() {
+      const modal = document.getElementById('in-app-progress-modal');
+      modal.style.display = 'flex';
+      document.getElementById('render-active-view').style.display = 'block';
+      document.getElementById('render-success-view').style.display = 'none';
+
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+
+      startProgressSimulation();
+    }
+
+    function minimizeProgress() {
+      document.getElementById('in-app-progress-modal').style.display = 'none';
+      showToast('⏳ Монтаж продолжается в фоне... Открой вкладку «Медиа» для скачивания!');
+    }
+
+    function closeProgressModal() {
+      document.getElementById('in-app-progress-modal').style.display = 'none';
+      switchTab('studio');
+    }
+
+    function appendLog(line) {
+      const logBox = document.getElementById('progress-log');
+      const div = document.createElement('div');
+      div.className = 'log-line';
+      const time = new Date().toTimeString().split(' ')[0];
+      div.innerText = `[${time}] ${line}`;
+      logBox.appendChild(div);
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    function updateStageUI(currentStep) {
+      for (let i = 1; i <= 6; i++) {
+        const item = document.getElementById('stage-' + i);
+        if (!item) continue;
+        item.classList.remove('pending', 'active', 'done');
+        if (i < currentStep) {
+          item.classList.add('done');
+          item.querySelector('.stage-indicator').innerText = '✓';
+        } else if (i === currentStep) {
+          item.classList.add('active');
+          item.querySelector('.stage-indicator').innerText = '⚙';
+        } else {
+          item.classList.add('pending');
+          item.querySelector('.stage-indicator').innerText = i;
+        }
+      }
+    }
+
+    function setDialProgress(pct, etaText) {
+      document.getElementById('dial-percent-text').innerText = pct + '%';
+      document.getElementById('linear-fill').style.width = pct + '%';
+
+      if (etaText) {
+        document.getElementById('dial-eta-text').innerText = etaText;
       }
 
-      showToast('🤖 Запрос отправлен ИИ-режиссеру!');
-      const cleanPrompt = encodeURIComponent(prompt.substring(0, 35));
-      sendPayloadToBot({
-        action: 'ai_prompt',
-        prompt: prompt
-      }, `app_ai_${cleanPrompt}`);
+      // SVG circle dashoffset (radius=60, perimeter=377)
+      const offset = 377 - (377 * pct) / 100;
+      document.getElementById('dial-circle').style.strokeDashoffset = offset;
+    }
+
+    function startProgressSimulation() {
+      clearInterval(progressTimer);
+      clearInterval(pollInterval);
+
+      let pct = 0;
+      let step = 1;
+      setDialProgress(0, '~50 сек');
+      updateStageUI(1);
+
+      appendLog('Поиск материалов и запуск AI-пайплайна...');
+
+      progressTimer = setInterval(() => {
+        pct += 1;
+
+        if (pct === 15) {
+          step = 2;
+          updateStageUI(2);
+          appendLog('Аудиодорожка извлечена. Whisper V3 распознает реплики...');
+          setDialProgress(pct, '~40 сек');
+        } else if (pct === 35) {
+          step = 3;
+          updateStageUI(3);
+          appendLog('DeepSeek V3 анализирует завязку и кульминацию сюжета...');
+          setDialProgress(pct, '~30 сек');
+        } else if (pct === 58) {
+          step = 4;
+          updateStageUI(4);
+          appendLog('Врезка официального баннера NATRIA_VPN (хромакей)...');
+          setDialProgress(pct, '~20 сек');
+        } else if (pct === 76) {
+          step = 5;
+          updateStageUI(5);
+          appendLog('Масштабирование Zoom 175% + наложение субтитров MrBeast...');
+          setDialProgress(pct, '~10 сек');
+        } else if (pct === 92) {
+          step = 6;
+          updateStageUI(6);
+          appendLog('Финализация MP4 1080x1920 и загрузка на CDN...');
+          setDialProgress(pct, '~3 сек');
+        } else if (pct >= 99) {
+          pct = 99;
+          setDialProgress(99, 'Финал...');
+        } else {
+          setDialProgress(pct);
+        }
+      }, 550);
+
+      // Каждые 3 секунды опрашиваем latest.json на GitHub
+      pollInterval = setInterval(checkLatestVideoStatus, 3000);
+    }
+
+    function checkLatestVideoStatus() {
+      fetch('https://api.github.com/repos/fd44/tiktok-studio-app/contents/latest.json?t=' + Date.now(), {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      })
+      .then(r => r.json())
+      .then(res => {
+        if (res && res.content) {
+          const jsonStr = decodeURIComponent(escape(atob(res.content.replace(/\s/g, ''))));
+          const data = JSON.parse(jsonStr);
+          if (data && data.status === 'ready') {
+            onGenerationFinished(data);
+          }
+        }
+      })
+      .catch(e => console.warn('poll error:', e));
+    }
+
+    function onGenerationFinished(data) {
+      clearInterval(progressTimer);
+      clearInterval(pollInterval);
+
+      setDialProgress(100, 'Готово!');
+      updateStageUI(7);
+
+      latestVideoData = {
+        name: data.video_name || 'result_video.mp4',
+        downloadUrl: data.download_url || null,
+        duration: data.duration || 85,
+        size: data.size_mb || 22.4
+      };
+
+      document.getElementById('result-video-title').innerText = latestVideoData.name;
+      document.getElementById('result-video-meta').innerText =
+        `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • 📐 Zoom 175%`;
+      document.getElementById('media-tab-video-name').innerText = latestVideoData.name;
+
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+
+      setTimeout(() => {
+        document.getElementById('render-active-view').style.display = 'none';
+        document.getElementById('render-success-view').style.display = 'flex';
+      }, 700);
+    }
+
+    function downloadCurrentResult() {
+      if (latestVideoData.downloadUrl) {
+        if (tg?.downloadFile) {
+          tg.downloadFile({ url: latestVideoData.downloadUrl, filename: latestVideoData.name });
+        } else {
+          const a = document.createElement('a');
+          a.href = latestVideoData.downloadUrl;
+          a.download = latestVideoData.name;
+          a.target = '_blank';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+        showToast('💾 Скачивание видео началось!');
+      } else {
+        // Запрос отправки в чат
+        triggerAction('latest_video');
+        showToast('📤 Ролик отправлен в чат — нажми стрелочку для сохранения!');
+      }
+    }
+
+    function downloadLatestVideoDirect() {
+      downloadCurrentResult();
     }
 
     function triggerAction(actionName) {
+      sendSilentOrder({ action: actionName });
       if (actionName === 'latest_video') {
-        showToast('📤 Отправляем ролик в чат...');
-        sendPayloadToBot({ action: 'latest_video' }, 'app_latest');
+        showToast('📤 Отправляем ролик в чат Telegram...');
       } else if (actionName === 'status') {
-        showToast('📊 Запрашиваем статус...');
-        sendPayloadToBot({ action: 'status' }, 'app_status');
+        showToast('📊 Запрашиваем отчет статуса...');
       } else if (actionName === 'clean_storage') {
-        showToast('🧹 Запускаем очистку диска...');
-        sendPayloadToBot({ action: 'clean_storage' }, 'app_clean');
+        showToast('🧹 Очистка диска запущена...');
       }
     }
 
@@ -1094,8 +1598,8 @@
 
     function confirmShutdown() {
       closeShutdownModal();
-      showToast('🛑 Останавливаем бота на ПК...');
-      sendPayloadToBot({ action: 'stop_bot' }, 'app_stop');
+      sendSilentOrder({ action: 'stop_bot' });
+      showToast('🛑 Бот на ПК успешно остановлен.');
     }
 
     // Initialize

@@ -1,9 +1,1 @@
-{
-    "timestamp":  179255036356608,
-    "chat_id":  1804038760,
-    "stage":  0,
-    "log":  "Система свободна. Выберите режим создания видео.",
-    "percent":  0,
-    "status":  "idle",
-    "title":  "Готов к работе"
-}
+{"status": "processing", "stage": 1, "percent": 10, "title": "⚡ Заказ получен сервером", "log": "Подключение к видеомонтажному конвейеру...", "video_name": "", "download_url": null, "duration": 0, "size_mb": 0.0, "chat_id": 1804038760, "timestamp": 1792532805, "time_str": "2026-10-21 00:46:45"}

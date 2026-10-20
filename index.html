@@ -7,14 +7,25 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg: var(--tg-theme-bg-color, #0d1117);
-      --card-bg: var(--tg-theme-secondary-bg-color, #161b22);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --text: var(--tg-theme-text-color, #f0f6fc);
-      --text-muted: var(--tg-theme-hint-color, #8b949e);
-      --accent: var(--tg-theme-button-color, #238636);
-      --accent-text: var(--tg-theme-button-text-color, #ffffff);
-      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      --bg-dark: #08040f;
+      --bg-gradient: radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.18) 0%, transparent 45%),
+                         radial-gradient(circle at 85% 35%, rgba(126, 34, 206, 0.16) 0%, transparent 50%),
+                         radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.14) 0%, transparent 55%),
+                         #08040f;
+      --glass-card: rgba(23, 14, 40, 0.65);
+      --glass-card-hover: rgba(32, 19, 56, 0.75);
+      --glass-card-active: linear-gradient(145deg, rgba(168, 85, 247, 0.28) 0%, rgba(126, 34, 206, 0.2) 100%);
+      --glass-border: rgba(168, 85, 247, 0.25);
+      --glass-border-active: #c084fc;
+      --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
+      --neon-glow: 0 0 25px rgba(168, 85, 247, 0.45);
+      --neon-purple: #a855f7;
+      --light-purple: #c084fc;
+      --text-white: #f5f3ff;
+      --text-muted: #9d8ec2;
+      --text-dim: #6b5c87;
+      --accent-gradient: linear-gradient(135deg, #c084fc 0%, #a855f7 45%, #7e22ce 100%);
+      --btn-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 100%);
     }
 
     * {
@@ -22,98 +33,150 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
     body {
-      background-color: var(--bg);
-      color: var(--text);
+      background: var(--bg-gradient);
+      color: var(--text-white);
       min-height: 100vh;
-      padding: 16px 16px 120px 16px;
+      padding: 16px 16px 105px 16px;
       overflow-x: hidden;
       user-select: none;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* HEADER */
+    /* TOP HEADER */
     .header {
-      text-align: center;
-      margin-bottom: 20px;
-      padding: 10px 0 5px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding: 4px 2px;
     }
 
-    .badge-bar {
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+      position: relative;
+    }
+
+    .brand-icon::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      background: var(--btn-gloss);
+      pointer-events: none;
+    }
+
+    .brand-text h1 {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #ffffff 30%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .status-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(168, 85, 247, 0.15);
-      border: 1px solid rgba(168, 85, 247, 0.3);
-      padding: 4px 12px;
+      padding: 6px 12px;
       border-radius: 20px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.35);
       font-size: 11px;
-      font-weight: 600;
-      color: #c084fc;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
+      font-weight: 700;
+      color: #4ade80;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
     }
 
-    .badge-bar .dot {
+    .status-badge .dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
       background: #22c55e;
-      box-shadow: 0 0 8px #22c55e;
+      box-shadow: 0 0 10px #22c55e;
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
-      0% { opacity: 0.5; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.1); }
-      100% { opacity: 0.5; transform: scale(0.9); }
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.6; }
     }
 
-    .header h1 {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: var(--primary-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 4px;
+    /* LIQUID GLASS CARD */
+    .glass-card {
+      background: var(--glass-card);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), var(--glass-highlight);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    .header p {
-      font-size: 13px;
-      color: var(--text-muted);
-      max-width: 320px;
-      margin: 0 auto;
-      line-height: 1.4;
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      pointer-events: none;
     }
 
-    /* SECTION TITLES */
-    .section-label {
+    .section-title {
       font-size: 13px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      color: var(--text-muted);
-      margin: 18px 0 10px 4px;
+      letter-spacing: 0.8px;
+      color: var(--light-purple);
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 6px;
     }
 
-    /* MODE CARDS */
+    /* FORMAT SELECTOR GRID */
     .mode-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
+      margin-bottom: 12px;
     }
 
-    .mode-card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 14px;
+    .mode-item {
+      background: rgba(28, 17, 48, 0.55);
+      border: 1.5px solid rgba(168, 85, 247, 0.2);
+      border-radius: 18px;
       padding: 14px 12px;
       cursor: pointer;
       position: relative;
@@ -121,234 +184,392 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
     }
 
-    .mode-card.active {
-      border-color: #a855f7;
-      background: linear-gradient(145deg, rgba(168, 85, 247, 0.12) 0%, rgba(99, 102, 241, 0.08) 100%);
-      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+    .mode-item:active {
+      transform: scale(0.97);
     }
 
-    .mode-card .icon {
+    .mode-item.active {
+      background: linear-gradient(145deg, rgba(168, 85, 247, 0.35) 0%, rgba(126, 34, 206, 0.25) 100%);
+      border-color: var(--glass-border-active);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+    }
+
+    .mode-item .icon {
       font-size: 26px;
     }
 
-    .mode-card .title {
-      font-size: 14px;
+    .mode-item .title {
+      font-size: 13.5px;
       font-weight: 700;
-      color: var(--text);
+      color: #ffffff;
     }
 
-    .mode-card .desc {
+    .mode-item .desc {
       font-size: 11px;
       color: var(--text-muted);
-      line-height: 1.3;
+      line-height: 1.35;
     }
 
-    .mode-card .check-badge {
+    .mode-item .glow-dot {
       position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 18px;
-      height: 18px;
+      top: 10px;
+      right: 10px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
-      background: #a855f7;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 11px;
-      font-weight: 900;
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.2s;
     }
 
-    .mode-card.active .check-badge {
-      display: flex;
+    .mode-item.active .glow-dot {
+      background: #c084fc;
+      border-color: #ffffff;
+      box-shadow: 0 0 10px #c084fc;
     }
 
-    /* PARAMS PANEL */
-    .params-container {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 14px;
-      margin-top: 12px;
-      transition: all 0.25s ease;
+    /* INPUTS & CONTROLS */
+    .input-box {
+      margin-top: 10px;
     }
 
-    .input-group {
-      margin-bottom: 12px;
-    }
-
-    .input-label {
-      font-size: 12px;
+    .input-box label {
+      display: block;
+      font-size: 11.5px;
       font-weight: 600;
       color: var(--text-muted);
       margin-bottom: 6px;
-      display: block;
     }
 
-    .text-input {
+    .glass-input {
       width: 100%;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 10px 12px;
-      color: var(--text);
-      font-size: 14px;
+      background: rgba(14, 8, 26, 0.7);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 14px;
+      padding: 12px 14px;
+      color: #ffffff;
+      font-size: 13.5px;
       outline: none;
-      transition: border-color 0.2s;
+      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s;
     }
 
-    .text-input:focus {
-      border-color: #a855f7;
+    .glass-input:focus {
+      border-color: #c084fc;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.35), inset 0 2px 5px rgba(0, 0, 0, 0.4);
     }
 
-    .text-input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
-      font-size: 13px;
+    .glass-input::placeholder {
+      color: rgba(157, 142, 194, 0.4);
+      font-size: 12.5px;
+    }
+
+    .glass-textarea {
+      min-height: 90px;
+      resize: none;
+      line-height: 1.45;
     }
 
     /* CHIP SELECTORS */
-    .chips-row {
+    .chips-group {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
-    .chip {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 6px 12px;
+    .glass-chip {
+      background: rgba(30, 18, 52, 0.55);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 12px;
+      padding: 7px 12px;
       font-size: 12px;
       font-weight: 500;
-      color: var(--text);
+      color: var(--text-white);
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
     }
 
-    .chip.active {
-      background: #a855f7;
-      border-color: #a855f7;
+    .glass-chip:active {
+      transform: scale(0.96);
+    }
+
+    .glass-chip.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.7), rgba(126, 34, 206, 0.9));
+      border-color: #c084fc;
       color: #ffffff;
-      font-weight: 600;
+      font-weight: 700;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
-    /* COUNT PILLS */
+    /* COUNT SELECTOR */
     .count-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
     }
 
-    .count-pill {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+    .count-cell {
+      background: rgba(30, 18, 52, 0.55);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 14px;
       padding: 10px 0;
       text-align: center;
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
     }
 
-    .count-pill.active {
-      background: linear-gradient(135deg, #a855f7, #6366f1);
-      border-color: #a855f7;
-      color: white;
-      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    .count-cell.active {
+      background: var(--accent-gradient);
+      border-color: #c084fc;
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
-    /* SPECS BANNER */
-    .specs-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px dashed var(--card-border);
-      border-radius: 12px;
-      padding: 12px;
-      margin-top: 16px;
-      font-size: 11.5px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .specs-card .item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .specs-card b {
-      color: var(--text);
-    }
-
-    /* FIXED FOOTER WITH ACTION BUTTON */
-    .footer-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 12px 16px;
-      padding-bottom: calc(12px + env(safe-area-inset-bottom));
-      background: rgba(13, 17, 23, 0.92);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-top: 1px solid var(--card-border);
-      z-index: 100;
-    }
-
-    .submit-btn {
+    /* ACTION BUTTONS */
+    .primary-btn {
       width: 100%;
-      background: var(--primary-gradient);
-      border: none;
-      border-radius: 14px;
+      background: var(--accent-gradient);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 16px;
       padding: 14px;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
-      color: white;
+      color: #ffffff;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform 0.1s ease, filter 0.2s ease;
+      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s;
+      margin-top: 14px;
     }
 
-    .submit-btn:active {
+    .primary-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--btn-gloss);
+      pointer-events: none;
+    }
+
+    .primary-btn:active {
       transform: scale(0.98);
-      filter: brightness(1.1);
+      filter: brightness(1.15);
     }
 
-    .submit-btn:disabled {
-      opacity: 0.6;
+    .primary-btn:disabled {
+      opacity: 0.55;
       cursor: not-allowed;
       transform: none;
     }
 
-    /* POPUP TOAST */
-    .toast {
+    .secondary-btn {
+      width: 100%;
+      background: rgba(30, 18, 52, 0.6);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 16px;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--light-purple);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+      transition: all 0.2s;
+    }
+
+    .secondary-btn:active {
+      background: rgba(168, 85, 247, 0.25);
+    }
+
+    .danger-btn {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.35) 0%, rgba(185, 28, 28, 0.5) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      border-radius: 16px;
+      padding: 13px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fca5a5;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 20px rgba(239, 68, 68, 0.35);
+      transition: all 0.2s;
+      margin-top: 12px;
+    }
+
+    .danger-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* SPECS TILES */
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .spec-tile {
+      background: rgba(16, 10, 30, 0.5);
+      border: 1px solid rgba(168, 85, 247, 0.15);
+      border-radius: 14px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .spec-tile .label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+    }
+
+    .spec-tile .value {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* FLOATING BOTTOM NAV DOCK (PHOTO 2 STYLE) */
+    .dock-container {
       position: fixed;
-      top: 16px;
+      bottom: 14px;
+      left: 14px;
+      right: 14px;
+      background: rgba(16, 9, 30, 0.82);
+      backdrop-filter: blur(30px) saturate(200%);
+      -webkit-backdrop-filter: blur(30px) saturate(200%);
+      border: 1px solid rgba(168, 85, 247, 0.32);
+      border-radius: 28px;
+      padding: 8px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(168, 85, 247, 0.2), var(--glass-highlight);
+      z-index: 1000;
+    }
+
+    .dock-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 8px 12px;
+      border-radius: 18px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      flex: 1;
+    }
+
+    .dock-item .nav-icon {
+      font-size: 19px;
+      line-height: 1;
+      transition: transform 0.2s;
+    }
+
+    .dock-item .nav-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .dock-item.active {
+      color: #ffffff;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.45) 0%, rgba(126, 34, 206, 0.65) 100%);
+      border: 1px solid var(--glass-border-active);
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+    }
+
+    .dock-item.active .nav-icon {
+      transform: scale(1.1);
+    }
+
+    /* TAB SCREENS */
+    .tab-screen {
+      display: none;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .tab-screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* TOAST */
+    .toast-box {
+      position: fixed;
+      top: 18px;
       left: 50%;
       transform: translateX(-50%) translateY(-100px);
-      background: #1e1b4b;
-      border: 1px solid #6366f1;
-      border-radius: 12px;
-      padding: 12px 20px;
-      color: white;
+      background: rgba(26, 14, 48, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid #c084fc;
+      border-radius: 16px;
+      padding: 12px 22px;
+      color: #ffffff;
       font-size: 13px;
       font-weight: 600;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      z-index: 200;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(168, 85, 247, 0.45);
+      z-index: 2000;
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
       text-align: center;
       max-width: 90%;
     }
 
-    .toast.show {
+    .toast-box.show {
       transform: translateX(-50%) translateY(0);
+    }
+
+    /* MODAL CONFIRMATION */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 3000;
+    }
+
+    .modal-card {
+      background: rgba(24, 13, 44, 0.95);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      border-radius: 24px;
+      padding: 22px;
+      max-width: 340px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(239, 68, 68, 0.3);
     }
   </style>
 </head>
@@ -356,138 +577,306 @@
 
   <!-- HEADER -->
   <div class="header">
-    <div class="badge-bar">
+    <div class="brand-box">
+      <div class="brand-icon">🎬</div>
+      <div class="brand-text">
+        <h1>TikTok Studio</h1>
+        <p>Autopilot V2.0 • Liquid Glass</p>
+      </div>
+    </div>
+    <div class="status-badge" id="top-status-indicator">
       <div class="dot"></div>
-      AUTOPILOT V2.0 ONLINE
-    </div>
-    <h1>TikTok Studio</h1>
-    <p>Монтаж вертикальных 9:16 видео со стильными субтитрами и авто-баннером</p>
-  </div>
-
-  <!-- SECTION: FORMAT -->
-  <div class="section-label">🎬 Формат контента</div>
-  <div class="mode-grid">
-    <div class="mode-card active" data-mode="upvote" onclick="selectMode('upvote')">
-      <div class="check-badge">✓</div>
-      <div class="icon">📺</div>
-      <div class="title">Канал «АПВОУТ»</div>
-      <div class="desc">Живая озвучка из YouTube, нарезка историй + субтитры</div>
-    </div>
-
-    <div class="mode-card" data-mode="reddit" onclick="selectMode('reddit')">
-      <div class="check-badge">✓</div>
-      <div class="icon">🧼</div>
-      <div class="title">Reddit ASMR</div>
-      <div class="desc">Нейро-озвучка истории + ASMR фон (мыло, сёрф, ковёр)</div>
-    </div>
-
-    <div class="mode-card" data-mode="sashatanya" onclick="selectMode('sashatanya')">
-      <div class="check-badge">✓</div>
-      <div class="icon">🍿</div>
-      <div class="title">СашаТаня</div>
-      <div class="desc">Авто-нарезка смешных моментов сериала (Zoom 175%)</div>
-    </div>
-
-    <div class="mode-card" data-mode="cinema" onclick="selectMode('cinema')">
-      <div class="check-badge">✓</div>
-      <div class="icon">🎬</div>
-      <div class="title">Фильмы / Сериалы</div>
-      <div class="desc">Культовые сцены из кино по названию или жанру</div>
+      <span>ONLINE</span>
     </div>
   </div>
 
-  <!-- PARAMS FOR ACTIVE MODE -->
-  <div class="params-container" id="params-upvote">
-    <div class="input-group">
-      <label class="input-label">🔎 Тематика или ссылка YouTube (необязательно)</label>
-      <input type="text" id="upvote-query" class="text-input" placeholder="Например: апвоут страшные истории...">
-      <div class="chips-row">
-        <div class="chip" onclick="setQuery('upvote', 'истории с реддита апвоут')">🔥 Свежие</div>
-        <div class="chip" onclick="setQuery('upvote', 'апвоут страшные истории')">👻 Страшные</div>
-        <div class="chip" onclick="setQuery('upvote', 'апвоут секреты врачей')">🤫 Секреты</div>
-        <div class="chip" onclick="setQuery('upvote', 'апвоут истории про богатых')">💰 Про деньги</div>
+  <!-- ================= TAB 1: STUDIO (ГЕНЕРАТОР) ================= -->
+  <div class="tab-screen active" id="screen-studio">
+    <div class="glass-card">
+      <div class="section-title">🎬 Выбери формат видео</div>
+      <div class="mode-grid">
+        <div class="mode-item active" data-mode="upvote" onclick="selectMode('upvote')">
+          <div class="glow-dot"></div>
+          <div class="icon">📺</div>
+          <div class="title">Канал «АПВОУТ»</div>
+          <div class="desc">Оригинальный голос YouTube, нарезка историй + субтитры</div>
+        </div>
+
+        <div class="mode-item" data-mode="reddit" onclick="selectMode('reddit')">
+          <div class="glow-dot"></div>
+          <div class="icon">🧼</div>
+          <div class="title">Reddit ASMR</div>
+          <div class="desc">Озвучка истории + ASMR оверлеи (мыло, сёрф, ковер)</div>
+        </div>
+
+        <div class="mode-item" data-mode="sashatanya" onclick="selectMode('sashatanya')">
+          <div class="glow-dot"></div>
+          <div class="icon">🍿</div>
+          <div class="title">СашаТаня</div>
+          <div class="desc">Авто-нарезка скетчей (Zoom 175%, анти-повтор)</div>
+        </div>
+
+        <div class="mode-item" data-mode="cinema" onclick="selectMode('cinema')">
+          <div class="glow-dot"></div>
+          <div class="icon">🎬</div>
+          <div class="title">Фильмы / Сериалы</div>
+          <div class="desc">Культовые сцены из кино по названию или жанру</div>
+        </div>
+      </div>
+
+      <!-- PARAMS: UPVOTE -->
+      <div class="input-box" id="box-upvote">
+        <label>🔎 Поисковый запрос YouTube или ссылка</label>
+        <input type="text" id="upvote-query" class="glass-input" placeholder="Например: апвоут страшные истории...">
+        <div class="chips-group">
+          <div class="glass-chip" onclick="setQuery('upvote', 'истории с реддита апвоут')">🔥 Свежие</div>
+          <div class="glass-chip" onclick="setQuery('upvote', 'апвоут страшные истории')">👻 Страшные</div>
+          <div class="glass-chip" onclick="setQuery('upvote', 'апвоут секреты врачей')">🤫 Секреты</div>
+          <div class="glass-chip" onclick="setQuery('upvote', 'апвоут истории про богатых')">💰 Деньги</div>
+        </div>
+      </div>
+
+      <!-- PARAMS: REDDIT -->
+      <div class="input-box" id="box-reddit" style="display: none;">
+        <label>📝 Тема Reddit-истории (необязательно)</label>
+        <input type="text" id="reddit-topic" class="glass-input" placeholder="Например: измена, школа, токсичная родня...">
+        <label style="margin-top: 10px;">🧼 Фоновый ASMR оверлей</label>
+        <div class="chips-group" id="bg-chips">
+          <div class="glass-chip active" onclick="selectBg('нарезка мыла')">🧼 Резка мыла</div>
+          <div class="glass-chip" onclick="selectBg('метро сёрф')">🏄 Метро Сёрф</div>
+          <div class="glass-chip" onclick="selectBg('майнкрафт паркур')">⛏️ Майнкрафт</div>
+          <div class="glass-chip" onclick="selectBg('чистка ковра')">🧹 Чистка ковра</div>
+          <div class="glass-chip" onclick="selectBg('custom')">✏️ Свой запрос...</div>
+        </div>
+        <div id="custom-bg-input-box" style="display: none; margin-top: 8px;">
+          <input type="text" id="reddit-custom-bg" class="glass-input" placeholder="Например: кинетический песок, gta 5 ramp...">
+        </div>
+      </div>
+
+      <!-- PARAMS: SASHATANYA -->
+      <div class="input-box" id="box-sashatanya" style="display: none;">
+        <label>🍿 Поиск серии или темы (оставь пустым для авто-выбора)</label>
+        <input type="text" id="sashatanya-query" class="glass-input" placeholder="Например: ревность, работа, диета...">
+      </div>
+
+      <!-- PARAMS: CINEMA -->
+      <div class="input-box" id="box-cinema" style="display: none;">
+        <label>🎬 Название фильма, сериала или сцены</label>
+        <input type="text" id="cinema-query" class="glass-input" placeholder="Например: Слово пацана, Интерстеллар, Кухня...">
+        <div class="chips-group">
+          <div class="glass-chip" onclick="setQuery('cinema', 'Слово пацана лучшие моменты')">Слово пацана</div>
+          <div class="glass-chip" onclick="setQuery('cinema', 'Сериал Кухня смешные моменты')">Кухня</div>
+          <div class="glass-chip" onclick="setQuery('cinema', 'Острые козырьки')">Острые козырьки</div>
+          <div class="glass-chip" onclick="setQuery('cinema', 'Брат 2 культовые сцены')">Брат 2</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUBTITLES & COUNT -->
+    <div class="glass-card">
+      <div class="section-title">📝 Стиль субтитров</div>
+      <div class="chips-group" id="sub-chips">
+        <div class="glass-chip active" onclick="selectSubtitle('mrbeast')">🟡 MrBeast (Жёлтые)</div>
+        <div class="glass-chip" onclick="selectSubtitle('classic_white')">⚪ Обычные белые</div>
+        <div class="glass-chip" onclick="selectSubtitle('neon_cyber')">🟣 Неон Cyber</div>
+        <div class="glass-chip" onclick="selectSubtitle('none')">🚫 Без субтитров</div>
+      </div>
+
+      <div class="section-title" style="margin-top: 14px;">🔢 Количество роликов</div>
+      <div class="count-grid" id="count-selector">
+        <div class="count-cell active" onclick="selectCount(1)">1</div>
+        <div class="count-cell" onclick="selectCount(2)">2</div>
+        <div class="count-cell" onclick="selectCount(3)">3</div>
+        <div class="count-cell" onclick="selectCount(5)">5</div>
+      </div>
+
+      <button class="primary-btn" id="studio-submit-btn" onclick="submitVideoOrder()">
+        <span>🚀 Смонтировать видео (1 шт)</span>
+      </button>
+    </div>
+
+    <!-- TECH SPECS -->
+    <div class="glass-card">
+      <div class="section-title">⚙️ Активные параметры конвейера</div>
+      <div class="specs-grid">
+        <div class="spec-tile">
+          <span class="label">Кадрирование</span>
+          <span class="value">Zoom 175% (Без полей)</span>
+        </div>
+        <div class="spec-tile">
+          <span class="label">Хронометраж</span>
+          <span class="value">60 — 180 сек</span>
+        </div>
+        <div class="spec-tile">
+          <span class="label">Баннер</span>
+          <span class="value">NATRIA_VPN (Хромакей)</span>
+        </div>
+        <div class="spec-tile">
+          <span class="label">Анти-дубликатор</span>
+          <span class="value">Включен (Уникально)</span>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="params-container" id="params-reddit" style="display: none;">
-    <div class="input-group">
-      <label class="input-label">📝 Тематика Reddit-истории (необязательно)</label>
-      <input type="text" id="reddit-topic" class="text-input" placeholder="Например: измена, токсичная свекровь, школа...">
-    </div>
-    <div class="input-group">
-      <label class="input-label">🧼 Фоновое видео (ASMR оверлей)</label>
-      <div class="chips-row" id="bg-chips">
-        <div class="chip active" onclick="selectBg('нарезка мыла')">🧼 Резка мыла</div>
-        <div class="chip" onclick="selectBg('метро сёрф')">🏄 Метро Сёрф</div>
-        <div class="chip" onclick="selectBg('майнкрафт паркур')">⛏️ Майнкрафт</div>
-        <div class="chip" onclick="selectBg('чистка ковра')">🧹 Чистка ковра</div>
-        <div class="chip" onclick="selectBg('custom')">✏️ Свой запрос...</div>
+  <!-- ================= TAB 2: AI ASSISTANT (ИИ-ПОМОЩНИК) ================= -->
+  <div class="tab-screen" id="screen-ai">
+    <div class="glass-card">
+      <div class="section-title">🤖 ИИ Режиссер и Помощник</div>
+      <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+        Опиши задачу свободным языком — нейросеть DeepSeek определит формат, подберет материалы, скачает нужные оверлеи и запустит сборку!
+      </p>
+
+      <div class="input-box">
+        <textarea id="ai-prompt-input" class="glass-input glass-textarea" placeholder="Например: Сделай 2 истории с реддита с канала АПВОУТ, жёлтые субтитры MrBeast..."></textarea>
       </div>
-      <div id="custom-bg-box" style="display: none; margin-top: 8px;">
-        <input type="text" id="reddit-custom-bg" class="text-input" placeholder="Например: gta 5 ramp, кинетический песок...">
+
+      <div class="section-title" style="margin-top: 14px; font-size: 11px;">⚡ Быстрые шаблоны</div>
+      <div class="chips-group">
+        <div class="glass-chip" onclick="setAiPrompt('История с реддита с канала АПВОУТ и белые субтитры')">📺 История Апвоут (YouTube)</div>
+        <div class="glass-chip" onclick="setAiPrompt('Сделай реддит историю про измену, фон нарезка мыла, субтитры mrbeast')">🧼 Реддит + нарезка мыла</div>
+        <div class="glass-chip" onclick="setAiPrompt('Сделай 2 ролика СашаТаня со смешными моментами')">🍿 2 ролика СашаТаня</div>
+        <div class="glass-chip" onclick="setAiPrompt('История с реддита про школу, фон метро сёрф')">🏄 Реддит + метро сёрф</div>
+        <div class="glass-chip" onclick="setAiPrompt('Найди сериал Кухня и сделай смешной ролик')">🎬 Сериал Кухня</div>
       </div>
+
+      <button class="primary-btn" onclick="submitAiPrompt()">
+        <span>✨ Отправить задачу ИИ-Режиссеру</span>
+      </button>
     </div>
   </div>
 
-  <div class="params-container" id="params-sashatanya" style="display: none;">
-    <div class="input-group">
-      <label class="input-label">🍿 Поиск серии или темы (необязательно)</label>
-      <input type="text" id="sashatanya-query" class="text-input" placeholder="Оставь пустым для авто-выбора свежей серии">
-    </div>
-    <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
-      ⚡ <b>Анти-дублирование активно:</b> бот автоматически нарезает уникальные фрагменты и не повторяет использованные моменты.
-    </div>
-  </div>
-
-  <div class="params-container" id="params-cinema" style="display: none;">
-    <div class="input-group">
-      <label class="input-label">🎬 Название фильма, сериала или сцена</label>
-      <input type="text" id="cinema-query" class="text-input" placeholder="Например: Слово пацана, Интерстеллар, Кухня...">
-      <div class="chips-row">
-        <div class="chip" onclick="setQuery('cinema', 'Слово пацана лучшие моменты')">Слово пацана</div>
-        <div class="chip" onclick="setQuery('cinema', 'Сериал Кухня смешные моменты')">Кухня</div>
-        <div class="chip" onclick="setQuery('cinema', 'Острые козырьки')">Острые козырьки</div>
-        <div class="chip" onclick="setQuery('cinema', 'Брат 2 культовые сцены')">Брат 2</div>
+  <!-- ================= TAB 3: MEDIA (ПОСЛЕДНЕЕ ВИДЕО И СКАЧИВАНИЕ) ================= -->
+  <div class="tab-screen" id="screen-media">
+    <div class="glass-card">
+      <div class="section-title">📹 Последний смонтированный ролик</div>
+      <div style="text-align: center; padding: 18px 0;">
+        <div style="width: 80px; height: 110px; margin: 0 auto 12px; border-radius: 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(99, 102, 241, 0.4)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
+          🎬
+        </div>
+        <div style="font-size: 15px; font-weight: 700; color: #ffffff;" id="latest-video-name">Готовый ролик 9:16</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Стильные субтитры MrBeast • Баннер NATRIA_VPN</div>
       </div>
+
+      <button class="primary-btn" onclick="triggerAction('latest_video')">
+        <span>📤 Отправить последнее видео в чат</span>
+      </button>
+      <button class="secondary-btn" onclick="triggerAction('latest_video')">
+        <span>💾 Скачать видео файл на устройство</span>
+      </button>
+    </div>
+
+    <div class="glass-card">
+      <div class="section-title">💡 Как скачивать ролики?</div>
+      <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5;">
+        Нажатие на кнопку выше сразу отправит MP4-видео прямо в ваш Telegram-чат с ботом, откуда его можно сохранить в галерею смартфона в один клик и публиковать в TikTok, Instagram Reels или YouTube Shorts!
+      </p>
     </div>
   </div>
 
-  <!-- SECTION: SUBTITLES -->
-  <div class="section-label">📝 Стиль субтитров</div>
-  <div class="chips-row" id="sub-chips">
-    <div class="chip active" onclick="selectSubtitle('mrbeast')">🟡 MrBeast (Жёлтые)</div>
-    <div class="chip" onclick="selectSubtitle('classic_white')">⚪ Обычные белые</div>
-    <div class="chip" onclick="selectSubtitle('neon_cyber')">🟣 Неон Cyber</div>
-    <div class="chip" onclick="selectSubtitle('none')">🚫 Без субтитров</div>
+  <!-- ================= TAB 4: STATUS (СТАТУС КОНВЕЙЕРА) ================= -->
+  <div class="tab-screen" id="screen-status">
+    <div class="glass-card">
+      <div class="section-title">📊 Статус и здоровье конвейера</div>
+      <div class="specs-grid">
+        <div class="spec-tile">
+          <span class="label">Хостинг</span>
+          <span class="value">💻 Локальный ПК</span>
+        </div>
+        <div class="spec-tile">
+          <span class="label">Состояние</span>
+          <span class="value" style="color: #4ade80;">🟢 Готов к работе</span>
+        </div>
+        <div class="spec-tile">
+          <span class="label">ИИ Модель</span>
+          <span class="value">DeepSeek V3</span>
+        </div>
+        <div class="spec-tile">
+          <span class="label">Распознавание</span>
+          <span class="value">Whisper V3</span>
+        </div>
+        <div class="spec-tile">
+          <span class="label">Масштабирование</span>
+          <span class="value">175% (Full 9:16)</span>
+        </div>
+        <div class="spec-tile">
+          <span class="label">Хронометраж</span>
+          <span class="value">60 — 180 сек</span>
+        </div>
+      </div>
+
+      <button class="secondary-btn" style="margin-top: 14px;" onclick="triggerAction('status')">
+        <span>📊 Запросить детальный отчет в чат</span>
+      </button>
+    </div>
   </div>
 
-  <!-- SECTION: COUNT -->
-  <div class="section-label">🔢 Количество видео</div>
-  <div class="count-grid" id="count-selector">
-    <div class="count-pill active" onclick="selectCount(1)">1</div>
-    <div class="count-pill" onclick="selectCount(2)">2</div>
-    <div class="count-pill" onclick="selectCount(3)">3</div>
-    <div class="count-pill" onclick="selectCount(5)">5</div>
+  <!-- ================= TAB 5: SYSTEM (СИСТЕМА, ОЧИСТКА, ВЫКЛЮЧЕНИЕ) ================= -->
+  <div class="tab-screen" id="screen-system">
+    <div class="glass-card">
+      <div class="section-title">🧹 Очистка диска и памяти</div>
+      <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+        Удаляет временные медиа-кэши, аудиодорожки и черновики, освобождая гигабайты свободного пространства на диске ПК для быстрого рендеринга.
+      </p>
+      <button class="primary-btn" onclick="triggerAction('clean_storage')">
+        <span>🧹 Очистить временные файлы и память</span>
+      </button>
+    </div>
+
+    <div class="glass-card" style="border-color: rgba(239, 68, 68, 0.4);">
+      <div class="section-title" style="color: #f87171;">🛑 Выключение бота на ПК</div>
+      <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px;">
+        Завершает процесс бота на локальном компьютере. Чтобы включить его снова, потребуется запустить скрипт на ПК.
+      </p>
+      <button class="danger-btn" onclick="openShutdownModal()">
+        <span>🛑 Выключить бота на ПК</span>
+      </button>
+    </div>
   </div>
 
-  <!-- SPECS -->
-  <div class="specs-card">
-    <div class="item">📐 <b>Формат 9:16:</b> Zoom 175% (без черных полос и искажений)</div>
-    <div class="item">⏱️ <b>Длительность:</b> 60 - 180 сек (идеально для алгоритмов TikTok)</div>
-    <div class="item">🏷️ <b>Баннер:</b> NATRIA_VPN (динамическая хромакей-врезка)</div>
-    <div class="item">🛡️ <b>Уникализация:</b> Анти-дубликатор моментов включен</div>
+  <!-- ================= FLOATING LIQUID GLASS DOCK (PHOTO 2 STYLE) ================= -->
+  <div class="dock-container">
+    <div class="dock-item active" onclick="switchTab('studio')">
+      <div class="nav-icon">🎬</div>
+      <div class="nav-label">Студия</div>
+    </div>
+
+    <div class="dock-item" onclick="switchTab('ai')">
+      <div class="nav-icon">🤖</div>
+      <div class="nav-label">ИИ Помощник</div>
+    </div>
+
+    <div class="dock-item" onclick="switchTab('media')">
+      <div class="nav-icon">📹</div>
+      <div class="nav-label">Медиа</div>
+    </div>
+
+    <div class="dock-item" onclick="switchTab('status')">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">Статус</div>
+    </div>
+
+    <div class="dock-item" onclick="switchTab('system')">
+      <div class="nav-icon">⚙️</div>
+      <div class="nav-label">Система</div>
+    </div>
   </div>
 
-  <!-- FOOTER -->
-  <div class="footer-bar">
-    <button class="submit-btn" id="main-submit" onclick="submitOrder()">
-      <span>🚀 Смонтировать видео (1 шт)</span>
-    </button>
-  </div>
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-box" id="toast"></div>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast"></div>
+  <!-- CONFIRM SHUTDOWN MODAL -->
+  <div class="modal-overlay" id="shutdown-modal">
+    <div class="modal-card">
+      <div style="font-size: 32px; margin-bottom: 8px;">⚠️</div>
+      <h3 style="font-size: 17px; margin-bottom: 8px;">Выключить бота?</h3>
+      <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 18px;">
+        Процесс бота на локальном ПК будет полностью остановлен.
+      </p>
+      <button class="danger-btn" onclick="confirmShutdown()">Да, выключить</button>
+      <button class="secondary-btn" onclick="closeShutdownModal()">Отмена</button>
+    </div>
+  </div>
 
   <script>
     const tg = window.Telegram?.WebApp;
@@ -506,19 +895,32 @@
       background: 'нарезка мыла'
     };
 
+    function switchTab(tabId) {
+      const tabs = ['studio', 'ai', 'media', 'status', 'system'];
+      tabs.forEach((t, index) => {
+        const screen = document.getElementById('screen-' + t);
+        const dockItem = document.querySelectorAll('.dock-item')[index];
+        if (screen) screen.classList.toggle('active', t === tabId);
+        if (dockItem) dockItem.classList.toggle('active', t === tabId);
+      });
+
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     function selectMode(m) {
       state.mode = m;
-      document.querySelectorAll('.mode-card').forEach(c => {
+      document.querySelectorAll('.mode-item').forEach(c => {
         c.classList.toggle('active', c.getAttribute('data-mode') === m);
       });
 
       ['upvote', 'reddit', 'sashatanya', 'cinema'].forEach(k => {
-        const p = document.getElementById('params-' + k);
+        const p = document.getElementById('box-' + k);
         if (p) p.style.display = (k === m) ? 'block' : 'none';
       });
 
       if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
-      updateMainButton();
+      updateStudioButton();
     }
 
     function setQuery(mode, text) {
@@ -527,9 +929,14 @@
       if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
     }
 
+    function setAiPrompt(text) {
+      document.getElementById('ai-prompt-input').value = text;
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+
     function selectBg(bg) {
       state.background = bg;
-      document.querySelectorAll('#bg-chips .chip').forEach(c => {
+      document.querySelectorAll('#bg-chips .glass-chip').forEach(c => {
         c.classList.remove('active');
         if (bg !== 'custom' && c.innerText.toLowerCase().includes(bg.toLowerCase().split(' ')[0])) {
           c.classList.add('active');
@@ -538,7 +945,7 @@
         }
       });
 
-      const customBox = document.getElementById('custom-bg-box');
+      const customBox = document.getElementById('custom-bg-input-box');
       if (customBox) {
         customBox.style.display = (bg === 'custom') ? 'block' : 'none';
       }
@@ -547,7 +954,7 @@
 
     function selectSubtitle(st) {
       state.subtitleStyle = st;
-      document.querySelectorAll('#sub-chips .chip').forEach(c => {
+      document.querySelectorAll('#sub-chips .glass-chip').forEach(c => {
         c.classList.remove('active');
       });
       event.target.classList.add('active');
@@ -556,23 +963,17 @@
 
     function selectCount(n) {
       state.count = n;
-      document.querySelectorAll('#count-selector .count-pill').forEach(p => {
+      document.querySelectorAll('#count-selector .count-cell').forEach(p => {
         p.classList.toggle('active', parseInt(p.innerText) === n);
       });
       if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
-      updateMainButton();
+      updateStudioButton();
     }
 
-    function updateMainButton() {
-      const btnText = `🚀 Смонтировать видео (${state.count} шт)`;
-      const submitBtn = document.getElementById('main-submit');
-      if (submitBtn) {
-        submitBtn.innerHTML = `<span>${btnText}</span>`;
-      }
-      if (tg?.MainButton) {
-        tg.MainButton.setText(btnText);
-        tg.MainButton.show();
-        tg.MainButton.onClick(submitOrder);
+    function updateStudioButton() {
+      const btn = document.getElementById('studio-submit-btn');
+      if (btn) {
+        btn.innerHTML = `<span>🚀 Смонтировать видео (${state.count} шт)</span>`;
       }
     }
 
@@ -583,11 +984,45 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    function submitOrder() {
-      const submitBtn = document.getElementById('main-submit');
-      if (submitBtn) submitBtn.disabled = true;
+    function sendPayloadToBot(payload, fallbackDeepParam) {
+      const jsonStr = JSON.stringify(payload);
+      console.log('Sending payload:', jsonStr);
 
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.notificationOccurred('success');
+      }
+
+      let sentViaTMA = false;
+      try {
+        if (tg && typeof tg.sendData === 'function') {
+          tg.sendData(jsonStr);
+          sentViaTMA = true;
+        }
+      } catch (err) {
+        console.warn('sendData error:', err);
+      }
+
+      setTimeout(() => {
+        try {
+          if (tg && typeof tg.close === 'function') {
+            tg.close();
+          }
+        } catch (e) {}
+
+        if (!sentViaTMA && fallbackDeepParam) {
+          const deepUrl = `https://t.me/ttconveyer_bot?start=${fallbackDeepParam.substring(0, 64)}`;
+          if (tg && typeof tg.openTelegramLink === 'function') {
+            tg.openTelegramLink(deepUrl);
+          } else {
+            window.location.href = deepUrl;
+          }
+        }
+      }, 350);
+    }
+
+    function submitVideoOrder() {
       let payload = {
+        action: 'create_video',
         mode: state.mode,
         count: state.count,
         subtitle_style: state.subtitleStyle
@@ -596,8 +1031,7 @@
       let queryParam = '';
 
       if (state.mode === 'upvote') {
-        const q = (document.getElementById('upvote-query').value || '').trim();
-        payload.query = q || 'истории с реддита апвоут';
+        payload.query = (document.getElementById('upvote-query').value || 'истории с реддита апвоут').trim();
         queryParam = payload.query;
       } else if (state.mode === 'reddit') {
         payload.topic = (document.getElementById('reddit-topic').value || '').trim();
@@ -615,52 +1049,57 @@
         queryParam = payload.query;
       }
 
-      const jsonStr = JSON.stringify(payload);
-      console.log('Sending payload:', jsonStr);
-
-      if (tg?.HapticFeedback) {
-        tg.HapticFeedback.notificationOccurred('success');
-      }
-
-      showToast('🚀 Заказ отправлен боту! Начинаем монтаж...');
-
-      // 1. Попытка стандартной отправки через Telegram WebApp sendData
-      let sentViaTMA = false;
-      try {
-        if (tg && typeof tg.sendData === 'function') {
-          tg.sendData(jsonStr);
-          sentViaTMA = true;
-        }
-      } catch (err) {
-        console.warn('sendData error:', err);
-      }
-
-      // 2. Если открыто через меню-кнопку (где sendData заблокирован Telegram), используем переход
-      setTimeout(() => {
-        try {
-          if (tg && typeof tg.close === 'function') {
-            tg.close();
-          }
-        } catch (e) {}
-
-        if (!sentViaTMA) {
-          // Компактный параметр для t.me/ttconveyer_bot?start=
-          // Формат: app_<mode>_<count>_<subStyle>_<cleanQuery>
-          let cleanQ = encodeURIComponent(queryParam.substring(0, 30));
-          let startParam = `app_${state.mode}_${state.count}_${state.subtitleStyle}_${cleanQ}`.substring(0, 64);
-          const deepUrl = `https://t.me/ttconveyer_bot?start=${startParam}`;
-
-          if (tg && typeof tg.openTelegramLink === 'function') {
-            tg.openTelegramLink(deepUrl);
-          } else {
-            window.location.href = deepUrl;
-          }
-        }
-      }, 400);
+      showToast('🚀 Заказ отправлен! Запускаем конвейер...');
+      const cleanQ = encodeURIComponent(queryParam.substring(0, 25));
+      const deepParam = `app_create_${state.mode}_${state.count}_${state.subtitleStyle}_${cleanQ}`;
+      sendPayloadToBot(payload, deepParam);
     }
 
-    // Initialize on load
-    updateMainButton();
+    function submitAiPrompt() {
+      const prompt = (document.getElementById('ai-prompt-input').value || '').trim();
+      if (!prompt) {
+        showToast('⚠️ Введи запрос для ИИ-помощника!');
+        return;
+      }
+
+      showToast('🤖 Запрос отправлен ИИ-режиссеру!');
+      const cleanPrompt = encodeURIComponent(prompt.substring(0, 35));
+      sendPayloadToBot({
+        action: 'ai_prompt',
+        prompt: prompt
+      }, `app_ai_${cleanPrompt}`);
+    }
+
+    function triggerAction(actionName) {
+      if (actionName === 'latest_video') {
+        showToast('📤 Отправляем ролик в чат...');
+        sendPayloadToBot({ action: 'latest_video' }, 'app_latest');
+      } else if (actionName === 'status') {
+        showToast('📊 Запрашиваем статус...');
+        sendPayloadToBot({ action: 'status' }, 'app_status');
+      } else if (actionName === 'clean_storage') {
+        showToast('🧹 Запускаем очистку диска...');
+        sendPayloadToBot({ action: 'clean_storage' }, 'app_clean');
+      }
+    }
+
+    function openShutdownModal() {
+      document.getElementById('shutdown-modal').style.display = 'flex';
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+    }
+
+    function closeShutdownModal() {
+      document.getElementById('shutdown-modal').style.display = 'none';
+    }
+
+    function confirmShutdown() {
+      closeShutdownModal();
+      showToast('🛑 Останавливаем бота на ПК...');
+      sendPayloadToBot({ action: 'stop_bot' }, 'app_stop');
+    }
+
+    // Initialize
+    updateStudioButton();
   </script>
 </body>
 </html>

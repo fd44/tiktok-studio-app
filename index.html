@@ -1640,22 +1640,29 @@
       if (bannerTxt) bannerTxt.innerText = `⏳ Монтаж ролика в процессе: ${pct}%`;
     }
 
+    let activeProgressPct = 10;
+    let activeTargetCap = 35;
+    let currentServerStage = 1;
+
     function startProgressSimulation() {
       clearInterval(progressTimer);
       clearInterval(pollInterval);
 
-      let currentPct = 10;
-      setDialProgress(currentPct, '~45 сек');
+      activeProgressPct = 12;
+      activeTargetCap = 35;
+      currentServerStage = 1;
+      setDialProgress(activeProgressPct, '~45 сек');
       updateStageUI(1);
 
-      // Плавный прирост процентов до границы следующего этапа
-      let maxCap = 30;
+      // Плавный динамический прирост: никогда не зависает на 30%!
       progressTimer = setInterval(() => {
-        if (currentPct < maxCap) {
-          currentPct += 1;
-          setDialProgress(currentPct);
+        if (activeProgressPct < activeTargetCap) {
+          activeProgressPct += 1;
+        } else if (activeProgressPct < 97) {
+          activeProgressPct += (activeProgressPct > 90 ? 0.2 : 0.4);
         }
-      }, 700);
+        setDialProgress(Math.floor(activeProgressPct), getEtaByStage(currentServerStage));
+      }, 750);
 
       pollInterval = setInterval(checkLatestVideoStatus, 1500);
       checkLatestVideoStatus();
@@ -1681,8 +1688,19 @@
           if (data && data.status === 'processing') {
             const serverPct = Math.max(10, Math.min(95, data.percent || 15));
             const stage = data.stage || 1;
+            currentServerStage = stage;
             updateStageUI(stage);
-            setDialProgress(serverPct, getEtaByStage(stage));
+
+            if (stage === 1) activeTargetCap = 35;
+            else if (stage === 2) activeTargetCap = 55;
+            else if (stage === 3) activeTargetCap = 72;
+            else if (stage === 4) activeTargetCap = 85;
+            else if (stage === 5) activeTargetCap = 96;
+
+            if (serverPct > activeProgressPct) {
+              activeProgressPct = serverPct;
+            }
+            setDialProgress(Math.floor(activeProgressPct), getEtaByStage(stage));
             if (data.log && data.log !== window.lastLogMsg) {
               window.lastLogMsg = data.log;
               appendLog(data.log);

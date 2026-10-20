@@ -14,9 +14,7 @@
       --text-muted: var(--tg-theme-hint-color, #8b949e);
       --accent: var(--tg-theme-button-color, #238636);
       --accent-text: var(--tg-theme-button-text-color, #ffffff);
-      --accent-glow: rgba(35, 134, 54, 0.35);
       --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-      --active-card-border: #a855f7;
     }
 
     * {
@@ -31,7 +29,7 @@
       background-color: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      padding: 16px 16px 110px 16px;
+      padding: 16px 16px 120px 16px;
       overflow-x: hidden;
       user-select: none;
     }
@@ -293,7 +291,7 @@
       right: 0;
       padding: 12px 16px;
       padding-bottom: calc(12px + env(safe-area-inset-bottom));
-      background: rgba(13, 17, 23, 0.85);
+      background: rgba(13, 17, 23, 0.92);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-top: 1px solid var(--card-border);
@@ -595,9 +593,12 @@
         subtitle_style: state.subtitleStyle
       };
 
+      let queryParam = '';
+
       if (state.mode === 'upvote') {
         const q = (document.getElementById('upvote-query').value || '').trim();
         payload.query = q || 'истории с реддита апвоут';
+        queryParam = payload.query;
       } else if (state.mode === 'reddit') {
         payload.topic = (document.getElementById('reddit-topic').value || '').trim();
         if (state.background === 'custom') {
@@ -605,10 +606,13 @@
         } else {
           payload.background = state.background;
         }
+        queryParam = (payload.topic ? payload.topic + '__' : '') + payload.background;
       } else if (state.mode === 'sashatanya') {
         payload.query = (document.getElementById('sashatanya-query').value || '').trim();
+        queryParam = payload.query;
       } else if (state.mode === 'cinema') {
         payload.query = (document.getElementById('cinema-query').value || 'популярные фильмы').trim();
+        queryParam = payload.query;
       }
 
       const jsonStr = JSON.stringify(payload);
@@ -631,7 +635,7 @@
         console.warn('sendData error:', err);
       }
 
-      // 2. Если открыто не через клавиатуру (например из меню-кнопки), делаем переход через start-параметр
+      // 2. Если открыто через меню-кнопку (где sendData заблокирован Telegram), используем переход
       setTimeout(() => {
         try {
           if (tg && typeof tg.close === 'function') {
@@ -639,12 +643,20 @@
           }
         } catch (e) {}
 
-        // Fallback: переход на t.me/ttconveyer_bot?start=app_...
         if (!sentViaTMA) {
-          const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
-          window.location.href = `https://t.me/ttconveyer_bot?start=app_${b64}`;
+          // Компактный параметр для t.me/ttconveyer_bot?start=
+          // Формат: app_<mode>_<count>_<subStyle>_<cleanQuery>
+          let cleanQ = encodeURIComponent(queryParam.substring(0, 30));
+          let startParam = `app_${state.mode}_${state.count}_${state.subtitleStyle}_${cleanQ}`.substring(0, 64);
+          const deepUrl = `https://t.me/ttconveyer_bot?start=${startParam}`;
+
+          if (tg && typeof tg.openTelegramLink === 'function') {
+            tg.openTelegramLink(deepUrl);
+          } else {
+            window.location.href = deepUrl;
+          }
         }
-      }, 500);
+      }, 400);
     }
 
     // Initialize on load

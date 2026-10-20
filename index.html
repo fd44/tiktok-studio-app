@@ -815,6 +815,88 @@
       text-align: center;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(239, 68, 68, 0.3);
     }
+
+    /* FLOATING PIP WIDGET */
+    .floating-pip-widget {
+      position: fixed;
+      bottom: 84px;
+      left: 14px;
+      right: 14px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, rgba(26, 14, 48, 0.95), rgba(15, 8, 30, 0.98));
+      border: 1.5px solid rgba(192, 132, 252, 0.65);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 20px rgba(168, 85, 247, 0.35);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      display: none;
+      align-items: center;
+      gap: 12px;
+      z-index: 999;
+      cursor: pointer;
+      animation: floatPulse 3s ease-in-out infinite;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .floating-pip-widget:active {
+      transform: scale(0.98);
+    }
+    @keyframes floatPulse {
+      0%, 100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 20px rgba(168, 85, 247, 0.35); }
+      50% { box-shadow: 0 12px 35px rgba(0, 0, 0, 0.75), 0 0 30px rgba(168, 85, 247, 0.6); }
+    }
+    .pip-pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #c084fc;
+      box-shadow: 0 0 10px #c084fc;
+      animation: blink 1.2s infinite ease-in-out;
+      flex-shrink: 0;
+    }
+    .pip-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .pip-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pip-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+    .pip-mini-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    .pip-mini-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #a855f7, #ec4899);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+    .pip-action-btn {
+      padding: 6px 12px;
+      border-radius: 12px;
+      background: rgba(168, 85, 247, 0.25);
+      border: 1px solid rgba(192, 132, 252, 0.5);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #f3e8ff;
+      flex-shrink: 0;
+    }
   </style>
 </head>
 <body>
@@ -847,6 +929,19 @@
 
   <!-- ================= TAB 1: STUDIO (ГЕНЕРАТОР) ================= -->
   <div class="tab-screen active" id="screen-studio">
+    <!-- ACTIVE TASK BANNER -->
+    <div id="studio-active-task-banner" class="glass-card" style="display: none; border-color: rgba(192, 132, 252, 0.7); background: rgba(168, 85, 247, 0.15); cursor: pointer; margin-bottom: 14px; animation: floatPulse 3s ease-in-out infinite;" onclick="maximizeProgress()">
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="pip-pulse-dot"></div>
+          <div>
+            <div style="font-size: 13.5px; font-weight: 700; color: #ffffff;" id="banner-stage-text">⏳ Монтаж ролика в процессе: 15%</div>
+            <div style="font-size: 11.5px; color: var(--light-purple); margin-top: 2px;" id="banner-sub-text">Нажмите сюда, чтобы открыть окно прогресса</div>
+          </div>
+        </div>
+        <div style="font-size: 18px; color: #c084fc;">↗️</div>
+      </div>
+    </div>
     <div class="glass-card">
       <div class="section-title">🎬 Выбери формат видео</div>
       <div class="mode-grid">
@@ -1081,6 +1176,24 @@
       <button class="danger-btn" onclick="openShutdownModal()">
         <span>🛑 Выключить бота на ПК</span>
       </button>
+    </div>
+  </div>
+
+  <!-- ================= FLOATING MINI PROGRESS BAR (PIP) ================= -->
+  <div class="floating-pip-widget" id="floating-pip-widget" onclick="maximizeProgress()">
+    <div class="pip-pulse-dot" id="pip-pulse-dot"></div>
+    <div class="pip-content">
+      <div class="pip-title">
+        <span class="pip-icon" id="pip-icon">🎬</span>
+        <span class="pip-stage" id="pip-stage-text">Монтаж видео: 15%</span>
+      </div>
+      <div class="pip-sub" id="pip-sub-text">Поиск и подготовка исходников...</div>
+      <div class="pip-mini-bar">
+        <div class="pip-mini-fill" id="pip-mini-fill" style="width: 15%;"></div>
+      </div>
+    </div>
+    <div class="pip-action-btn" id="pip-action-btn">
+      <span>Развернуть ↗️</span>
     </div>
   </div>
 
@@ -1435,6 +1548,10 @@
       document.getElementById('render-active-view').style.display = 'block';
       document.getElementById('render-success-view').style.display = 'none';
 
+      // Прячем свернутый виджет при открытии полного окна
+      const pip = document.getElementById('floating-pip-widget');
+      if (pip) pip.style.display = 'none';
+
       // Очищаем лог
       const logBox = document.getElementById('progress-log');
       if (logBox) {
@@ -1448,11 +1565,27 @@
 
     function minimizeProgress() {
       document.getElementById('in-app-progress-modal').style.display = 'none';
-      showToast('⏳ Монтаж продолжается в фоне... Открой вкладку «Медиа» для скачивания!');
+      const pip = document.getElementById('floating-pip-widget');
+      if (pip) pip.style.display = 'flex';
+      const banner = document.getElementById('studio-active-task-banner');
+      if (banner) banner.style.display = 'block';
+      showToast('⏳ Окно свернуто! Нажми на плавающую плашку внизу, чтобы развернуть');
+    }
+
+    function maximizeProgress() {
+      const pip = document.getElementById('floating-pip-widget');
+      if (pip) pip.style.display = 'none';
+      const modal = document.getElementById('in-app-progress-modal');
+      if (modal) modal.style.display = 'flex';
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
     }
 
     function closeProgressModal() {
       document.getElementById('in-app-progress-modal').style.display = 'none';
+      const pip = document.getElementById('floating-pip-widget');
+      if (pip) pip.style.display = 'none';
+      const banner = document.getElementById('studio-active-task-banner');
+      if (banner) banner.style.display = 'none';
       switchTab('studio');
     }
 
@@ -1495,6 +1628,16 @@
 
       const offset = 377 - (377 * pct) / 100;
       document.getElementById('dial-circle').style.strokeDashoffset = offset;
+
+      // Обновляем плавающий мини-виджет (PIP)
+      const pipStage = document.getElementById('pip-stage-text');
+      if (pipStage) pipStage.innerText = `Монтаж видео: ${pct}%`;
+      const pipFill = document.getElementById('pip-mini-fill');
+      if (pipFill) pipFill.style.width = `${pct}%`;
+
+      // Обновляем плашку в Студии
+      const bannerTxt = document.getElementById('banner-stage-text');
+      if (bannerTxt) bannerTxt.innerText = `⏳ Монтаж ролика в процессе: ${pct}%`;
     }
 
     function startProgressSimulation() {
@@ -1529,6 +1672,12 @@
           const jsonStr = decodeURIComponent(escape(atob(res.content.replace(/\s/g, ''))));
           const data = JSON.parse(jsonStr);
 
+          // Игнорируем старые зависшие статусы (старше 10 минут)
+          const isStale = data.timestamp && ((Date.now() / 1000) - data.timestamp > 600);
+          if (isStale && data.status === 'processing') {
+            return;
+          }
+
           if (data && data.status === 'processing') {
             const serverPct = Math.max(10, Math.min(95, data.percent || 15));
             const stage = data.stage || 1;
@@ -1537,14 +1686,18 @@
             if (data.log && data.log !== window.lastLogMsg) {
               window.lastLogMsg = data.log;
               appendLog(data.log);
+              const pipSub = document.getElementById('pip-sub-text');
+              if (pipSub) pipSub.innerText = data.log;
+              const bannerSub = document.getElementById('banner-sub-text');
+              if (bannerSub) bannerSub.innerText = data.log;
             }
           } else if (data && data.status === 'ready') {
-            if (!window.sessionStartTime || (data.timestamp * 1000) >= (window.sessionStartTime - 5000)) {
+            if (!window.sessionStartTime || (data.timestamp * 1000) >= (window.sessionStartTime - 10000)) {
               onGenerationFinished(data);
             }
           } else if (data && data.status === 'error') {
             appendLog('⚠️ ' + (data.log || 'Произошла ошибка при сборке'));
-            showToast('⚠️ Ошибка монтажа. Попробуй ещё раз');
+            showToast('⚠️ Ошибка монтажа: ' + (data.log || ''));
           }
         }
       })
@@ -1581,6 +1734,21 @@
       document.getElementById('media-tab-video-meta').innerText =
         `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • Zoom 175%`;
 
+      // Обновляем плавающий мини-виджет
+      const pipPulse = document.getElementById('pip-pulse-dot');
+      if (pipPulse) {
+        pipPulse.style.background = '#4ade80';
+        pipPulse.style.boxShadow = '0 0 10px #4ade80';
+      }
+      const pipStage = document.getElementById('pip-stage-text');
+      if (pipStage) pipStage.innerText = '🎉 Ролик готов! 100%';
+      const pipSub = document.getElementById('pip-sub-text');
+      if (pipSub) pipSub.innerText = latestVideoData.name;
+      const pipBtn = document.getElementById('pip-action-btn');
+      if (pipBtn) pipBtn.innerHTML = '<span>Открыть 💾</span>';
+      const banner = document.getElementById('studio-active-task-banner');
+      if (banner) banner.style.display = 'none';
+
       // Встраиваем встроенный плеер для мгновенного просмотра в модалке
       const resPlayerBox = document.getElementById('result-video-player-box');
       if (resPlayerBox) {
@@ -1598,8 +1766,11 @@
       if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
       setTimeout(() => {
-        document.getElementById('render-active-view').style.display = 'none';
-        document.getElementById('render-success-view').style.display = 'flex';
+        const modal = document.getElementById('in-app-progress-modal');
+        if (modal && modal.style.display === 'flex') {
+          document.getElementById('render-active-view').style.display = 'none';
+          document.getElementById('render-success-view').style.display = 'flex';
+        }
       }, 700);
     }
 
@@ -1649,20 +1820,41 @@
           const jsonStr = decodeURIComponent(escape(atob(res.content.replace(/\s/g, ''))));
           const data = JSON.parse(jsonStr);
           if (data && data.video_name) {
-            latestVideoData = {
-              name: data.video_name,
-              downloadUrl: data.download_url,
-              duration: data.duration || 85,
-              size: data.size_mb || 16.5
-            };
-            document.getElementById('media-tab-video-name').innerText = latestVideoData.name;
-            document.getElementById('media-tab-video-meta').innerText =
-              `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • Zoom 175%`;
-            updateMediaTabPlayer();
+            applyMediaData(data);
+            return;
           }
         }
+        // Фолбэк на глобальный latest.json
+        fetch(`https://api.github.com/repos/${GH_REPO}/contents/latest.json?t=${Date.now()}`, {
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        })
+        .then(r => r.ok ? r.json() : null)
+        .then(gRes => {
+          if (gRes && gRes.content) {
+            const gJson = decodeURIComponent(escape(atob(gRes.content.replace(/\s/g, ''))));
+            const gData = JSON.parse(gJson);
+            const entry = (gData.users && gData.users[myId]) || gData.global || gData;
+            if (entry && entry.video_name) {
+              applyMediaData(entry);
+            }
+          }
+        });
       })
       .catch(e => console.warn('media tab poll error:', e));
+    }
+
+    function applyMediaData(data) {
+      latestVideoData = {
+        name: data.video_name,
+        downloadUrl: data.download_url,
+        duration: data.duration || 85,
+        size: data.size_mb || 16.5
+      };
+      const titleElem = document.getElementById('media-tab-video-name');
+      if (titleElem) titleElem.innerText = latestVideoData.name;
+      const metaElem = document.getElementById('media-tab-video-meta');
+      if (metaElem) metaElem.innerText = `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • Zoom 175%`;
+      updateMediaTabPlayer();
     }
 
     function updateMediaTabPlayer() {

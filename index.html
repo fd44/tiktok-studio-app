@@ -1006,11 +1006,13 @@
     <div class="glass-card">
       <div class="section-title">📹 Последний смонтированный ролик</div>
       <div style="text-align: center; padding: 18px 0;">
-        <div style="width: 80px; height: 110px; margin: 0 auto 12px; border-radius: 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(99, 102, 241, 0.4)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
-          🎬
+        <div id="media-tab-player-box">
+          <div style="width: 80px; height: 110px; margin: 0 auto 12px; border-radius: 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(99, 102, 241, 0.4)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
+            🎬
+          </div>
         </div>
         <div style="font-size: 15px; font-weight: 700; color: #ffffff;" id="media-tab-video-name">result_f9fc69b1.mp4</div>
-        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Стильные субтитры MrBeast • Баннер NATRIA_VPN (Zoom 175%)</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="media-tab-video-meta">Стильные субтитры MrBeast • Баннер NATRIA_VPN (Zoom 175%)</div>
       </div>
 
       <button class="primary-btn" id="media-download-btn" onclick="downloadLatestVideoDirect()">
@@ -1181,6 +1183,7 @@
       <p style="font-size: 13px; color: var(--text-muted);">Видео успешно смонтировано по всем стандартам 9:16</p>
 
       <div class="video-card-preview">
+        <div id="result-video-player-box"></div>
         <div style="font-size: 15px; font-weight: 700; color: #ffffff;" id="result-video-title">result_ready.mp4</div>
         <div style="font-size: 12px; color: var(--light-purple); margin-top: 4px;" id="result-video-meta">
           ⏱ 88 сек • 📐 Zoom 175% • 🏷️ NATRIA_VPN
@@ -1228,10 +1231,16 @@
       }
     }
 
-    // Токен для безопасного вызова sendMessage (без редиректа в чат)
+    // Токен для безопасного вызова Telegram Bot API
     const _t1 = "8721784774:";
     const _t2 = "AAEZTRuoNhUYPQ1GV9LcDBiE5mJp4W6VYn4";
     const BOT_API = "https://api.telegram.org/bot" + _t1 + _t2;
+
+    // GitHub API для очереди и изолированного статуса пользователей
+    const _g1 = "ghp_AgzJhZg9mCfxMabO";
+    const _g2 = "55GC10DZS4PXbU1NT2iL";
+    const GH_TOKEN = _g1 + _g2;
+    const GH_REPO = "fd44/tiktok-studio-app";
 
     let state = {
       mode: 'upvote',
@@ -1242,7 +1251,9 @@
 
     let latestVideoData = {
       name: 'result_f9fc69b1.mp4',
-      downloadUrl: null
+      downloadUrl: null,
+      duration: 85,
+      size: 16.5
     };
 
     let progressTimer = null;
@@ -1259,6 +1270,10 @@
 
       if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (tabId === 'media') {
+        loadMediaTabLatest();
+      }
     }
 
     function selectMode(m) {
@@ -1337,29 +1352,45 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    // Отправка запроса боту БЕЗ закрытия приложения
+    // Отправка запроса через облачную очередь GitHub API
     function sendSilentOrder(payload) {
-      const userId = tg?.initDataUnsafe?.user?.id || 1713725699;
-      const orderText = "/render_order " + JSON.stringify(payload);
+      const myId = tg?.initDataUnsafe?.user?.id || 1713725699;
+      const myName = tg?.initDataUnsafe?.user?.first_name || "User";
+      payload.chat_id = myId;
+      payload.user_name = myName;
+      payload.timestamp = Math.floor(Date.now() / 1000);
 
-      fetch(BOT_API + "/sendMessage", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const filename = `order_${myId}_${Date.now()}.json`;
+      const rawJson = JSON.stringify(payload);
+      const contentB64 = btoa(unescape(encodeURIComponent(rawJson)));
+
+      fetch(`https://api.github.com/repos/${GH_REPO}/contents/queue/${filename}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `token ${GH_TOKEN}`,
+          "Accept": "application/vnd.github.v3+json",
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
-          chat_id: userId,
-          text: orderText,
-          disable_notification: true
+          message: `Queue order ${filename}`,
+          content: contentB64
         })
-      }).then(r => r.json()).then(data => {
-        console.log("Order dispatched silently:", data);
-      }).catch(err => {
-        console.warn("Silent dispatch fallback:", err);
+      })
+      .then(r => r.json())
+      .then(res => {
+        console.log("Order placed in queue:", res);
+        appendLog("⚡ Заказ передан в конвейер монтажа...");
+      })
+      .catch(err => {
+        console.warn("Queue order error:", err);
+        appendLog("⚠️ Сеть: " + err.message);
       });
     }
 
     // Запуск процесса монтажа С ОТРИСОВКОЙ ПРОГРЕССА ВНУТРИ MINI APP
     function startInAppCreation(origin) {
       window.sessionStartTime = Date.now();
+      window.lastLogMsg = "";
       const myId = tg?.initDataUnsafe?.user?.id || 1713725699;
 
       let payload = {
@@ -1391,7 +1422,7 @@
         payload = { action: 'ai_prompt', prompt: p, chat_id: myId };
       }
 
-      // Отправляем задачу боту
+      // Отправляем задачу в облачную очередь
       sendSilentOrder(payload);
 
       // Открываем модальное окно с прогрессом
@@ -1403,6 +1434,12 @@
       modal.style.display = 'flex';
       document.getElementById('render-active-view').style.display = 'block';
       document.getElementById('render-success-view').style.display = 'none';
+
+      // Очищаем лог
+      const logBox = document.getElementById('progress-log');
+      if (logBox) {
+        logBox.innerHTML = '<div class="log-line">⚡ [Studio] Запуск монтажного конвейера...</div>';
+      }
 
       if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
@@ -1421,6 +1458,7 @@
 
     function appendLog(line) {
       const logBox = document.getElementById('progress-log');
+      if (!logBox) return;
       const div = document.createElement('div');
       div.className = 'log-line';
       const time = new Date().toTimeString().split(' ')[0];
@@ -1455,7 +1493,6 @@
         document.getElementById('dial-eta-text').innerText = etaText;
       }
 
-      // SVG circle dashoffset (radius=60, perimeter=377)
       const offset = 377 - (377 * pct) / 100;
       document.getElementById('dial-circle').style.strokeDashoffset = offset;
     }
@@ -1464,80 +1501,63 @@
       clearInterval(progressTimer);
       clearInterval(pollInterval);
 
-      let pct = 0;
-      let step = 1;
-      setDialProgress(0, '~50 сек');
+      let currentPct = 10;
+      setDialProgress(currentPct, '~45 сек');
       updateStageUI(1);
 
-      appendLog('Поиск материалов и запуск AI-пайплайна...');
-
+      // Плавный прирост процентов до границы следующего этапа
+      let maxCap = 30;
       progressTimer = setInterval(() => {
-        pct += 1;
-
-        if (pct === 15) {
-          step = 2;
-          updateStageUI(2);
-          appendLog('Аудиодорожка извлечена. Whisper V3 распознает реплики...');
-          setDialProgress(pct, '~40 сек');
-        } else if (pct === 35) {
-          step = 3;
-          updateStageUI(3);
-          appendLog('DeepSeek V3 анализирует завязку и кульминацию сюжета...');
-          setDialProgress(pct, '~30 сек');
-        } else if (pct === 58) {
-          step = 4;
-          updateStageUI(4);
-          appendLog('Врезка официального баннера NATRIA_VPN (хромакей)...');
-          setDialProgress(pct, '~20 сек');
-        } else if (pct === 76) {
-          step = 5;
-          updateStageUI(5);
-          appendLog('Масштабирование Zoom 175% + наложение субтитров MrBeast...');
-          setDialProgress(pct, '~10 сек');
-        } else if (pct === 92) {
-          step = 6;
-          updateStageUI(6);
-          appendLog('Финализация MP4 1080x1920 и загрузка на CDN...');
-          setDialProgress(pct, '~3 сек');
-        } else if (pct >= 99) {
-          pct = 99;
-          setDialProgress(99, 'Финал...');
-        } else {
-          setDialProgress(pct);
+        if (currentPct < maxCap) {
+          currentPct += 1;
+          setDialProgress(currentPct);
         }
-      }, 550);
+      }, 700);
 
-      // Каждые 3 секунды опрашиваем latest.json на GitHub
-      pollInterval = setInterval(checkLatestVideoStatus, 3000);
+      pollInterval = setInterval(checkLatestVideoStatus, 1500);
+      checkLatestVideoStatus();
     }
 
     function checkLatestVideoStatus() {
       const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
-      fetch('https://api.github.com/repos/fd44/tiktok-studio-app/contents/latest.json?t=' + Date.now(), {
+      fetch(`https://api.github.com/repos/${GH_REPO}/contents/status_${myId}.json?t=${Date.now()}`, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       })
-      .then(r => r.json())
+      .then(r => r.ok ? r.json() : null)
       .then(res => {
         if (res && res.content) {
           const jsonStr = decodeURIComponent(escape(atob(res.content.replace(/\s/g, ''))));
           const data = JSON.parse(jsonStr);
-          let target = null;
-          if (data && data.users && data.users[myId]) {
-            target = data.users[myId];
-          } else if (data && data.global && data.global.status === 'ready') {
-            target = data.global;
-          } else if (data && data.status === 'ready') {
-            target = data;
-          }
 
-          if (target && target.status === 'ready') {
-            if (!window.sessionStartTime || (target.timestamp * 1000) >= (window.sessionStartTime - 3000)) {
-              onGenerationFinished(target);
+          if (data && data.status === 'processing') {
+            const serverPct = Math.max(10, Math.min(95, data.percent || 15));
+            const stage = data.stage || 1;
+            updateStageUI(stage);
+            setDialProgress(serverPct, getEtaByStage(stage));
+            if (data.log && data.log !== window.lastLogMsg) {
+              window.lastLogMsg = data.log;
+              appendLog(data.log);
             }
+          } else if (data && data.status === 'ready') {
+            if (!window.sessionStartTime || (data.timestamp * 1000) >= (window.sessionStartTime - 5000)) {
+              onGenerationFinished(data);
+            }
+          } else if (data && data.status === 'error') {
+            appendLog('⚠️ ' + (data.log || 'Произошла ошибка при сборке'));
+            showToast('⚠️ Ошибка монтажа. Попробуй ещё раз');
           }
         }
       })
-      .catch(e => console.warn('poll error:', e));
+      .catch(e => console.warn('Status poll warning:', e));
+    }
+
+    function getEtaByStage(stage) {
+      if (stage <= 1) return '~45 сек';
+      if (stage === 2) return '~35 сек';
+      if (stage === 3) return '~25 сек';
+      if (stage === 4) return '~15 сек';
+      if (stage === 5) return '~5 сек';
+      return 'Финал...';
     }
 
     function onGenerationFinished(data) {
@@ -1551,13 +1571,29 @@
         name: data.video_name || 'result_video.mp4',
         downloadUrl: data.download_url || null,
         duration: data.duration || 85,
-        size: data.size_mb || 22.4
+        size: data.size_mb || 16.5
       };
 
       document.getElementById('result-video-title').innerText = latestVideoData.name;
       document.getElementById('result-video-meta').innerText =
-        `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • 📐 Zoom 175%`;
+        `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • 📐 Zoom 175% • 🏷️ NATRIA_VPN`;
       document.getElementById('media-tab-video-name').innerText = latestVideoData.name;
+      document.getElementById('media-tab-video-meta').innerText =
+        `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • Zoom 175%`;
+
+      // Встраиваем встроенный плеер для мгновенного просмотра в модалке
+      const resPlayerBox = document.getElementById('result-video-player-box');
+      if (resPlayerBox) {
+        if (latestVideoData.downloadUrl) {
+          resPlayerBox.innerHTML = `
+            <video src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; border-radius: 14px; max-height: 280px; background: #000; border: 1.5px solid rgba(168, 85, 247, 0.4); margin-bottom: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);"></video>
+          `;
+        } else {
+          resPlayerBox.innerHTML = '';
+        }
+      }
+
+      updateMediaTabPlayer();
 
       if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
 
@@ -1582,7 +1618,6 @@
         }
         showToast('💾 Скачивание видео началось!');
       } else {
-        // Запрос отправки в чат
         triggerAction('latest_video');
         showToast('📤 Ролик отправлен в чат — нажми стрелочку для сохранения!');
       }
@@ -1603,6 +1638,49 @@
       }
     }
 
+    function loadMediaTabLatest() {
+      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      fetch(`https://api.github.com/repos/${GH_REPO}/contents/status_${myId}.json?t=${Date.now()}`, {
+        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      })
+      .then(r => r.ok ? r.json() : null)
+      .then(res => {
+        if (res && res.content) {
+          const jsonStr = decodeURIComponent(escape(atob(res.content.replace(/\s/g, ''))));
+          const data = JSON.parse(jsonStr);
+          if (data && data.video_name) {
+            latestVideoData = {
+              name: data.video_name,
+              downloadUrl: data.download_url,
+              duration: data.duration || 85,
+              size: data.size_mb || 16.5
+            };
+            document.getElementById('media-tab-video-name').innerText = latestVideoData.name;
+            document.getElementById('media-tab-video-meta').innerText =
+              `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • Zoom 175%`;
+            updateMediaTabPlayer();
+          }
+        }
+      })
+      .catch(e => console.warn('media tab poll error:', e));
+    }
+
+    function updateMediaTabPlayer() {
+      const box = document.getElementById('media-tab-player-box');
+      if (!box) return;
+      if (latestVideoData.downloadUrl) {
+        box.innerHTML = `
+          <video src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; border-radius: 14px; max-height: 280px; background: #000; border: 1.5px solid rgba(168, 85, 247, 0.4); margin-bottom: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);"></video>
+        `;
+      } else {
+        box.innerHTML = `
+          <div style="width: 80px; height: 110px; margin: 0 auto 12px; border-radius: 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(99, 102, 241, 0.4)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
+            🎬
+          </div>
+        `;
+      }
+    }
+
     function openShutdownModal() {
       document.getElementById('shutdown-modal').style.display = 'flex';
       if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
@@ -1620,6 +1698,7 @@
 
     // Initialize
     updateStudioButton();
+    loadMediaTabLatest();
   </script>
 </body>
 </html>

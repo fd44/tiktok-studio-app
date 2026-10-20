@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>TikTok Autopilot Studio</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg: var(--tg-theme-bg-color, #0d1117);
+      --card-bg: var(--tg-theme-secondary-bg-color, #161b22);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: var(--tg-theme-text-color, #f0f6fc);
+      --text-muted: var(--tg-theme-hint-color, #8b949e);
+      --accent: var(--tg-theme-button-color, #238636);
+      --accent-text: var(--tg-theme-button-text-color, #ffffff);
+      --accent-glow: rgba(35, 134, 54, 0.35);
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      --active-card-border: #a855f7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px 16px 110px 16px;
+      overflow-x: hidden;
+      user-select: none;
+    }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 10px 0 5px 0;
+    }
+
+    .badge-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #c084fc;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .badge-bar .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.5; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0.5; transform: scale(0.9); }
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 320px;
+      margin: 0 auto;
+      line-height: 1.4;
+    }
+
+    /* SECTION TITLES */
+    .section-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      margin: 18px 0 10px 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* MODE CARDS */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mode-card {
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px 12px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .mode-card.active {
+      border-color: #a855f7;
+      background: linear-gradient(145deg, rgba(168, 85, 247, 0.12) 0%, rgba(99, 102, 241, 0.08) 100%);
+      box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+    }
+
+    .mode-card .icon {
+      font-size: 26px;
+    }
+
+    .mode-card .title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .mode-card .desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .mode-card .check-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #a855f7;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .mode-card.active .check-badge {
+      display: flex;
+    }
+
+    /* PARAMS PANEL */
+    .params-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .input-group {
+      margin-bottom: 12px;
+    }
+
+    .input-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .text-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .text-input:focus {
+      border-color: #a855f7;
+    }
+
+    .text-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 13px;
+    }
+
+    /* CHIP SELECTORS */
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .chip.active {
+      background: #a855f7;
+      border-color: #a855f7;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* COUNT PILLS */
+    .count-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .count-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .count-pill.active {
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      border-color: #a855f7;
+      color: white;
+      box-shadow: 0 4px 15px rgba(168, 85, 247, 0.3);
+    }
+
+    /* SPECS BANNER */
+    .specs-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed var(--card-border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 16px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .specs-card .item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .specs-card b {
+      color: var(--text);
+    }
+
+    /* FIXED FOOTER WITH ACTION BUTTON */
+    .footer-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 12px 16px;
+      padding-bottom: calc(12px + env(safe-area-inset-bottom));
+      background: rgba(13, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--card-border);
+      z-index: 100;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--primary-gradient);
+      border: none;
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: transform 0.1s ease, filter 0.2s ease;
+    }
+
+    .submit-btn:active {
+      transform: scale(0.98);
+      filter: brightness(1.1);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* POPUP TOAST */
+    .toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #1e1b4b;
+      border: 1px solid #6366f1;
+      border-radius: 12px;
+      padding: 12px 20px;
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      z-index: 200;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-align: center;
+      max-width: 90%;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge-bar">
+      <div class="dot"></div>
+      AUTOPILOT V2.0 ONLINE
+    </div>
+    <h1>TikTok Studio</h1>
+    <p>Монтаж вертикальных 9:16 видео со стильными субтитрами и авто-баннером</p>
+  </div>
+
+  <!-- SECTION: FORMAT -->
+  <div class="section-label">🎬 Формат контента</div>
+  <div class="mode-grid">
+    <div class="mode-card active" data-mode="upvote" onclick="selectMode('upvote')">
+      <div class="check-badge">✓</div>
+      <div class="icon">📺</div>
+      <div class="title">Канал «АПВОУТ»</div>
+      <div class="desc">Живая озвучка из YouTube, нарезка историй + субтитры</div>
+    </div>
+
+    <div class="mode-card" data-mode="reddit" onclick="selectMode('reddit')">
+      <div class="check-badge">✓</div>
+      <div class="icon">🧼</div>
+      <div class="title">Reddit ASMR</div>
+      <div class="desc">Нейро-озвучка истории + ASMR фон (мыло, сёрф, ковёр)</div>
+    </div>
+
+    <div class="mode-card" data-mode="sashatanya" onclick="selectMode('sashatanya')">
+      <div class="check-badge">✓</div>
+      <div class="icon">🍿</div>
+      <div class="title">СашаТаня</div>
+      <div class="desc">Авто-нарезка смешных моментов сериала (Zoom 175%)</div>
+    </div>
+
+    <div class="mode-card" data-mode="cinema" onclick="selectMode('cinema')">
+      <div class="check-badge">✓</div>
+      <div class="icon">🎬</div>
+      <div class="title">Фильмы / Сериалы</div>
+      <div class="desc">Культовые сцены из кино по названию или жанру</div>
+    </div>
+  </div>
+
+  <!-- PARAMS FOR ACTIVE MODE -->
+  <div class="params-container" id="params-upvote">
+    <div class="input-group">
+      <label class="input-label">🔎 Тематика или ссылка YouTube (необязательно)</label>
+      <input type="text" id="upvote-query" class="text-input" placeholder="Например: апвоут страшные истории...">
+      <div class="chips-row">
+        <div class="chip" onclick="setQuery('upvote', 'истории с реддита апвоут')">🔥 Свежие</div>
+        <div class="chip" onclick="setQuery('upvote', 'апвоут страшные истории')">👻 Страшные</div>
+        <div class="chip" onclick="setQuery('upvote', 'апвоут секреты врачей')">🤫 Секреты</div>
+        <div class="chip" onclick="setQuery('upvote', 'апвоут истории про богатых')">💰 Про деньги</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="params-container" id="params-reddit" style="display: none;">
+    <div class="input-group">
+      <label class="input-label">📝 Тематика Reddit-истории (необязательно)</label>
+      <input type="text" id="reddit-topic" class="text-input" placeholder="Например: измена, токсичная свекровь, школа...">
+    </div>
+    <div class="input-group">
+      <label class="input-label">🧼 Фоновое видео (ASMR оверлей)</label>
+      <div class="chips-row" id="bg-chips">
+        <div class="chip active" onclick="selectBg('нарезка мыла')">🧼 Резка мыла</div>
+        <div class="chip" onclick="selectBg('метро сёрф')">🏄 Метро Сёрф</div>
+        <div class="chip" onclick="selectBg('майнкрафт паркур')">⛏️ Майнкрафт</div>
+        <div class="chip" onclick="selectBg('чистка ковра')">🧹 Чистка ковра</div>
+        <div class="chip" onclick="selectBg('custom')">✏️ Свой запрос...</div>
+      </div>
+      <div id="custom-bg-box" style="display: none; margin-top: 8px;">
+        <input type="text" id="reddit-custom-bg" class="text-input" placeholder="Например: gta 5 ramp, кинетический песок...">
+      </div>
+    </div>
+  </div>
+
+  <div class="params-container" id="params-sashatanya" style="display: none;">
+    <div class="input-group">
+      <label class="input-label">🍿 Поиск серии или темы (необязательно)</label>
+      <input type="text" id="sashatanya-query" class="text-input" placeholder="Оставь пустым для авто-выбора свежей серии">
+    </div>
+    <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+      ⚡ <b>Анти-дублирование активно:</b> бот автоматически нарезает уникальные фрагменты и не повторяет использованные моменты.
+    </div>
+  </div>
+
+  <div class="params-container" id="params-cinema" style="display: none;">
+    <div class="input-group">
+      <label class="input-label">🎬 Название фильма, сериала или сцена</label>
+      <input type="text" id="cinema-query" class="text-input" placeholder="Например: Слово пацана, Интерстеллар, Кухня...">
+      <div class="chips-row">
+        <div class="chip" onclick="setQuery('cinema', 'Слово пацана лучшие моменты')">Слово пацана</div>
+        <div class="chip" onclick="setQuery('cinema', 'Сериал Кухня смешные моменты')">Кухня</div>
+        <div class="chip" onclick="setQuery('cinema', 'Острые козырьки')">Острые козырьки</div>
+        <div class="chip" onclick="setQuery('cinema', 'Брат 2 культовые сцены')">Брат 2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: SUBTITLES -->
+  <div class="section-label">📝 Стиль субтитров</div>
+  <div class="chips-row" id="sub-chips">
+    <div class="chip active" onclick="selectSubtitle('mrbeast')">🟡 MrBeast (Жёлтые)</div>
+    <div class="chip" onclick="selectSubtitle('classic_white')">⚪ Обычные белые</div>
+    <div class="chip" onclick="selectSubtitle('neon_cyber')">🟣 Неон Cyber</div>
+    <div class="chip" onclick="selectSubtitle('none')">🚫 Без субтитров</div>
+  </div>
+
+  <!-- SECTION: COUNT -->
+  <div class="section-label">🔢 Количество видео</div>
+  <div class="count-grid" id="count-selector">
+    <div class="count-pill active" onclick="selectCount(1)">1</div>
+    <div class="count-pill" onclick="selectCount(2)">2</div>
+    <div class="count-pill" onclick="selectCount(3)">3</div>
+    <div class="count-pill" onclick="selectCount(5)">5</div>
+  </div>
+
+  <!-- SPECS -->
+  <div class="specs-card">
+    <div class="item">📐 <b>Формат 9:16:</b> Zoom 175% (без черных полос и искажений)</div>
+    <div class="item">⏱️ <b>Длительность:</b> 60 - 180 сек (идеально для алгоритмов TikTok)</div>
+    <div class="item">🏷️ <b>Баннер:</b> NATRIA_VPN (динамическая хромакей-врезка)</div>
+    <div class="item">🛡️ <b>Уникализация:</b> Анти-дубликатор моментов включен</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-bar">
+    <button class="submit-btn" id="main-submit" onclick="submitOrder()">
+      <span>🚀 Смонтировать видео (1 шт)</span>
+    </button>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      if (tg.enableClosingConfirmation) {
+        tg.enableClosingConfirmation();
+      }
+    }
+
+    let state = {
+      mode: 'upvote',
+      count: 1,
+      subtitleStyle: 'mrbeast',
+      background: 'нарезка мыла'
+    };
+
+    function selectMode(m) {
+      state.mode = m;
+      document.querySelectorAll('.mode-card').forEach(c => {
+        c.classList.toggle('active', c.getAttribute('data-mode') === m);
+      });
+
+      ['upvote', 'reddit', 'sashatanya', 'cinema'].forEach(k => {
+        const p = document.getElementById('params-' + k);
+        if (p) p.style.display = (k === m) ? 'block' : 'none';
+      });
+
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      updateMainButton();
+    }
+
+    function setQuery(mode, text) {
+      if (mode === 'upvote') document.getElementById('upvote-query').value = text;
+      if (mode === 'cinema') document.getElementById('cinema-query').value = text;
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+
+    function selectBg(bg) {
+      state.background = bg;
+      document.querySelectorAll('#bg-chips .chip').forEach(c => {
+        c.classList.remove('active');
+        if (bg !== 'custom' && c.innerText.toLowerCase().includes(bg.toLowerCase().split(' ')[0])) {
+          c.classList.add('active');
+        } else if (bg === 'custom' && c.innerText.includes('Свой')) {
+          c.classList.add('active');
+        }
+      });
+
+      const customBox = document.getElementById('custom-bg-box');
+      if (customBox) {
+        customBox.style.display = (bg === 'custom') ? 'block' : 'none';
+      }
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+
+    function selectSubtitle(st) {
+      state.subtitleStyle = st;
+      document.querySelectorAll('#sub-chips .chip').forEach(c => {
+        c.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+
+    function selectCount(n) {
+      state.count = n;
+      document.querySelectorAll('#count-selector .count-pill').forEach(p => {
+        p.classList.toggle('active', parseInt(p.innerText) === n);
+      });
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      updateMainButton();
+    }
+
+    function updateMainButton() {
+      const btnText = `🚀 Смонтировать видео (${state.count} шт)`;
+      const submitBtn = document.getElementById('main-submit');
+      if (submitBtn) {
+        submitBtn.innerHTML = `<span>${btnText}</span>`;
+      }
+      if (tg?.MainButton) {
+        tg.MainButton.setText(btnText);
+        tg.MainButton.show();
+        tg.MainButton.onClick(submitOrder);
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    function submitOrder() {
+      const submitBtn = document.getElementById('main-submit');
+      if (submitBtn) submitBtn.disabled = true;
+
+      let payload = {
+        mode: state.mode,
+        count: state.count,
+        subtitle_style: state.subtitleStyle
+      };
+
+      if (state.mode === 'upvote') {
+        const q = (document.getElementById('upvote-query').value || '').trim();
+        payload.query = q || 'истории с реддита апвоут';
+      } else if (state.mode === 'reddit') {
+        payload.topic = (document.getElementById('reddit-topic').value || '').trim();
+        if (state.background === 'custom') {
+          payload.background = (document.getElementById('reddit-custom-bg').value || 'нарезка мыла').trim();
+        } else {
+          payload.background = state.background;
+        }
+      } else if (state.mode === 'sashatanya') {
+        payload.query = (document.getElementById('sashatanya-query').value || '').trim();
+      } else if (state.mode === 'cinema') {
+        payload.query = (document.getElementById('cinema-query').value || 'популярные фильмы').trim();
+      }
+
+      const jsonStr = JSON.stringify(payload);
+      console.log('Sending payload:', jsonStr);
+
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.notificationOccurred('success');
+      }
+
+      showToast('🚀 Заказ отправлен боту! Начинаем монтаж...');
+
+      // 1. Попытка стандартной отправки через Telegram WebApp sendData
+      let sentViaTMA = false;
+      try {
+        if (tg && typeof tg.sendData === 'function') {
+          tg.sendData(jsonStr);
+          sentViaTMA = true;
+        }
+      } catch (err) {
+        console.warn('sendData error:', err);
+      }
+
+      // 2. Если открыто не через клавиатуру (например из меню-кнопки), делаем переход через start-параметр
+      setTimeout(() => {
+        try {
+          if (tg && typeof tg.close === 'function') {
+            tg.close();
+          }
+        } catch (e) {}
+
+        // Fallback: переход на t.me/ttconveyer_bot?start=app_...
+        if (!sentViaTMA) {
+          const b64 = btoa(unescape(encodeURIComponent(jsonStr)));
+          window.location.href = `https://t.me/ttconveyer_bot?start=app_${b64}`;
+        }
+      }, 500);
+    }
+
+    // Initialize on load
+    updateMainButton();
+  </script>
+</body>
+</html>

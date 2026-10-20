@@ -1,1 +1,9 @@
-{"status": "ready", "stage": 6, "percent": 100, "title": "✅ Ролик готов к скачиванию!", "log": "Монтаж успешно завершён. Исходник доступен в приложении!", "video_name": "result_8dbd8310.mp4", "download_url": "https://api.telegram.org/file/bot8721784774:AAEZTRuoNhUYPQ1GV9LcDBiE5mJp4W6VYn4/videos/file_6.mp4", "duration": 83, "size_mb": 19.3, "chat_id": 1713725699, "timestamp": 1792531683, "time_str": "2026-10-21 02:28:03"}
+{
+    "timestamp":  179255036476101,
+    "chat_id":  1713725699,
+    "stage":  0,
+    "log":  "Система свободна. Выберите режим создания видео.",
+    "percent":  0,
+    "status":  "idle",
+    "title":  "Готов к работе"
+}

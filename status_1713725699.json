@@ -1,1 +1,1 @@
-{"status": "processing", "stage": 1, "percent": 15, "title": "🔍 Поиск видеоматериалов", "log": "Поиск исходника: сериал СашаТаня...", "video_name": "", "download_url": null, "duration": 0, "size_mb": 0.0, "chat_id": 1713725699, "timestamp": 1792565793, "time_str": "2026-10-21 09:56:33"}
+{"status": "error", "stage": 1, "percent": 0, "title": "❌ Ошибка", "log": "Не удалось найти или скачать видео-исходник.", "video_name": "", "download_url": null, "duration": 0, "size_mb": 0.0, "chat_id": 1713725699, "timestamp": 1792565795, "time_str": "2026-10-21 09:56:35"}

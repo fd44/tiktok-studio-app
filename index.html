@@ -984,6 +984,14 @@
           <div class="glass-chip" onclick="setQuery('upvote', 'апвоут секреты врачей')">🤫 Секреты</div>
           <div class="glass-chip" onclick="setQuery('upvote', 'апвоут истории про богатых')">💰 Деньги</div>
         </div>
+        <label style="margin-top: 10px;">🧼 Фоновое видео (ASMR / Геймплей)</label>
+        <div class="chips-group" id="upvote-bg-chips">
+          <div class="glass-chip active" onclick="selectUpvoteBg('нарезка мыла')">🧼 Резка мыла</div>
+          <div class="glass-chip" onclick="selectUpvoteBg('майнкрафт паркур')">⛏️ Майнкрафт</div>
+          <div class="glass-chip" onclick="selectUpvoteBg('чистка ковра')">🧹 Чистка ковра</div>
+          <div class="glass-chip" onclick="selectUpvoteBg('метро сёрф')">🏄 Метро Сёрф</div>
+          <div class="glass-chip" onclick="selectUpvoteBg('original')">📹 Оригинал видео</div>
+        </div>
       </div>
 
       <!-- PARAMS: REDDIT -->
@@ -1359,7 +1367,8 @@
       mode: 'upvote',
       count: 1,
       subtitleStyle: 'mrbeast',
-      background: 'нарезка мыла'
+      background: 'нарезка мыла',
+      upvoteBackground: 'нарезка мыла'
     };
 
     let latestVideoData = {
@@ -1430,6 +1439,19 @@
       if (customBox) {
         customBox.style.display = (bg === 'custom') ? 'block' : 'none';
       }
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+
+    function selectUpvoteBg(bg) {
+      state.upvoteBackground = bg;
+      document.querySelectorAll('#upvote-bg-chips .glass-chip').forEach(c => {
+        c.classList.remove('active');
+        if (bg === 'original' && c.innerText.includes('Оригинал')) {
+          c.classList.add('active');
+        } else if (bg !== 'original' && c.innerText.toLowerCase().includes(bg.toLowerCase().split(' ')[0])) {
+          c.classList.add('active');
+        }
+      });
       if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
     }
 
@@ -1517,6 +1539,7 @@
       if (origin === 'studio') {
         if (state.mode === 'upvote') {
           payload.query = (document.getElementById('upvote-query').value || 'истории с реддита апвоут').trim();
+          payload.background = state.upvoteBackground || 'нарезка мыла';
         } else if (state.mode === 'reddit') {
           payload.topic = (document.getElementById('reddit-topic').value || '').trim();
           payload.background = (state.background === 'custom') ?

@@ -1013,8 +1013,14 @@
 
       <!-- PARAMS: SASHATANYA -->
       <div class="input-box" id="box-sashatanya" style="display: none;">
-        <label>🍿 Поиск серии или темы (оставь пустым для авто-выбора)</label>
-        <input type="text" id="sashatanya-query" class="glass-input" placeholder="Например: ревность, работа, диета...">
+        <label>🍿 Поиск серии, ссылка или ник TikTok (@serialvisionss)</label>
+        <input type="text" id="sashatanya-query" class="glass-input" placeholder="Например: @serialvisionss, ревность, работа...">
+        <div class="chips-group" style="margin-top: 8px;">
+          <div class="glass-chip" onclick="setQuery('sashatanya', '@serialvisionss')">⚡ @serialvisionss (HD Серии)</div>
+          <div class="glass-chip" onclick="setQuery('sashatanya', 'сериал сашатаня лучшие моменты')">🔥 Топ скетчи</div>
+          <div class="glass-chip" onclick="setQuery('sashatanya', 'саша таня диета')">🥗 Диета</div>
+          <div class="glass-chip" onclick="setQuery('sashatanya', 'саша таня ревность')">💔 Ревность</div>
+        </div>
       </div>
 
       <!-- PARAMS: CINEMA -->
@@ -1034,8 +1040,8 @@
     <div class="glass-card">
       <div class="section-title">📝 Стиль субтитров</div>
       <div class="chips-group" id="sub-chips">
-        <div class="glass-chip active" onclick="selectSubtitle('mrbeast')">🟡 MrBeast (Жёлтые)</div>
-        <div class="glass-chip" onclick="selectSubtitle('classic_white')">⚪ Обычные белые</div>
+        <div class="glass-chip active" onclick="selectSubtitle('classic_white')">⚪ Classic White (1:1 образец)</div>
+        <div class="glass-chip" onclick="selectSubtitle('mrbeast')">🟡 MrBeast (Жёлтые)</div>
         <div class="glass-chip" onclick="selectSubtitle('neon_cyber')">🟣 Неон Cyber</div>
         <div class="glass-chip" onclick="selectSubtitle('none')">🚫 Без субтитров</div>
       </div>
@@ -1366,7 +1372,7 @@
     let state = {
       mode: 'upvote',
       count: 1,
-      subtitleStyle: 'mrbeast',
+      subtitleStyle: 'classic_white',
       background: 'нарезка мыла',
       upvoteBackground: 'нарезка мыла'
     };

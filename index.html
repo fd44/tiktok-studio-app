@@ -897,6 +897,106 @@
       color: #f3e8ff;
       flex-shrink: 0;
     }
+
+    /* LIBRARY STYLES */
+    .library-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: rgba(20, 12, 38, 0.65);
+      border: 1px solid rgba(168, 85, 247, 0.22);
+      border-radius: 16px;
+      margin-bottom: 10px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    }
+    .library-item:active {
+      transform: scale(0.985);
+    }
+    .library-item.active {
+      border-color: #c084fc;
+      background: rgba(45, 20, 80, 0.7);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+    }
+    .lib-thumb-box {
+      width: 48px;
+      height: 64px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(99, 102, 241, 0.35));
+      border: 1px solid rgba(192, 132, 252, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      cursor: pointer;
+    }
+    .lib-info {
+      flex: 1;
+      min-width: 0;
+      cursor: pointer;
+    }
+    .lib-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .lib-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lib-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .lib-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(30, 18, 52, 0.8);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .lib-btn:active {
+      transform: scale(0.9);
+    }
+    .lib-btn.play-btn {
+      border-color: rgba(168, 85, 247, 0.4);
+    }
+    .lib-btn.download-btn {
+      border-color: rgba(74, 222, 128, 0.4);
+    }
+    .lib-btn.delete-btn {
+      border-color: rgba(248, 113, 113, 0.4);
+      color: #f87171;
+    }
+    .lib-btn.delete-btn:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+    .library-empty-state {
+      text-align: center;
+      padding: 30px 16px;
+      background: rgba(14, 8, 26, 0.5);
+      border: 1px dashed rgba(168, 85, 247, 0.3);
+      border-radius: 16px;
+      margin: 10px 0;
+    }
   </style>
 </head>
 <body>
@@ -1131,10 +1231,17 @@
     </div>
   </div>
 
-  <!-- ================= TAB 3: MEDIA (ПОСЛЕДНЕЕ ВИДЕО, ПЛЕЕР И ОПИСАНИЕ) ================= -->
+  <!-- ================= TAB 3: MEDIA / LIBRARY (БИБЛИОТЕКА И ПЛЕЕР) ================= -->
   <div class="tab-screen" id="screen-media">
-    <div class="glass-card">
-      <div class="section-title">📹 Видеоплеер предпросмотра (9:16)</div>
+    <!-- ПРЕДПРОСМОТР ВЫБРАННОГО РОЛИКА -->
+    <div class="glass-card" style="margin-bottom: 14px;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <div class="section-title" style="margin-bottom: 0;">📹 Предпросмотр ролика (9:16)</div>
+        <button class="lib-btn" onclick="loadMediaTabLatest(true)" title="Обновить библиотеку" style="width: 32px; height: 32px; border-radius: 10px;">
+          <span>🔄</span>
+        </button>
+      </div>
+
       <div style="text-align: center; padding: 10px 0;">
         <div id="media-tab-player-box">
           <div style="width: 100px; height: 140px; margin: 0 auto 12px; border-radius: 18px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(99, 102, 241, 0.3)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 42px; box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);">
@@ -1168,8 +1275,26 @@
         <span>💾 Скачать MP4 на устройство</span>
       </button>
       <button class="secondary-btn" onclick="triggerAction('latest_video')">
-        <span>📤 Отправить ролик в чат Telegram</span>
+        <span>📤 Отправить выбранный ролик в чат Telegram</span>
       </button>
+    </div>
+
+    <!-- КАРТОЧКА БИБЛИОТЕКИ ВСЕХ РОЛИКОВ ПОЛЬЗОВАТЕЛЯ -->
+    <div class="glass-card">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div class="section-title" style="margin-bottom: 0;">📁 Библиотека роликов (<span id="library-count" style="color: #c084fc;">0</span>)</div>
+        <span style="font-size: 11px; color: #4ade80;">● Облако доступно</span>
+      </div>
+      <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 14px;">
+        Все готовые видео вашего аккаунта. Нажмите ▶️ чтобы посмотреть, 💾 чтобы скачать или 🗑️ чтобы удалить ненужные ролики.
+      </p>
+
+      <div id="library-video-list">
+        <div style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 13px;">
+          <div style="font-size: 28px; margin-bottom: 8px;">⏳</div>
+          Загрузка вашей медиатеки...
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1264,8 +1389,8 @@
     </div>
 
     <div class="dock-item" onclick="switchTab('media')">
-      <div class="nav-icon">📹</div>
-      <div class="nav-label">Медиа</div>
+      <div class="nav-icon">📁</div>
+      <div class="nav-label">Библиотека</div>
     </div>
 
     <div class="dock-item" onclick="switchTab('status')">
@@ -1912,55 +2037,203 @@
       }
     }
 
-    function loadMediaTabLatest() {
+    let userLibraryVideos = [];
+
+    function loadMediaTabLatest(force) {
       const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
-      fetch(`https://api.github.com/repos/${GH_REPO}/contents/status_${myId}.json?t=${Date.now()}`, {
+      const badge = document.getElementById('library-user-badge');
+      if (badge && tg?.initDataUnsafe?.user?.first_name) {
+        badge.innerText = `● ${tg.initDataUnsafe.user.first_name}`;
+      }
+
+      fetch(`https://api.github.com/repos/${GH_REPO}/contents/latest.json?t=${Date.now()}`, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       })
       .then(r => r.ok ? r.json() : null)
-      .then(res => {
-        if (res && res.content) {
-          const jsonStr = decodeURIComponent(escape(atob(res.content.replace(/\s/g, ''))));
-          const data = JSON.parse(jsonStr);
-          if (data && data.video_name) {
-            applyMediaData(data);
-            return;
+      .then(gRes => {
+        if (gRes && gRes.content) {
+          const gJson = decodeURIComponent(escape(atob(gRes.content.replace(/\s/g, ''))));
+          const gData = JSON.parse(gJson);
+          
+          // 1. Извлекаем библиотеку роликов текущего пользователя
+          const libMap = gData.user_library || {};
+          userLibraryVideos = (myId && libMap[myId]) ? libMap[myId] : (libMap['global'] || []);
+          renderLibraryList();
+
+          // 2. Выбираем первое видео или текущее последнее
+          const entry = (gData.users && gData.users[myId]) || (userLibraryVideos.length > 0 ? userLibraryVideos[0] : null) || gData.global;
+          if (entry && entry.video_name) {
+            applyMediaData(entry);
           }
         }
-        // Фолбэк на глобальный latest.json
-        fetch(`https://api.github.com/repos/${GH_REPO}/contents/latest.json?t=${Date.now()}`, {
-          headers: { 'Accept': 'application/vnd.github.v3+json' }
-        })
-        .then(r => r.ok ? r.json() : null)
-        .then(gRes => {
-          if (gRes && gRes.content) {
-            const gJson = decodeURIComponent(escape(atob(gRes.content.replace(/\s/g, ''))));
-            const gData = JSON.parse(gJson);
-            const entry = (gData.users && gData.users[myId]) || gData.global || gData;
-            if (entry && entry.video_name) {
-              applyMediaData(entry);
-            }
-          }
-        });
       })
       .catch(e => console.warn('media tab poll error:', e));
+    }
+
+    function renderLibraryList() {
+      const listContainer = document.getElementById('library-video-list');
+      const countElem = document.getElementById('library-count');
+      if (countElem) countElem.innerText = userLibraryVideos.length;
+
+      if (!listContainer) return;
+
+      if (!userLibraryVideos || userLibraryVideos.length === 0) {
+        listContainer.innerHTML = `
+          <div class="library-empty-state">
+            <div style="font-size: 38px; margin-bottom: 8px;">🎬</div>
+            <div style="font-weight: 700; color: #ffffff; font-size: 14px;">Библиотека пуста</div>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px; margin-bottom: 14px;">
+              Здесь будут храниться все ваши смонтированные ролики.
+            </div>
+            <button class="primary-btn" onclick="switchTab('studio')" style="max-width: 200px; margin: 0 auto; padding: 10px 16px;">
+              <span>🚀 Смонтировать видео</span>
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      const modeIcons = {
+        'sashatanya': '🍿',
+        'upvote': '📺',
+        'reddit': '🧼',
+        'cinema': '🎬'
+      };
+
+      let html = '';
+      userLibraryVideos.forEach((v, index) => {
+        const vName = v.video_name || v.id || `video_${index}.mp4`;
+        const vTitle = v.title || vName;
+        const icon = modeIcons[v.mode] || '🎬';
+        const durStr = v.duration ? `${v.duration} сек` : '80 сек';
+        const szStr = v.size_mb ? `${v.size_mb} МБ` : '18 МБ';
+        const dateStr = v.time_str || v.created_at || '';
+        const isCurrent = latestVideoData && latestVideoData.name === vName;
+
+        html += `
+          <div class="library-item ${isCurrent ? 'active' : ''}" id="lib-item-${vName.replace(/[^a-zA-Z0-9]/g, '_')}">
+            <div class="lib-thumb-box" onclick="selectLibraryVideo('${vName}')" title="Смотреть">
+              <span style="font-size: 18px;">${icon}</span>
+              <span style="font-size: 9px; color: #c084fc; font-weight: 700; margin-top: 2px;">9:16</span>
+            </div>
+            <div class="lib-info" onclick="selectLibraryVideo('${vName}')">
+              <div class="lib-title" title="${vTitle}">${vTitle}</div>
+              <div class="lib-meta">⏱ ${durStr} • 💾 ${szStr} ${dateStr ? '• ' + dateStr : ''}</div>
+            </div>
+            <div class="lib-actions">
+              <button class="lib-btn play-btn" onclick="selectLibraryVideo('${vName}')" title="Смотреть">
+                <span>▶️</span>
+              </button>
+              <button class="lib-btn download-btn" onclick="downloadLibraryVideo('${vName}', event)" title="Скачать MP4">
+                <span>💾</span>
+              </button>
+              <button class="lib-btn delete-btn" onclick="deleteLibraryVideo('${vName}', event)" title="Удалить из библиотеки">
+                <span>🗑️</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      listContainer.innerHTML = html;
+    }
+
+    function selectLibraryVideo(videoName) {
+      const v = userLibraryVideos.find(x => (x.video_name === videoName || x.id === videoName));
+      if (!v) return;
+      applyMediaData(v);
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+      renderLibraryList();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast(`🎬 Выбран: «${(v.title || v.video_name).slice(0, 25)}...»`);
+    }
+
+    function downloadLibraryVideo(videoName, e) {
+      if (e) e.stopPropagation();
+      const v = userLibraryVideos.find(x => (x.video_name === videoName || x.id === videoName));
+      if (!v) return;
+
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+
+      if (v.download_url) {
+        if (tg?.downloadFile) {
+          tg.downloadFile({ url: v.download_url, filename: v.video_name });
+        } else {
+          const a = document.createElement('a');
+          a.href = v.download_url;
+          a.download = v.video_name;
+          a.target = '_blank';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+        showToast('💾 Скачивание видео началось!');
+      } else {
+        const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+        sendSilentOrder({ action: 'send_library_video', video_name: v.video_name, chat_id: myId });
+        showToast('📤 Ролик отправлен в чат Telegram!');
+      }
+    }
+
+    function deleteLibraryVideo(videoName, e) {
+      if (e) e.stopPropagation();
+      const v = userLibraryVideos.find(x => (x.video_name === videoName || x.id === videoName));
+      if (!v) return;
+
+      const vTitle = v.title || v.video_name;
+      if (!confirm(`Удалить ролик «${vTitle.slice(0, 30)}» из библиотеки?`)) {
+        return;
+      }
+
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
+
+      // Анимация удаления карточки
+      const domId = 'lib-item-' + videoName.replace(/[^a-zA-Z0-9]/g, '_');
+      const itemEl = document.getElementById(domId);
+      if (itemEl) {
+        itemEl.style.transition = 'all 0.3s ease';
+        itemEl.style.transform = 'scale(0.85) translateX(30px)';
+        itemEl.style.opacity = '0';
+      }
+
+      setTimeout(() => {
+        userLibraryVideos = userLibraryVideos.filter(x => x.video_name !== videoName && x.id !== videoName);
+        renderLibraryList();
+      }, 300);
+
+      // Отправляем команду серверу на удаление
+      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      sendSilentOrder({ action: 'delete_video', video_name: videoName, chat_id: myId });
+      showToast('🗑️ Ролик удалён из библиотеки');
+
+      // Если удалённый ролик сейчас был в плеере, переключаемся на следующий
+      if (latestVideoData && latestVideoData.name === videoName) {
+        setTimeout(() => {
+          if (userLibraryVideos.length > 0) {
+            applyMediaData(userLibraryVideos[0]);
+          } else {
+            latestVideoData = { name: 'Нет роликов', downloadUrl: null, duration: 0, size: 0 };
+            updateMediaTabPlayer();
+          }
+        }, 350);
+      }
     }
 
     function applyMediaData(data) {
       latestVideoData = {
         name: data.video_name,
+        title: data.title || data.video_name,
         downloadUrl: data.download_url,
         duration: data.duration || 85,
         size: data.size_mb || 16.5
       };
       const titleElem = document.getElementById('media-tab-video-name');
-      if (titleElem) titleElem.innerText = latestVideoData.name;
+      const cleanName = data.title || (latestVideoData.name || 'Вирусный скетч').replace('.mp4', '').replace(/result_[a-f0-9]+/, 'Новый ролик');
+      if (titleElem) titleElem.innerText = cleanName;
       const metaElem = document.getElementById('media-tab-video-meta');
       if (metaElem) metaElem.innerText = `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • Zoom 175%`;
       
       const copyElem = document.getElementById('media-copy-text');
       if (copyElem) {
-        const cleanName = (latestVideoData.name || 'Вирусный скетч').replace('.mp4', '').replace(/result_[a-f0-9]+/, 'Новый ролик');
         copyElem.innerText = `🎬 ${cleanName} 🔥\n\n💬 Как бы вы поступили в такой ситуации? Пишите в комменты! 👇\n\n#сашатаня #юмор #кино #shorts #fyp #врек #вирусное`;
       }
       updateMediaTabPlayer();

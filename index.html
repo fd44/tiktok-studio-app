@@ -308,7 +308,7 @@
     /* COUNT SELECTOR */
     .count-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
     }
 
@@ -1036,6 +1036,25 @@
       </div>
     </div>
 
+    <!-- AUTOPILOT & CONTENT PLAN CARD -->
+    <div class="glass-card" style="border-color: rgba(168, 85, 247, 0.4); background: linear-gradient(135deg, rgba(23, 14, 40, 0.72) 0%, rgba(59, 20, 95, 0.35) 100%);">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <div class="section-title" style="margin-bottom: 0;">📅 Автопилот: Контент-план на неделю</div>
+        <span style="font-size: 11px; background: rgba(168, 85, 247, 0.3); color: #c084fc; padding: 2px 8px; border-radius: 10px; font-weight: 700; border: 1px solid rgba(192, 132, 252, 0.4);">HOT</span>
+      </div>
+      <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
+        Монтаж партии роликов без повторов с прайм-тайм расписанием выкладки и общим ZIP-архивом:
+      </p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+        <button class="secondary-btn" style="padding: 10px 4px; font-size: 12px; border-color: rgba(192, 132, 252, 0.5);" onclick="selectContentPlan(7)">
+          📦 7 видео (1 в день)
+        </button>
+        <button class="secondary-btn" style="padding: 10px 4px; font-size: 12px; border-color: rgba(192, 132, 252, 0.5);" onclick="selectContentPlan(14)">
+          🚀 14 видео (2 в день)
+        </button>
+      </div>
+    </div>
+
     <!-- SUBTITLES & COUNT -->
     <div class="glass-card">
       <div class="section-title">📝 Стиль субтитров</div>
@@ -1052,6 +1071,8 @@
         <div class="count-cell" onclick="selectCount(2)">2</div>
         <div class="count-cell" onclick="selectCount(3)">3</div>
         <div class="count-cell" onclick="selectCount(5)">5</div>
+        <div class="count-cell" onclick="selectCount(7)">📅 7</div>
+        <div class="count-cell" onclick="selectCount(14)">🚀 14</div>
       </div>
 
       <button class="primary-btn" id="studio-submit-btn" onclick="startInAppCreation('studio')">
@@ -1110,22 +1131,41 @@
     </div>
   </div>
 
-  <!-- ================= TAB 3: MEDIA (ПОСЛЕДНЕЕ ВИДЕО И СКАЧИВАНИЕ) ================= -->
+  <!-- ================= TAB 3: MEDIA (ПОСЛЕДНЕЕ ВИДЕО, ПЛЕЕР И ОПИСАНИЕ) ================= -->
   <div class="tab-screen" id="screen-media">
     <div class="glass-card">
-      <div class="section-title">📹 Последний смонтированный ролик</div>
-      <div style="text-align: center; padding: 18px 0;">
+      <div class="section-title">📹 Видеоплеер предпросмотра (9:16)</div>
+      <div style="text-align: center; padding: 10px 0;">
         <div id="media-tab-player-box">
-          <div style="width: 80px; height: 110px; margin: 0 auto 12px; border-radius: 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(99, 102, 241, 0.4)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
+          <div style="width: 100px; height: 140px; margin: 0 auto 12px; border-radius: 18px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(99, 102, 241, 0.3)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 42px; box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);">
             🎬
           </div>
         </div>
-        <div style="font-size: 15px; font-weight: 700; color: #ffffff;" id="media-tab-video-name">result_f9fc69b1.mp4</div>
-        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="media-tab-video-meta">Стильные субтитры MrBeast • Баннер NATRIA_VPN (Zoom 175%)</div>
+        <div style="font-size: 16px; font-weight: 700; color: #ffffff;" id="media-tab-video-name">Загрузка ролика...</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="media-tab-video-meta">Стильные субтитры • Zoom 175% • Баннер NATRIA_VPN</div>
       </div>
 
-      <button class="primary-btn" id="media-download-btn" onclick="downloadLatestVideoDirect()">
-        <span>💾 Скачать исходник на устройство</span>
+      <!-- ВИРУСНОЕ ОПИСАНИЕ ДЛЯ TIKTOK -->
+      <div style="background: rgba(10, 6, 20, 0.7); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 14px; padding: 12px; margin: 12px 0; text-align: left;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+          <span style="font-size: 12px; font-weight: 700; color: #c084fc;">📋 ТЕКСТ ДЛЯ TIKTOK / REELS</span>
+          <span style="font-size: 11px; color: #4ade80;">● Готово к выкладке</span>
+        </div>
+        <div id="media-copy-text" style="font-size: 12px; color: #f5f3ff; line-height: 1.45; max-height: 100px; overflow-y: auto; white-space: pre-line; user-select: all; font-family: monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
+🎬 Вирусный скетч! 🤯
+
+💬 Как бы вы поступили в этой ситуации? Пишите в комменты! 👇
+
+#сашатаня #юмор #кино #shorts #fyp #врек #вирусное
+        </div>
+      </div>
+
+      <button class="primary-btn" id="copy-description-btn" onclick="copyTikTokDescription()" style="margin-bottom: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+        <span>📋 Скопировать описание и хэштеги</span>
+      </button>
+
+      <button class="secondary-btn" id="media-download-btn" onclick="downloadLatestVideoDirect()" style="margin-bottom: 8px;">
+        <span>💾 Скачать MP4 на устройство</span>
       </button>
       <button class="secondary-btn" onclick="triggerAction('latest_video')">
         <span>📤 Отправить ролик в чат Telegram</span>
@@ -1473,16 +1513,32 @@
     function selectCount(n) {
       state.count = n;
       document.querySelectorAll('#count-selector .count-cell').forEach(p => {
-        p.classList.toggle('active', parseInt(p.innerText) === n);
+        p.classList.toggle('active', p.innerText.includes(String(n)));
       });
       if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
       updateStudioButton();
     }
 
+    function selectContentPlan(n) {
+      state.count = n;
+      document.querySelectorAll('#count-selector .count-cell').forEach(p => {
+        p.classList.toggle('active', p.innerText.includes(String(n)));
+      });
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      updateStudioButton();
+      showToast(`📅 Выбран автопилот: контент-план на ${n} видео!`);
+      const btn = document.getElementById('studio-submit-btn');
+      if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     function updateStudioButton() {
       const btn = document.getElementById('studio-submit-btn');
       if (btn) {
-        btn.innerHTML = `<span>🚀 Смонтировать видео (${state.count} шт)</span>`;
+        if (state.count >= 7) {
+          btn.innerHTML = `<span>📅 Запустить контент-план (${state.count} видео) 🚀</span>`;
+        } else {
+          btn.innerHTML = `<span>🚀 Смонтировать видео (${state.count} шт)</span>`;
+        }
       }
     }
 
@@ -1901,7 +1957,29 @@
       if (titleElem) titleElem.innerText = latestVideoData.name;
       const metaElem = document.getElementById('media-tab-video-meta');
       if (metaElem) metaElem.innerText = `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • Zoom 175%`;
+      
+      const copyElem = document.getElementById('media-copy-text');
+      if (copyElem) {
+        const cleanName = (latestVideoData.name || 'Вирусный скетч').replace('.mp4', '').replace(/result_[a-f0-9]+/, 'Новый ролик');
+        copyElem.innerText = `🎬 ${cleanName} 🔥\n\n💬 Как бы вы поступили в такой ситуации? Пишите в комменты! 👇\n\n#сашатаня #юмор #кино #shorts #fyp #врек #вирусное`;
+      }
       updateMediaTabPlayer();
+    }
+
+    function copyTikTokDescription() {
+      const copyElem = document.getElementById('media-copy-text');
+      if (!copyElem) return;
+      const text = copyElem.innerText;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+          showToast('✅ Описание и хэштеги скопированы!');
+        }).catch(() => {
+          showToast('Скопируйте текст вручную');
+        });
+      } else {
+        showToast('✅ Скопируйте текст из поля');
+      }
     }
 
     function updateMediaTabPlayer() {
@@ -1909,7 +1987,7 @@
       if (!box) return;
       if (latestVideoData.downloadUrl) {
         box.innerHTML = `
-          <video src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; border-radius: 14px; max-height: 280px; background: #000; border: 1.5px solid rgba(168, 85, 247, 0.4); margin-bottom: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);"></video>
+          <video src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; max-width: 250px; max-height: 380px; border-radius: 16px; background: #000; border: 2px solid #c084fc; margin: 0 auto 12px; box-shadow: 0 4px 25px rgba(168, 85, 247, 0.45); object-fit: contain; display: block;"></video>
         `;
       } else {
         box.innerHTML = `

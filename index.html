@@ -2116,10 +2116,32 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
+    function getEffectiveUserId() {
+      try {
+        if (tg?.initDataUnsafe?.user?.id) {
+          localStorage.setItem('tt_chat_id', String(tg.initDataUnsafe.user.id));
+          return String(tg.initDataUnsafe.user.id);
+        }
+      } catch (e) {}
+      try {
+        const p = new URLSearchParams(window.location.search);
+        const cid = p.get('chat_id') || p.get('user_id');
+        if (cid) {
+          localStorage.setItem('tt_chat_id', String(cid));
+          return String(cid);
+        }
+      } catch (e) {}
+      try {
+        const cached = localStorage.getItem('tt_chat_id');
+        if (cached) return String(cached);
+      } catch (e) {}
+      return '1804038760';
+    }
+
     // Отправка запроса через облачную очередь GitHub API
     function sendSilentOrder(payload) {
-      const myId = tg?.initDataUnsafe?.user?.id || 1713725699;
-      const myName = tg?.initDataUnsafe?.user?.first_name || "User";
+      const myId = getEffectiveUserId();
+      const myName = tg?.initDataUnsafe?.user?.first_name || "Ваня";
       payload.chat_id = myId;
       payload.user_name = myName;
       payload.timestamp = Math.floor(Date.now() / 1000);
@@ -2155,7 +2177,7 @@
     function startInAppCreation(origin) {
       window.sessionStartTime = Date.now();
       window.lastLogMsg = "";
-      const myId = tg?.initDataUnsafe?.user?.id || 1713725699;
+      const myId = getEffectiveUserId();
 
       let payload = {
         action: 'create_video',
@@ -2328,7 +2350,7 @@
     }
 
     function checkLatestVideoStatus() {
-      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      const myId = String(getEffectiveUserId());
       fetch(`https://api.github.com/repos/${GH_REPO}/contents/status_${myId}.json?t=${Date.now()}`, {
         headers: { 'Accept': 'application/vnd.github.v3+json' }
       })
@@ -2567,10 +2589,11 @@
     }
 
     function loadMediaTabLatest(force) {
-      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      const myId = String(getEffectiveUserId());
       const badge = document.getElementById('library-user-badge');
-      if (badge && tg?.initDataUnsafe?.user?.first_name) {
-        badge.innerText = `● ${tg.initDataUnsafe.user.first_name}`;
+      if (badge) {
+        const uName = tg?.initDataUnsafe?.user?.first_name || (myId === '1804038760' ? 'Ваня' : 'Пользователь');
+        badge.innerText = `● ${uName}`;
       }
 
       fetch(`https://api.github.com/repos/${GH_REPO}/contents/latest.json?t=${Date.now()}`, {
@@ -2584,7 +2607,12 @@
           
           // 1. Извлекаем библиотеку роликов текущего пользователя
           const libMap = gData.user_library || {};
-          userLibraryVideos = (myId && libMap[myId]) ? libMap[myId] : (libMap['global'] || []);
+          let myVideos = libMap[myId] || [];
+          if (!myVideos || myVideos.length === 0) {
+            const altId = (myId === '1804038760') ? '1713725699' : '1804038760';
+            myVideos = libMap[altId] || libMap['global'] || [];
+          }
+          userLibraryVideos = myVideos || [];
           renderLibraryList();
 
           // 2. Выбираем первое видео или текущее последнее
@@ -2667,7 +2695,7 @@
         const isCurrent = (currentSelectedVideo && (currentSelectedVideo.video_name === vName || currentSelectedVideo.id === vName)) || (!currentSelectedVideo && latestVideoData && latestVideoData.name === vName);
 
         html += `
-          <div class="library-item ${isCurrent ? 'active' : ''}" id="lib-item-${vName.replace(/[^a-zA-Z0-9]/g, '_')}" onclick="selectLibraryVideo('${vName}')">
+          <div class="library-item ${isCurrent ? 'active' : ''}" id="lib-item-${vName.replace(/[^a-zA-Z0-9]/g, '_')}" onclick="selectLibraryVideo('${vName}', true)">
             <div class="lib-thumb-box" title="Выбрать ролик">
               <span style="font-size: 18px;">${icon}</span>
               <span style="font-size: 9px; color: #c084fc; font-weight: 700; margin-top: 2px;">9:16</span>
@@ -2701,7 +2729,7 @@
 
     let currentSelectedVideo = null;
 
-    function selectLibraryVideo(videoName, shouldScroll = false) {
+    function selectLibraryVideo(videoName, shouldScroll = true) {
       const v = userLibraryVideos.find(x => (x.video_name === videoName || x.id === videoName));
       if (!v) return;
       currentSelectedVideo = v;
@@ -2712,7 +2740,8 @@
         const playerBox = document.getElementById('media-tab-player-box');
         if (playerBox) playerBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-      showToast(`🎬 Выбран: «${(v.title || v.video_name).slice(0, 25)}...»`);
+      const cleanName = (v.title || v.video_name).slice(0, 25);
+      showToast(`🎬 Выбран: «${cleanName}...»`);
     }
 
     function downloadSelectedVideo() {
@@ -2730,10 +2759,11 @@
         showToast('⚠️ Выберите видео из библиотеки');
         return;
       }
-      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      const myId = String(getEffectiveUserId());
+      const cleanTitle = (v.title || v.video_name).slice(0, 20);
       sendSilentOrder({ action: 'send_library_video', video_name: v.video_name, chat_id: myId });
       if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-      showToast(`📤 Ролик «${(v.title || v.video_name).slice(0, 20)}» отправлен в чат!`);
+      showToast(`📤 Ролик «${cleanTitle}» отправлен в чат!`);
     }
 
     function sendLibraryVideoDirect(videoName, e) {
@@ -2743,10 +2773,11 @@
       currentSelectedVideo = v;
       applyMediaData(v);
       renderLibraryList();
-      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      const myId = String(getEffectiveUserId());
+      const cleanTitle = (v.title || v.video_name).slice(0, 20);
       sendSilentOrder({ action: 'send_library_video', video_name: v.video_name, chat_id: myId });
       if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-      showToast(`📤 Ролик «${(v.title || v.video_name).slice(0, 20)}» отправлен в чат!`);
+      showToast(`📤 Ролик «${cleanTitle}» отправлен в чат!`);
     }
 
     function downloadLibraryVideo(videoName, e) {
@@ -2756,24 +2787,19 @@
 
       if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
-      if (v.download_url) {
-        if (tg?.downloadFile) {
+      const myId = String(getEffectiveUserId());
+      const cleanTitle = (v.title || v.video_name).slice(0, 22);
+
+      if (v.download_url && String(v.download_url).startsWith('http') && tg?.downloadFile) {
+        try {
           tg.downloadFile({ url: v.download_url, filename: v.video_name });
-        } else {
-          const a = document.createElement('a');
-          a.href = v.download_url;
-          a.download = v.video_name;
-          a.target = '_blank';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
-        showToast('💾 Скачивание видео началось!');
-      } else {
-        const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
-        sendSilentOrder({ action: 'send_library_video', video_name: v.video_name, chat_id: myId });
-        showToast('📤 Ролик отправлен в чат Telegram!');
+          showToast(`💾 Скачивание «${cleanTitle}» началось!`);
+          return;
+        } catch (err) {}
       }
+
+      sendSilentOrder({ action: 'send_library_video', video_name: v.video_name, chat_id: myId });
+      showToast(`📤 Ролик «${cleanTitle}» отправлен в чат для сохранения в HD!`);
     }
 
     function deleteLibraryVideo(videoName, e) {
@@ -2801,7 +2827,7 @@
         renderLibraryList();
       }, 300);
 
-      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      const myId = String(getEffectiveUserId());
       sendSilentOrder({ action: 'delete_video', video_name: videoName, chat_id: myId });
       showToast('🗑️ Ролик удалён из библиотеки');
 
@@ -2889,22 +2915,47 @@
     function updateMediaTabPlayer() {
       const box = document.getElementById('media-tab-player-box');
       if (!box) return;
-      if (latestVideoData.downloadUrl) {
+      const v = currentSelectedVideo || latestVideoData;
+      if (!v) return;
+
+      const directUrl = v.download_url || v.downloadUrl;
+      if (directUrl && String(directUrl).startsWith('http')) {
         box.innerHTML = `
-          <video id="media-tab-player-video" src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; max-width: 250px; max-height: 380px; border-radius: 18px; background: #000; border: 1.5px solid rgba(192, 132, 252, 0.7); margin: 0 auto; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(168, 85, 247, 0.35); object-fit: contain; display: block;"></video>
-        `;
-      } else {
-        box.innerHTML = `
-          <div style="width: 100%; max-width: 250px; min-height: 220px; margin: 0 auto; border-radius: 18px; background: linear-gradient(135deg, rgba(28, 14, 48, 0.9), rgba(14, 7, 24, 0.9)); border: 1.5px dashed rgba(192, 132, 252, 0.45); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px; text-align: center; box-shadow: 0 12px 35px rgba(0,0,0,0.5);">
-            <div style="font-size: 38px; margin-bottom: 8px;">🎬</div>
-            <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">Готово в кэше бота</div>
-            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.35;">Нажмите кнопку ниже — бот мгновенно отправит ролик прямо вам в чат!</div>
-            <button class="primary-btn" onclick="sendSelectedVideoToChat()" style="padding: 9px 14px; font-size: 11.5px; margin: 0;">
-              <span>📤 Отправить в чат Telegram</span>
-            </button>
+          <div style="position: relative; width: 100%; max-width: 250px; margin: 0 auto;">
+            <video id="media-tab-player-video" src="${directUrl}" controls playsinline preload="metadata" 
+              style="width: 100%; max-height: 380px; border-radius: 18px; background: #000; border: 1.5px solid rgba(192, 132, 252, 0.7); box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(168, 85, 247, 0.35); object-fit: contain; display: block;"
+              onerror="renderPlayerCardFallback(this.parentElement, null, true)">
+            </video>
           </div>
         `;
+      } else {
+        renderPlayerCardFallback(box, v, false);
       }
+    }
+
+    function renderPlayerCardFallback(container, videoData, isExpired = false) {
+      const v = videoData || currentSelectedVideo || latestVideoData;
+      if (!v || !container) return;
+      const mode = v.mode || 'sashatanya';
+      const modeIcon = modeIcons[mode] || '🎬';
+      const cleanTitle = (v.title || v.name || v.video_name || 'Ролик').replace('.mp4', '');
+      const dur = v.duration ? `${v.duration} сек` : '80 сек';
+      const sz = v.size_mb || v.size ? `${v.size_mb || v.size} МБ` : '17 МБ';
+
+      container.innerHTML = `
+        <div style="width: 100%; max-width: 260px; min-height: 240px; margin: 0 auto; border-radius: 20px; background: linear-gradient(135deg, rgba(30, 16, 52, 0.95), rgba(15, 8, 28, 0.95)); border: 1.5px solid rgba(192, 132, 252, 0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; box-shadow: 0 14px 40px rgba(0,0,0,0.7), 0 0 30px rgba(168, 85, 247, 0.3); position: relative; overflow: hidden;">
+          <div style="position: absolute; top: 10px; right: 10px; font-size: 10px; font-weight: 700; color: #4ade80; background: rgba(34, 197, 94, 0.2); border: 1px solid rgba(74, 222, 128, 0.4); border-radius: 8px; padding: 2px 7px;">● ГОТОВО В КЭШЕ</div>
+          <div style="font-size: 46px; margin-bottom: 8px; filter: drop-shadow(0 0 16px rgba(168, 85, 247, 0.7));">${modeIcon}</div>
+          <div style="font-size: 14px; font-weight: 800; color: #ffffff; margin-bottom: 4px; max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${cleanTitle}</div>
+          <div style="font-size: 11.5px; color: #c084fc; margin-bottom: 12px; font-weight: 600;">⏱ ${dur} • 💾 ${sz} • 9:16 HD</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 14px; line-height: 1.35;">
+            ${isExpired ? 'Сессия онлайн-предпросмотра Telegram истекла. Нажмите кнопку ниже — бот мгновенно отправит ролик вам в чат в оригинальном HD!' : 'Ролик готов на ПК. Нажмите кнопку — бот мгновенно отправит его вам в чат!'}
+          </div>
+          <button class="primary-btn" onclick="sendSelectedVideoToChat()" style="width: 100%; padding: 10px 14px; font-size: 12px; margin: 0; background: linear-gradient(135deg, #a855f7 0%, #7e22ce 100%); box-shadow: 0 4px 18px rgba(168, 85, 247, 0.5);">
+            <span>📤 Получить ролик в чат Telegram</span>
+          </button>
+        </div>
+      `;
     }
 
     function openShutdownModal() {

@@ -1042,11 +1042,6 @@
     .lib-thumb-box:active {
       transform: scale(0.92);
     }
-      justify-content: center;
-      flex-shrink: 0;
-      position: relative;
-      cursor: pointer;
-    }
     .lib-info {
       flex: 1;
       min-width: 0;
@@ -1098,6 +1093,10 @@
     .lib-btn.download-btn {
       border-color: rgba(74, 222, 128, 0.5);
       background: rgba(74, 222, 128, 0.15);
+    }
+    .lib-btn.send-btn {
+      border-color: rgba(99, 102, 241, 0.5);
+      background: rgba(99, 102, 241, 0.18);
     }
     .lib-btn.delete-btn {
       border-color: rgba(248, 113, 113, 0.5);
@@ -1629,44 +1628,46 @@
           </div>
         </div>
         <div style="font-size: 16px; font-weight: 700; color: #ffffff;" id="media-tab-video-name">Загрузка ролика...</div>
-        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="media-tab-video-meta">Стильные субтитры • Zoom 175% • Баннер NATRIA_VPN</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="media-tab-video-meta">Стильные субтитры • Zoom 175% • 1080x1920 HD</div>
+      </div>
+
+      <!-- ГЛАВНЫЕ ДЕЙСТВИЯ С ВЫБРАННЫМ РОЛИКОМ -->
+      <div style="display: flex; gap: 8px; margin: 12px 0 8px 0;">
+        <button class="primary-btn" id="media-download-btn" onclick="downloadSelectedVideo()" style="flex: 1.2; margin: 0; padding: 11px 12px; font-size: 12.5px;">
+          <span>💾 Скачать выбранный ролик</span>
+        </button>
+        <button class="secondary-btn" id="media-send-chat-btn" onclick="sendSelectedVideoToChat()" style="flex: 1; margin: 0; padding: 11px 12px; font-size: 12.5px;">
+          <span>📤 В Telegram</span>
+        </button>
       </div>
 
       <!-- НАВИГАЦИЯ МЕЖДУ РОЛИКАМИ В ПЛЕЕРЕ -->
-      <div style="display: flex; gap: 8px; justify-content: center; margin: 6px 0 12px 0;">
-        <button class="secondary-btn" style="flex: 1; padding: 9px 10px; font-size: 12px;" onclick="navigateLibrary(-1)">
+      <div style="display: flex; gap: 8px; justify-content: center; margin-bottom: 8px;">
+        <button class="secondary-btn" style="flex: 1; padding: 8px 10px; font-size: 11.5px;" onclick="navigateLibrary(-1)">
           <span>⏮️ Пред. ролик</span>
         </button>
-        <button class="secondary-btn" style="flex: 1; padding: 9px 10px; font-size: 12px;" onclick="navigateLibrary(1)">
+        <button class="secondary-btn" style="flex: 1; padding: 8px 10px; font-size: 11.5px;" onclick="navigateLibrary(1)">
           <span>След. ролик ⏭️</span>
         </button>
       </div>
 
-      <!-- ВИРУСНОЕ ОПИСАНИЕ ДЛЯ TIKTOK -->
-      <div style="background: rgba(10, 6, 20, 0.7); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 14px; padding: 12px; margin: 12px 0; text-align: left;">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-          <span style="font-size: 12px; font-weight: 700; color: #c084fc;">📋 ТЕКСТ ДЛЯ TIKTOK / REELS</span>
-          <span style="font-size: 11px; color: #4ade80;">● Готово к выкладке</span>
-        </div>
-        <div id="media-copy-text" style="font-size: 12px; color: #f5f3ff; line-height: 1.45; max-height: 100px; overflow-y: auto; white-space: pre-line; user-select: all; font-family: monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px;">
+      <!-- КОМПАКТНЫЙ РАСКРЫВАЮЩИЙСЯ БЛОК ОПИСАНИЯ ДЛЯ TIKTOK -->
+      <details style="background: rgba(10, 6, 20, 0.65); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 10px 12px; margin-top: 6px; text-align: left;">
+        <summary style="font-size: 12px; font-weight: 700; color: #c084fc; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between;">
+          <span>📋 Текст и хэштеги для TikTok / Reels</span>
+          <span style="font-size: 10.5px; color: var(--text-muted);">Развернуть ▾</span>
+        </summary>
+        <div id="media-copy-text" style="font-size: 12px; color: #f5f3ff; line-height: 1.45; max-height: 100px; overflow-y: auto; white-space: pre-line; user-select: all; font-family: monospace; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px; margin-top: 8px;">
 🎬 Вирусный скетч! 🤯
 
 💬 Как бы вы поступили в этой ситуации? Пишите в комменты! 👇
 
 #сашатаня #юмор #кино #shorts #fyp #врек #вирусное
         </div>
-      </div>
-
-      <button class="primary-btn" id="copy-description-btn" onclick="copyTikTokDescription()" style="margin-bottom: 8px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
-        <span>📋 Скопировать описание и хэштеги</span>
-      </button>
-
-      <button class="secondary-btn" id="media-download-btn" onclick="downloadLatestVideoDirect()" style="margin-bottom: 8px;">
-        <span>💾 Скачать MP4 на устройство</span>
-      </button>
-      <button class="secondary-btn" onclick="triggerAction('latest_video')">
-        <span>📤 Отправить выбранный ролик в чат Telegram</span>
-      </button>
+        <button class="primary-btn" id="copy-description-btn" onclick="copyTikTokDescription()" style="margin-top: 8px; padding: 8px 12px; font-size: 11.5px; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+          <span>📋 Скопировать описание и хэштеги</span>
+        </button>
+      </details>
     </div>
 
     <!-- КАРТОЧКА БИБЛИОТЕКИ ВСЕХ РОЛИКОВ ПОЛЬЗОВАТЕЛЯ -->
@@ -2646,24 +2647,30 @@
         const durStr = v.duration ? `${v.duration} сек` : '80 сек';
         const szStr = v.size_mb ? `${v.size_mb} МБ` : '18 МБ';
         const dateStr = v.time_str || v.created_at || '';
-        const isCurrent = latestVideoData && latestVideoData.name === vName;
+        const isCurrent = (currentSelectedVideo && (currentSelectedVideo.video_name === vName || currentSelectedVideo.id === vName)) || (!currentSelectedVideo && latestVideoData && latestVideoData.name === vName);
 
         html += `
-          <div class="library-item ${isCurrent ? 'active' : ''}" id="lib-item-${vName.replace(/[^a-zA-Z0-9]/g, '_')}">
-            <div class="lib-thumb-box" onclick="selectLibraryVideo('${vName}')" title="Смотреть">
+          <div class="library-item ${isCurrent ? 'active' : ''}" id="lib-item-${vName.replace(/[^a-zA-Z0-9]/g, '_')}" onclick="selectLibraryVideo('${vName}')">
+            <div class="lib-thumb-box" title="Выбрать ролик">
               <span style="font-size: 18px;">${icon}</span>
               <span style="font-size: 9px; color: #c084fc; font-weight: 700; margin-top: 2px;">9:16</span>
             </div>
-            <div class="lib-info" onclick="selectLibraryVideo('${vName}')">
-              <div class="lib-title" title="${vTitle}">${vTitle}</div>
+            <div class="lib-info">
+              <div class="lib-title" title="${vTitle}">
+                ${vTitle}
+                ${isCurrent ? '<span style="font-size: 9px; font-weight: 700; color: #f3e8ff; background: rgba(168, 85, 247, 0.45); border: 1px solid #c084fc; border-radius: 6px; padding: 1px 6px; margin-left: 6px;">● ВЫБРАН</span>' : ''}
+              </div>
               <div class="lib-meta">⏱ ${durStr} • 💾 ${szStr} ${dateStr ? '• ' + dateStr : ''}</div>
             </div>
-            <div class="lib-actions">
-              <button class="lib-btn play-btn" onclick="selectLibraryVideo('${vName}')" title="Смотреть">
+            <div class="lib-actions" onclick="event.stopPropagation()">
+              <button class="lib-btn play-btn" onclick="selectLibraryVideo('${vName}', true)" title="Смотреть в плеере">
                 <span>▶️</span>
               </button>
               <button class="lib-btn download-btn" onclick="downloadLibraryVideo('${vName}', event)" title="Скачать MP4">
                 <span>💾</span>
+              </button>
+              <button class="lib-btn send-btn" onclick="sendLibraryVideoDirect('${vName}', event)" title="Отправить в чат Telegram" style="border-color: rgba(99, 102, 241, 0.5); background: rgba(99, 102, 241, 0.2);">
+                <span>📤</span>
               </button>
               <button class="lib-btn delete-btn" onclick="deleteLibraryVideo('${vName}', event)" title="Удалить из библиотеки">
                 <span>🗑️</span>
@@ -2675,14 +2682,54 @@
       listContainer.innerHTML = html;
     }
 
-    function selectLibraryVideo(videoName) {
+    let currentSelectedVideo = null;
+
+    function selectLibraryVideo(videoName, shouldScroll = false) {
       const v = userLibraryVideos.find(x => (x.video_name === videoName || x.id === videoName));
       if (!v) return;
+      currentSelectedVideo = v;
       applyMediaData(v);
-      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
       renderLibraryList();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (shouldScroll) {
+        const playerBox = document.getElementById('media-tab-player-box');
+        if (playerBox) playerBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
       showToast(`🎬 Выбран: «${(v.title || v.video_name).slice(0, 25)}...»`);
+    }
+
+    function downloadSelectedVideo() {
+      const v = currentSelectedVideo || (userLibraryVideos.length > 0 ? userLibraryVideos[0] : null);
+      if (!v) {
+        showToast('⚠️ Выберите видео из библиотеки');
+        return;
+      }
+      downloadLibraryVideo(v.video_name);
+    }
+
+    function sendSelectedVideoToChat() {
+      const v = currentSelectedVideo || (userLibraryVideos.length > 0 ? userLibraryVideos[0] : null);
+      if (!v) {
+        showToast('⚠️ Выберите видео из библиотеки');
+        return;
+      }
+      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      sendSilentOrder({ action: 'send_library_video', video_name: v.video_name, chat_id: myId });
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      showToast(`📤 Ролик «${(v.title || v.video_name).slice(0, 20)}» отправлен в чат!`);
+    }
+
+    function sendLibraryVideoDirect(videoName, e) {
+      if (e) e.stopPropagation();
+      const v = userLibraryVideos.find(x => (x.video_name === videoName || x.id === videoName));
+      if (!v) return;
+      currentSelectedVideo = v;
+      applyMediaData(v);
+      renderLibraryList();
+      const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
+      sendSilentOrder({ action: 'send_library_video', video_name: v.video_name, chat_id: myId });
+      if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+      showToast(`📤 Ролик «${(v.title || v.video_name).slice(0, 20)}» отправлен в чат!`);
     }
 
     function downloadLibraryVideo(videoName, e) {
@@ -2724,7 +2771,6 @@
 
       if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('warning');
 
-      // Анимация удаления карточки
       const domId = 'lib-item-' + videoName.replace(/[^a-zA-Z0-9]/g, '_');
       const itemEl = document.getElementById(domId);
       if (itemEl) {
@@ -2738,18 +2784,17 @@
         renderLibraryList();
       }, 300);
 
-      // Отправляем команду серверу на удаление
       const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
       sendSilentOrder({ action: 'delete_video', video_name: videoName, chat_id: myId });
       showToast('🗑️ Ролик удалён из библиотеки');
 
-      // Если удалённый ролик сейчас был в плеере, переключаемся на следующий
       if (latestVideoData && latestVideoData.name === videoName) {
         setTimeout(() => {
           if (userLibraryVideos.length > 0) {
             applyMediaData(userLibraryVideos[0]);
           } else {
             latestVideoData = { name: 'Нет роликов', downloadUrl: null, duration: 0, size: 0 };
+            currentSelectedVideo = null;
             updateMediaTabPlayer();
           }
         }, 350);
@@ -2757,6 +2802,7 @@
     }
 
     function applyMediaData(data) {
+      currentSelectedVideo = data;
       latestVideoData = {
         name: data.video_name,
         title: data.title || data.video_name,
@@ -2771,6 +2817,16 @@
       const metaElem = document.getElementById('media-tab-video-meta');
       if (metaElem) metaElem.innerText = `⏱ ${latestVideoData.duration} сек • 💾 ${latestVideoData.size} МБ • Zoom 175%`;
       
+      const dlBtn = document.getElementById('media-download-btn');
+      if (dlBtn) {
+        const shortName = cleanName.length > 18 ? cleanName.slice(0, 18) + '...' : cleanName;
+        dlBtn.innerHTML = `<span>💾 Скачать «${shortName}»</span>`;
+      }
+      const sendBtn = document.getElementById('media-send-chat-btn');
+      if (sendBtn) {
+        sendBtn.innerHTML = `<span>📤 В Telegram</span>`;
+      }
+
       const copyElem = document.getElementById('media-copy-text');
       if (copyElem) {
         const hashTags = data.mode === 'kukhnya' ? '#кухня #шеф #сериалы #юмор #стс #fyp #врек #комедия'
@@ -2818,14 +2874,21 @@
       if (!box) return;
       if (latestVideoData.downloadUrl) {
         box.innerHTML = `
-          <video src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; max-width: 250px; max-height: 380px; border-radius: 18px; background: #000; border: 1.5px solid rgba(192, 132, 252, 0.7); margin: 0 auto 12px; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(168, 85, 247, 0.35); object-fit: contain; display: block;"></video>
+          <video id="media-tab-player-video" src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; max-width: 250px; max-height: 380px; border-radius: 18px; background: #000; border: 1.5px solid rgba(192, 132, 252, 0.7); margin: 0 auto; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(168, 85, 247, 0.35); object-fit: contain; display: block;"></video>
         `;
       } else {
         box.innerHTML = `
-          <div style="width: 80px; height: 110px; margin: 0 auto 12px; border-radius: 16px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.4), rgba(99, 102, 241, 0.4)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);">
-            🎬
+          <div style="width: 100%; max-width: 250px; min-height: 220px; margin: 0 auto; border-radius: 18px; background: linear-gradient(135deg, rgba(28, 14, 48, 0.9), rgba(14, 7, 24, 0.9)); border: 1.5px dashed rgba(192, 132, 252, 0.45); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 18px; text-align: center; box-shadow: 0 12px 35px rgba(0,0,0,0.5);">
+            <div style="font-size: 38px; margin-bottom: 8px;">🎬</div>
+            <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">Готово в кэше бота</div>
+            <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.35;">Нажмите кнопку ниже — бот мгновенно отправит ролик прямо вам в чат!</div>
+            <button class="primary-btn" onclick="sendSelectedVideoToChat()" style="padding: 9px 14px; font-size: 11.5px; margin: 0;">
+              <span>📤 Отправить в чат Telegram</span>
+            </button>
           </div>
         `;
+      }
+    }
       }
     }
 

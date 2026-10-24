@@ -7,23 +7,26 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-dark: #08040f;
-      --bg-gradient: radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.22) 0%, transparent 45%),
-                         radial-gradient(circle at 85% 35%, rgba(126, 34, 206, 0.18) 0%, transparent 50%),
-                         radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.15) 0%, transparent 55%),
-                         #08040f;
-      --glass-card: rgba(23, 14, 40, 0.72);
-      --glass-card-hover: rgba(34, 20, 58, 0.82);
-      --glass-border: rgba(168, 85, 247, 0.28);
+      --bg-deep: #05020a;
+      --bg-surface: #0a0515;
+      --bg-gradient: radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.16) 0%, transparent 45%),
+                         radial-gradient(circle at 85% 35%, rgba(126, 34, 206, 0.14) 0%, transparent 50%),
+                         radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.12) 0%, transparent 55%),
+                         #05020a;
+      --glass-card: rgba(18, 10, 32, 0.68);
+      --glass-card-hover: rgba(28, 16, 48, 0.82);
+      --glass-border: rgba(255, 255, 255, 0.09);
+      --glass-border-hover: rgba(192, 132, 252, 0.35);
       --glass-border-active: #c084fc;
-      --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
-      --neon-glow: 0 0 25px rgba(168, 85, 247, 0.5);
+      --glass-highlight: inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
+      --neon-glow: 0 0 28px rgba(168, 85, 247, 0.55);
       --neon-purple: #a855f7;
-      --light-purple: #c084fc;
-      --text-white: #f5f3ff;
-      --text-muted: #9d8ec2;
-      --text-dim: #6b5c87;
+      --light-purple: #d8b4fe;
+      --text-white: #ffffff;
+      --text-muted: #a192be;
+      --text-dim: #716091;
       --accent-gradient: linear-gradient(135deg, #c084fc 0%, #a855f7 45%, #7e22ce 100%);
+      --accent-glow: linear-gradient(135deg, rgba(192, 132, 252, 0.35) 0%, rgba(168, 85, 247, 0.2) 100%);
       --btn-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 100%);
     }
 
@@ -32,7 +35,7 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
     }
 
     body {
@@ -43,6 +46,64 @@
       overflow-x: hidden;
       user-select: none;
       -webkit-font-smoothing: antialiased;
+      position: relative;
+    }
+
+    /* LIVING AMBIENT MESH (ORBS) */
+    .ambient-mesh {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.16;
+      will-change: transform;
+    }
+
+    .ambient-orb-1 {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+      top: -60px;
+      left: -60px;
+      animation: floatOrb1 18s ease-in-out infinite alternate;
+    }
+
+    .ambient-orb-2 {
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, #6366f1 0%, transparent 70%);
+      top: 35%;
+      right: -80px;
+      animation: floatOrb2 22s ease-in-out infinite alternate;
+    }
+
+    .ambient-orb-3 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+      bottom: 80px;
+      left: 15%;
+      animation: floatOrb3 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatOrb1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 70px) scale(1.15); }
+    }
+    @keyframes floatOrb2 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-50px, 40px) scale(0.9); }
+    }
+    @keyframes floatOrb3 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -50px) scale(1.1); }
     }
 
     /* TOP HEADER */
@@ -173,37 +234,63 @@
     }
 
     .mode-item {
-      background: rgba(28, 17, 48, 0.55);
-      border: 1.5px solid rgba(168, 85, 247, 0.22);
-      border-radius: 18px;
-      padding: 14px 12px;
+      background: rgba(22, 13, 38, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 15px 13px;
       cursor: pointer;
       position: relative;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
       gap: 6px;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    .mode-item::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     }
 
     .mode-item:active {
-      transform: scale(0.97);
+      transform: scale(0.965);
     }
 
     .mode-item.active {
-      background: linear-gradient(145deg, rgba(168, 85, 247, 0.38) 0%, rgba(126, 34, 206, 0.25) 100%);
-      border-color: var(--glass-border-active);
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      background: linear-gradient(145deg, rgba(168, 85, 247, 0.35) 0%, rgba(99, 102, 241, 0.22) 100%);
+      border-color: #c084fc;
+      box-shadow: 0 0 28px rgba(168, 85, 247, 0.45), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+    }
+
+    .mode-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      padding: 2.5px 7px;
+      border-radius: 8px;
+      background: rgba(168, 85, 247, 0.25);
+      border: 1px solid rgba(192, 132, 252, 0.4);
+      color: #e9d5ff;
+      text-transform: uppercase;
     }
 
     .mode-item .icon {
-      font-size: 26px;
+      font-size: 28px;
+      margin-bottom: 2px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
     }
 
     .mode-item .title {
       font-size: 13.5px;
       font-weight: 700;
       color: #ffffff;
+      letter-spacing: -0.2px;
     }
 
     .mode-item .desc {
@@ -213,21 +300,7 @@
     }
 
     .mode-item .glow-dot {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: transparent;
-      border: 2px solid rgba(255, 255, 255, 0.25);
-      transition: all 0.2s;
-    }
-
-    .mode-item.active .glow-dot {
-      background: #c084fc;
-      border-color: #ffffff;
-      box-shadow: 0 0 10px #c084fc;
+      display: none;
     }
 
     /* INPUTS */
@@ -237,32 +310,35 @@
 
     .input-box label {
       display: block;
-      font-size: 11.5px;
-      font-weight: 600;
-      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--light-purple);
       margin-bottom: 6px;
     }
 
     .glass-input {
       width: 100%;
-      background: rgba(14, 8, 26, 0.75);
-      border: 1px solid rgba(168, 85, 247, 0.25);
-      border-radius: 14px;
+      background: rgba(12, 6, 22, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
       padding: 12px 14px;
       color: #ffffff;
       font-size: 13.5px;
       outline: none;
-      box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4);
-      transition: all 0.2s;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s ease;
     }
 
     .glass-input:focus {
       border-color: #c084fc;
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.4), inset 0 2px 5px rgba(0, 0, 0, 0.4);
+      background: rgba(16, 9, 30, 0.9);
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.4), inset 0 2px 6px rgba(0, 0, 0, 0.5);
     }
 
     .glass-input::placeholder {
-      color: rgba(157, 142, 194, 0.45);
+      color: rgba(161, 146, 190, 0.4);
       font-size: 12.5px;
     }
 
@@ -281,20 +357,20 @@
     }
 
     .glass-chip {
-      background: rgba(30, 18, 52, 0.55);
-      border: 1px solid rgba(168, 85, 247, 0.22);
+      background: rgba(24, 14, 42, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
       padding: 7px 12px;
       font-size: 12px;
       font-weight: 500;
       color: var(--text-white);
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
     }
 
     .glass-chip:active {
-      transform: scale(0.96);
+      transform: scale(0.95);
     }
 
     .glass-chip.active {
@@ -302,7 +378,7 @@
       border-color: #c084fc;
       color: #ffffff;
       font-weight: 700;
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.4);
     }
 
     /* COUNT SELECTOR */
@@ -313,16 +389,20 @@
     }
 
     .count-cell {
-      background: rgba(30, 18, 52, 0.55);
-      border: 1px solid rgba(168, 85, 247, 0.22);
+      background: rgba(24, 14, 42, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
       padding: 10px 0;
       text-align: center;
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .count-cell:active {
+      transform: scale(0.95);
     }
 
     .count-cell.active {
@@ -335,10 +415,10 @@
     /* BUTTONS */
     .primary-btn {
       width: 100%;
-      background: var(--accent-gradient);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 16px;
-      padding: 14px;
+      background: linear-gradient(135deg, #c084fc 0%, #a855f7 45%, #6d28d9 100%);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 18px;
+      padding: 15px;
       font-size: 15px;
       font-weight: 700;
       color: #ffffff;
@@ -347,23 +427,29 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.45);
+      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.5);
       position: relative;
       overflow: hidden;
-      transition: all 0.2s;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       margin-top: 14px;
     }
 
     .primary-btn::after {
       content: '';
       position: absolute;
-      inset: 0;
-      background: var(--btn-gloss);
+      top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.35) 50%, transparent 100%);
+      animation: sweepLight 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
       pointer-events: none;
     }
 
+    @keyframes sweepLight {
+      0% { left: -100%; }
+      40%, 100% { left: 150%; }
+    }
+
     .primary-btn:active {
-      transform: scale(0.98);
+      transform: scale(0.975);
       filter: brightness(1.15);
     }
 
@@ -375,11 +461,11 @@
 
     .secondary-btn {
       width: 100%;
-      background: rgba(30, 18, 52, 0.65);
+      background: rgba(24, 14, 42, 0.65);
       border: 1px solid rgba(168, 85, 247, 0.3);
       border-radius: 16px;
       padding: 12px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 600;
       color: var(--light-purple);
       cursor: pointer;
@@ -388,10 +474,11 @@
       justify-content: center;
       gap: 6px;
       margin-top: 10px;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .secondary-btn:active {
+      transform: scale(0.97);
       background: rgba(168, 85, 247, 0.3);
     }
 
@@ -497,6 +584,19 @@
       background: linear-gradient(135deg, rgba(168, 85, 247, 0.45) 0%, rgba(126, 34, 206, 0.7) 100%);
       border: 1px solid var(--glass-border-active);
       box-shadow: 0 0 18px rgba(168, 85, 247, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+    }
+
+    .dock-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 3px;
+      border-radius: 999px;
+      background: #c084fc;
+      box-shadow: 0 0 8px #c084fc;
     }
 
     .dock-item.active .nav-icon {
@@ -903,31 +1003,45 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px;
-      background: rgba(20, 12, 38, 0.65);
+      padding: 12px 14px;
+      background: rgba(18, 10, 32, 0.75);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
       border: 1px solid rgba(168, 85, 247, 0.22);
-      border-radius: 16px;
+      border-radius: 18px;
       margin-bottom: 10px;
-      transition: all 0.25s ease;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
     }
     .library-item:active {
       transform: scale(0.985);
     }
     .library-item.active {
       border-color: #c084fc;
-      background: rgba(45, 20, 80, 0.7);
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+      background: linear-gradient(135deg, rgba(45, 20, 80, 0.85) 0%, rgba(25, 12, 45, 0.85) 100%);
+      box-shadow: 0 0 24px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
     .lib-thumb-box {
-      width: 48px;
-      height: 64px;
-      border-radius: 10px;
+      width: 50px;
+      height: 68px;
+      border-radius: 12px;
       background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(99, 102, 241, 0.35));
-      border: 1px solid rgba(192, 132, 252, 0.4);
+      border: 1px solid rgba(192, 132, 252, 0.45);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s;
+    }
+    .lib-thumb-box:active {
+      transform: scale(0.92);
+    }
       justify-content: center;
       flex-shrink: 0;
       position: relative;
@@ -960,42 +1074,86 @@
       flex-shrink: 0;
     }
     .lib-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 15px;
       border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(30, 18, 52, 0.8);
+      background: rgba(28, 16, 48, 0.85);
       color: #fff;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     .lib-btn:active {
-      transform: scale(0.9);
+      transform: scale(0.88);
     }
     .lib-btn.play-btn {
-      border-color: rgba(168, 85, 247, 0.4);
+      border-color: rgba(168, 85, 247, 0.5);
+      background: rgba(168, 85, 247, 0.18);
     }
     .lib-btn.download-btn {
-      border-color: rgba(74, 222, 128, 0.4);
+      border-color: rgba(74, 222, 128, 0.5);
+      background: rgba(74, 222, 128, 0.15);
     }
     .lib-btn.delete-btn {
-      border-color: rgba(248, 113, 113, 0.4);
+      border-color: rgba(248, 113, 113, 0.5);
+      background: rgba(248, 113, 113, 0.15);
       color: #f87171;
     }
     .lib-btn.delete-btn:hover {
-      background: rgba(239, 68, 68, 0.25);
+      background: rgba(239, 68, 68, 0.3);
     }
     .library-empty-state {
       text-align: center;
-      padding: 30px 16px;
-      background: rgba(14, 8, 26, 0.5);
+      padding: 34px 16px;
+      background: rgba(12, 6, 22, 0.6);
       border: 1px dashed rgba(168, 85, 247, 0.3);
-      border-radius: 16px;
+      border-radius: 20px;
       margin: 10px 0;
+    }
+
+    /* THEATER AMBIENT GLOW (9:16 PLAYER AMBILIGHT) */
+    .theater-frame {
+      position: relative;
+      display: inline-block;
+      margin: 4px auto 10px auto;
+      border-radius: 20px;
+    }
+    .theater-ambient-glow {
+      position: absolute;
+      inset: -14px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.45) 0%, rgba(99, 102, 241, 0.25) 50%, transparent 80%);
+      filter: blur(28px);
+      border-radius: 30px;
+      pointer-events: none;
+      z-index: 1;
+      animation: ambientBreath 4s ease-in-out infinite alternate;
+    }
+    @keyframes ambientBreath {
+      0% { opacity: 0.55; transform: scale(0.96); }
+      100% { opacity: 0.9; transform: scale(1.04); }
+    }
+    .theater-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* PRO BADGE */
+    .pro-chip {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(99, 102, 241, 0.35));
+      border: 1px solid rgba(192, 132, 252, 0.5);
+      color: #e9d5ff;
+      text-transform: uppercase;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.35);
     }
 
     /* SEARCH & CATEGORY CHIPS */
@@ -1018,37 +1176,39 @@
     .calendar-days-row {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 5px;
+      gap: 6px;
       margin-top: 10px;
       margin-bottom: 10px;
     }
     .calendar-day-tile {
-      background: rgba(22, 13, 40, 0.65);
-      border: 1px solid rgba(168, 85, 247, 0.22);
-      border-radius: 12px;
-      padding: 7px 2px;
+      background: rgba(18, 10, 32, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 8px 2px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
     .calendar-day-tile:active {
       transform: scale(0.92);
     }
     .calendar-day-tile.today {
       border-color: #c084fc;
-      background: rgba(168, 85, 247, 0.25);
-      box-shadow: 0 0 12px rgba(168, 85, 247, 0.45);
+      background: rgba(168, 85, 247, 0.28);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.3);
     }
     .calendar-day-tile.checked {
       border-color: #4ade80;
-      background: rgba(34, 197, 94, 0.18);
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+      background: rgba(34, 197, 94, 0.22);
+      box-shadow: 0 0 14px rgba(34, 197, 94, 0.35);
     }
     .day-name {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       color: #ffffff;
+      letter-spacing: 0.2px;
     }
     .day-time {
       font-size: 9px;
@@ -1061,17 +1221,18 @@
     }
     .calendar-progress-wrap {
       width: 100%;
-      height: 6px;
+      height: 7px;
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 3px;
+      border-radius: 4px;
       overflow: hidden;
       margin-top: 6px;
     }
     .calendar-progress-fill {
       height: 100%;
       background: linear-gradient(90deg, #a855f7, #4ade80);
-      border-radius: 3px;
+      border-radius: 4px;
       transition: width 0.35s ease;
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.6);
     }
 
     /* DURATION SELECTOR */
@@ -1081,23 +1242,27 @@
       gap: 6px;
       margin-top: 6px;
       margin-bottom: 12px;
+      background: rgba(12, 6, 22, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 4px;
     }
     .duration-chip {
-      background: rgba(28, 17, 48, 0.55);
-      border: 1.5px solid rgba(168, 85, 247, 0.22);
-      border-radius: 14px;
-      padding: 10px 4px;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 8px 4px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .duration-chip:active {
       transform: scale(0.96);
     }
     .duration-chip.active {
-      background: linear-gradient(145deg, rgba(168, 85, 247, 0.38) 0%, rgba(126, 34, 206, 0.25) 100%);
+      background: linear-gradient(145deg, rgba(168, 85, 247, 0.45) 0%, rgba(126, 34, 206, 0.3) 100%);
       border-color: #c084fc;
-      box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25);
     }
     .duration-chip .dur-title {
       font-size: 11.5px;
@@ -1112,6 +1277,13 @@
   </style>
 </head>
 <body>
+
+  <!-- LIVING AMBIENT MESH (FLOATING LIGHT ORBS) -->
+  <div class="ambient-mesh">
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+    <div class="ambient-orb ambient-orb-3"></div>
+  </div>
 
   <!-- SVG GRADIENTS -->
   <svg width="0" height="0" style="position: absolute;">
@@ -1129,8 +1301,11 @@
     <div class="brand-box">
       <div class="brand-icon">🎬</div>
       <div class="brand-text">
-        <h1>TikTok Studio</h1>
-        <p>Autopilot V2.0 • Liquid Glass</p>
+        <div style="display: flex; align-items: center; gap: 7px;">
+          <h1>TikTok Studio</h1>
+          <span class="pro-chip">PRO</span>
+        </div>
+        <p>AUTOPILOT V3.0 • LIQUID GLASS SUITE</p>
       </div>
     </div>
     <div class="status-badge" id="top-status-indicator">
@@ -1158,49 +1333,49 @@
       <div class="section-title">🎬 Выбери формат видео</div>
       <div class="mode-grid">
         <div class="mode-item active" data-mode="sashatanya" onclick="selectMode('sashatanya')">
-          <div class="glow-dot"></div>
+          <div class="mode-badge">🍿 ZOOM 175%</div>
           <div class="icon">🍿</div>
           <div class="title">СашаТаня</div>
           <div class="desc">Авто-нарезка скетчей (Zoom 175%, анти-повтор)</div>
         </div>
 
         <div class="mode-item" data-mode="kukhnya" onclick="selectMode('kukhnya')">
-          <div class="glow-dot"></div>
+          <div class="mode-badge" style="background: rgba(245, 158, 11, 0.25); border-color: rgba(245, 158, 11, 0.5); color: #fbbf24;">👨‍🍳 ХИТ 2026</div>
           <div class="icon">👨‍🍳</div>
           <div class="title">Сериал «Кухня»</div>
           <div class="desc">Разборки Шефа, Сеня и Федя, приключения Макса</div>
         </div>
 
         <div class="mode-item" data-mode="interny" onclick="selectMode('interny')">
-          <div class="glow-dot"></div>
+          <div class="mode-badge" style="background: rgba(59, 130, 246, 0.25); border-color: rgba(59, 130, 246, 0.5); color: #93c5fd;">🏥 ТОП ЮМОР</div>
           <div class="icon">🏥</div>
           <div class="title">Сериал «Интерны»</div>
           <div class="desc">Разносы Быкова, косяки Лобанова и Романенко</div>
         </div>
 
         <div class="mode-item" data-mode="police" onclick="selectMode('police')">
-          <div class="glow-dot"></div>
+          <div class="mode-badge" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.5); color: #fca5a5;">👮 ДЕМОН!</div>
           <div class="icon">👮</div>
           <div class="title">Рублёвка (Демон)</div>
           <div class="desc">Угар Гриши Измайлова и Володи Яковлева</div>
         </div>
 
         <div class="mode-item" data-mode="upvote" onclick="selectMode('upvote')">
-          <div class="glow-dot"></div>
+          <div class="mode-badge" style="background: rgba(168, 85, 247, 0.25); border-color: rgba(192, 132, 252, 0.5); color: #e9d5ff;">📺 YOUTUBE</div>
           <div class="icon">📺</div>
           <div class="title">Канал «АПВОУТ»</div>
           <div class="desc">Оригинальный голос YouTube, нарезка историй + субтитры</div>
         </div>
 
         <div class="mode-item" data-mode="reddit" onclick="selectMode('reddit')">
-          <div class="glow-dot"></div>
+          <div class="mode-badge" style="background: rgba(236, 72, 153, 0.25); border-color: rgba(236, 72, 153, 0.5); color: #f472b6;">🧼 ASMR</div>
           <div class="icon">🧼</div>
           <div class="title">Reddit ASMR</div>
           <div class="desc">Озвучка истории + ASMR оверлеи (мыло, сёрф, ковер)</div>
         </div>
 
         <div class="mode-item" data-mode="cinema" onclick="selectMode('cinema')">
-          <div class="glow-dot"></div>
+          <div class="mode-badge" style="background: rgba(99, 102, 241, 0.25); border-color: rgba(129, 140, 248, 0.5); color: #a5b4fc;">🎬 4K КИНО</div>
           <div class="icon">🎬</div>
           <div class="title">Фильмы / Сериалы</div>
           <div class="desc">Культовые сцены из кино по названию или жанру</div>
@@ -1445,9 +1620,12 @@
       </div>
 
       <div style="text-align: center; padding: 10px 0;">
-        <div id="media-tab-player-box">
-          <div style="width: 100px; height: 140px; margin: 0 auto 12px; border-radius: 18px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(99, 102, 241, 0.3)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 42px; box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);">
-            🎬
+        <div class="theater-frame">
+          <div class="theater-ambient-glow"></div>
+          <div class="theater-inner" id="media-tab-player-box">
+            <div style="width: 100px; height: 140px; margin: 0 auto 12px; border-radius: 18px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(99, 102, 241, 0.3)); border: 1.5px solid #c084fc; display: flex; align-items: center; justify-content: center; font-size: 42px; box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);">
+              🎬
+            </div>
           </div>
         </div>
         <div style="font-size: 16px; font-weight: 700; color: #ffffff;" id="media-tab-video-name">Загрузка ролика...</div>
@@ -2640,7 +2818,7 @@
       if (!box) return;
       if (latestVideoData.downloadUrl) {
         box.innerHTML = `
-          <video src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; max-width: 250px; max-height: 380px; border-radius: 16px; background: #000; border: 2px solid #c084fc; margin: 0 auto 12px; box-shadow: 0 4px 25px rgba(168, 85, 247, 0.45); object-fit: contain; display: block;"></video>
+          <video src="${latestVideoData.downloadUrl}" controls playsinline preload="metadata" style="width: 100%; max-width: 250px; max-height: 380px; border-radius: 18px; background: #000; border: 1.5px solid rgba(192, 132, 252, 0.7); margin: 0 auto 12px; box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(168, 85, 247, 0.35); object-fit: contain; display: block;"></video>
         `;
       } else {
         box.innerHTML = `

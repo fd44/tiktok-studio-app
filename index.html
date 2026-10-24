@@ -997,6 +997,118 @@
       border-radius: 16px;
       margin: 10px 0;
     }
+
+    /* SEARCH & CATEGORY CHIPS */
+    .lib-search-box {
+      position: relative;
+      margin-bottom: 8px;
+    }
+    .lib-category-chips {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+    }
+    .lib-category-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* CALENDAR STYLES */
+    .calendar-days-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    .calendar-day-tile {
+      background: rgba(22, 13, 40, 0.65);
+      border: 1px solid rgba(168, 85, 247, 0.22);
+      border-radius: 12px;
+      padding: 7px 2px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .calendar-day-tile:active {
+      transform: scale(0.92);
+    }
+    .calendar-day-tile.today {
+      border-color: #c084fc;
+      background: rgba(168, 85, 247, 0.25);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.45);
+    }
+    .calendar-day-tile.checked {
+      border-color: #4ade80;
+      background: rgba(34, 197, 94, 0.18);
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    }
+    .day-name {
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .day-time {
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .day-status-icon {
+      font-size: 13px;
+      margin-top: 3px;
+    }
+    .calendar-progress-wrap {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+    .calendar-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #a855f7, #4ade80);
+      border-radius: 3px;
+      transition: width 0.35s ease;
+    }
+
+    /* DURATION SELECTOR */
+    .duration-chips {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+      margin-bottom: 12px;
+    }
+    .duration-chip {
+      background: rgba(28, 17, 48, 0.55);
+      border: 1.5px solid rgba(168, 85, 247, 0.22);
+      border-radius: 14px;
+      padding: 10px 4px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .duration-chip:active {
+      transform: scale(0.96);
+    }
+    .duration-chip.active {
+      background: linear-gradient(145deg, rgba(168, 85, 247, 0.38) 0%, rgba(126, 34, 206, 0.25) 100%);
+      border-color: #c084fc;
+      box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+    }
+    .duration-chip .dur-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .duration-chip .dur-desc {
+      font-size: 9.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
   </style>
 </head>
 <body>
@@ -1045,7 +1157,35 @@
     <div class="glass-card">
       <div class="section-title">🎬 Выбери формат видео</div>
       <div class="mode-grid">
-        <div class="mode-item active" data-mode="upvote" onclick="selectMode('upvote')">
+        <div class="mode-item active" data-mode="sashatanya" onclick="selectMode('sashatanya')">
+          <div class="glow-dot"></div>
+          <div class="icon">🍿</div>
+          <div class="title">СашаТаня</div>
+          <div class="desc">Авто-нарезка скетчей (Zoom 175%, анти-повтор)</div>
+        </div>
+
+        <div class="mode-item" data-mode="kukhnya" onclick="selectMode('kukhnya')">
+          <div class="glow-dot"></div>
+          <div class="icon">👨‍🍳</div>
+          <div class="title">Сериал «Кухня»</div>
+          <div class="desc">Разборки Шефа, Сеня и Федя, приключения Макса</div>
+        </div>
+
+        <div class="mode-item" data-mode="interny" onclick="selectMode('interny')">
+          <div class="glow-dot"></div>
+          <div class="icon">🏥</div>
+          <div class="title">Сериал «Интерны»</div>
+          <div class="desc">Разносы Быкова, косяки Лобанова и Романенко</div>
+        </div>
+
+        <div class="mode-item" data-mode="police" onclick="selectMode('police')">
+          <div class="glow-dot"></div>
+          <div class="icon">👮</div>
+          <div class="title">Рублёвка (Демон)</div>
+          <div class="desc">Угар Гриши Измайлова и Володи Яковлева</div>
+        </div>
+
+        <div class="mode-item" data-mode="upvote" onclick="selectMode('upvote')">
           <div class="glow-dot"></div>
           <div class="icon">📺</div>
           <div class="title">Канал «АПВОУТ»</div>
@@ -1059,13 +1199,6 @@
           <div class="desc">Озвучка истории + ASMR оверлеи (мыло, сёрф, ковер)</div>
         </div>
 
-        <div class="mode-item" data-mode="sashatanya" onclick="selectMode('sashatanya')">
-          <div class="glow-dot"></div>
-          <div class="icon">🍿</div>
-          <div class="title">СашаТаня</div>
-          <div class="desc">Авто-нарезка скетчей (Zoom 175%, анти-повтор)</div>
-        </div>
-
         <div class="mode-item" data-mode="cinema" onclick="selectMode('cinema')">
           <div class="glow-dot"></div>
           <div class="icon">🎬</div>
@@ -1074,8 +1207,75 @@
         </div>
       </div>
 
+      <!-- DURATION SELECTOR -->
+      <div class="input-box" style="margin-top: 14px;">
+        <label>⏱️ Хронометраж ролика (удержание аудитории)</label>
+        <div class="duration-chips" id="duration-selector">
+          <div class="duration-chip" onclick="selectDuration('short')">
+            <div class="dur-title">⚡ 30–60 сек</div>
+            <div class="dur-desc">Быстрый скетч</div>
+          </div>
+          <div class="duration-chip active" onclick="selectDuration('standard')">
+            <div class="dur-title">🔥 60–90 сек</div>
+            <div class="dur-desc">Топ реков TikTok</div>
+          </div>
+          <div class="duration-chip" onclick="selectDuration('long')">
+            <div class="dur-title">🍿 90–180 сек</div>
+            <div class="dur-desc">Полная сцена</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARAMS: SASHATANYA -->
+      <div class="input-box" id="box-sashatanya">
+        <label>🍿 Поиск серии, ссылка или ник TikTok (@serialvisionss)</label>
+        <input type="text" id="sashatanya-query" class="glass-input" placeholder="Например: @serialvisionss, ревность, работа...">
+        <div class="chips-group" style="margin-top: 8px;">
+          <div class="glass-chip" onclick="setQuery('sashatanya', '@serialvisionss')">⚡ @serialvisionss (HD Серии)</div>
+          <div class="glass-chip" onclick="setQuery('sashatanya', 'сериал сашатаня лучшие моменты')">🔥 Топ скетчи</div>
+          <div class="glass-chip" onclick="setQuery('sashatanya', 'саша таня диета')">🥗 Диета</div>
+          <div class="glass-chip" onclick="setQuery('sashatanya', 'саша таня ревность')">💔 Ревность</div>
+        </div>
+      </div>
+
+      <!-- PARAMS: KUKHNYA -->
+      <div class="input-box" id="box-kukhnya" style="display: none;">
+        <label>👨‍🍳 Сцена или персонаж сериала «Кухня»</label>
+        <input type="text" id="kukhnya-query" class="glass-input" placeholder="Например: Шеф орет, Сеня и Федя, Макс...">
+        <div class="chips-group" style="margin-top: 8px;">
+          <div class="glass-chip" onclick="setQuery('kukhnya', 'сериал Кухня Шеф орет на поваров')">🔥 Шеф орет</div>
+          <div class="glass-chip" onclick="setQuery('kukhnya', 'сериал Кухня Сеня и Федя приколы')">🤣 Сеня и Федя</div>
+          <div class="glass-chip" onclick="setQuery('kukhnya', 'сериал Кухня Макс косячит')">🤦‍♂️ Макс накосячил</div>
+          <div class="glass-chip" onclick="setQuery('kukhnya', 'сериал Кухня Нагиев в ресторане')">🍷 Нагиев</div>
+        </div>
+      </div>
+
+      <!-- PARAMS: INTERNY -->
+      <div class="input-box" id="box-interny" style="display: none;">
+        <label>🏥 Сцена или персонаж сериала «Интерны»</label>
+        <input type="text" id="interny-query" class="glass-input" placeholder="Например: Быков разносит, Лобанов тупит...">
+        <div class="chips-group" style="margin-top: 8px;">
+          <div class="glass-chip" onclick="setQuery('interny', 'сериал Интерны Быков лучшие разносы')">🔥 Разнос Быкова</div>
+          <div class="glass-chip" onclick="setQuery('interny', 'сериал Интерны Лобанов косяки')">🤦‍♂️ Лобанов тупит</div>
+          <div class="glass-chip" onclick="setQuery('interny', 'сериал Интерны Купитман коньяк')">🥃 Купитман и коньяк</div>
+          <div class="glass-chip" onclick="setQuery('interny', 'сериал Интерны Романенко подстава')">😈 Романенко</div>
+        </div>
+      </div>
+
+      <!-- PARAMS: POLICE -->
+      <div class="input-box" id="box-police" style="display: none;">
+        <label>👮 Сцена «Полицейский с Рублёвки»</label>
+        <input type="text" id="police-query" class="glass-input" placeholder="Например: Яковлев Демон, Измайлов троллит...">
+        <div class="chips-group" style="margin-top: 8px;">
+          <div class="glass-chip" onclick="setQuery('police', 'Полицейский с Рублёвки Яковлев Демон лучшие моменты')">👹 Яковлев: ДЕМОН!</div>
+          <div class="glass-chip" onclick="setQuery('police', 'Полицейский с Рублёвки Измайлов троллит Володю')">🤣 Измайлов троллит</div>
+          <div class="glass-chip" onclick="setQuery('police', 'Полицейский с Рублёвки пранк над Яковлевым')">🚗 Пранк над Володей</div>
+          <div class="glass-chip" onclick="setQuery('police', 'Полицейский с Рублёвки Мухич расследует')">🕵️ Мухич</div>
+        </div>
+      </div>
+
       <!-- PARAMS: UPVOTE -->
-      <div class="input-box" id="box-upvote">
+      <div class="input-box" id="box-upvote" style="display: none;">
         <label>🔎 Поисковый запрос YouTube или ссылка</label>
         <input type="text" id="upvote-query" class="glass-input" placeholder="Например: апвоут страшные истории...">
         <div class="chips-group">
@@ -1111,18 +1311,6 @@
         </div>
       </div>
 
-      <!-- PARAMS: SASHATANYA -->
-      <div class="input-box" id="box-sashatanya" style="display: none;">
-        <label>🍿 Поиск серии, ссылка или ник TikTok (@serialvisionss)</label>
-        <input type="text" id="sashatanya-query" class="glass-input" placeholder="Например: @serialvisionss, ревность, работа...">
-        <div class="chips-group" style="margin-top: 8px;">
-          <div class="glass-chip" onclick="setQuery('sashatanya', '@serialvisionss')">⚡ @serialvisionss (HD Серии)</div>
-          <div class="glass-chip" onclick="setQuery('sashatanya', 'сериал сашатаня лучшие моменты')">🔥 Топ скетчи</div>
-          <div class="glass-chip" onclick="setQuery('sashatanya', 'саша таня диета')">🥗 Диета</div>
-          <div class="glass-chip" onclick="setQuery('sashatanya', 'саша таня ревность')">💔 Ревность</div>
-        </div>
-      </div>
-
       <!-- PARAMS: CINEMA -->
       <div class="input-box" id="box-cinema" style="display: none;">
         <label>🎬 Название фильма, сериала или сцены</label>
@@ -1139,13 +1327,27 @@
     <!-- AUTOPILOT & CONTENT PLAN CARD -->
     <div class="glass-card" style="border-color: rgba(168, 85, 247, 0.4); background: linear-gradient(135deg, rgba(23, 14, 40, 0.72) 0%, rgba(59, 20, 95, 0.35) 100%);">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-        <div class="section-title" style="margin-bottom: 0;">📅 Автопилот: Контент-план на неделю</div>
+        <div class="section-title" style="margin-bottom: 0;">📅 Автопилот: План выкладки на неделю</div>
         <span style="font-size: 11px; background: rgba(168, 85, 247, 0.3); color: #c084fc; padding: 2px 8px; border-radius: 10px; font-weight: 700; border: 1px solid rgba(192, 132, 252, 0.4);">HOT</span>
       </div>
-      <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 12px;">
-        Монтаж партии роликов без повторов с прайм-тайм расписанием выкладки и общим ZIP-архивом:
+      <p style="font-size: 12px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
+        Прайм-тайм расписание выкладки. Отмечайте выложенные ролики для трекинга недельной цели:
       </p>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+
+      <!-- 7-DAY WEEKLY CALENDAR TILES -->
+      <div class="calendar-days-row" id="calendar-days-container">
+        <!-- Rendered by renderCalendarDays() -->
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">
+        <span>Цель недели: <b id="calendar-progress-text" style="color: #4ade80;">0 из 7 выложено</b></span>
+        <span style="color: #c084fc;">Прайм-тайм: 12:30 и 18:30</span>
+      </div>
+      <div class="calendar-progress-wrap">
+        <div class="calendar-progress-fill" id="calendar-progress-bar" style="width: 0%;"></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;">
         <button class="secondary-btn" style="padding: 10px 4px; font-size: 12px; border-color: rgba(192, 132, 252, 0.5);" onclick="selectContentPlan(7)">
           📦 7 видео (1 в день)
         </button>
@@ -1252,6 +1454,16 @@
         <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;" id="media-tab-video-meta">Стильные субтитры • Zoom 175% • Баннер NATRIA_VPN</div>
       </div>
 
+      <!-- НАВИГАЦИЯ МЕЖДУ РОЛИКАМИ В ПЛЕЕРЕ -->
+      <div style="display: flex; gap: 8px; justify-content: center; margin: 6px 0 12px 0;">
+        <button class="secondary-btn" style="flex: 1; padding: 9px 10px; font-size: 12px;" onclick="navigateLibrary(-1)">
+          <span>⏮️ Пред. ролик</span>
+        </button>
+        <button class="secondary-btn" style="flex: 1; padding: 9px 10px; font-size: 12px;" onclick="navigateLibrary(1)">
+          <span>След. ролик ⏭️</span>
+        </button>
+      </div>
+
       <!-- ВИРУСНОЕ ОПИСАНИЕ ДЛЯ TIKTOK -->
       <div style="background: rgba(10, 6, 20, 0.7); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 14px; padding: 12px; margin: 12px 0; text-align: left;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
@@ -1281,13 +1493,35 @@
 
     <!-- КАРТОЧКА БИБЛИОТЕКИ ВСЕХ РОЛИКОВ ПОЛЬЗОВАТЕЛЯ -->
     <div class="glass-card">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-        <div class="section-title" style="margin-bottom: 0;">📁 Библиотека роликов (<span id="library-count" style="color: #c084fc;">0</span>)</div>
-        <span style="font-size: 11px; color: #4ade80;">● Облако доступно</span>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <div class="section-title" style="margin-bottom: 0;">📁 Медиатека роликов (<span id="library-count" style="color: #c084fc;">0</span>)</div>
+        <span style="font-size: 11px; color: #4ade80;" id="library-cloud-status">● Облако активно</span>
       </div>
-      <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 14px;">
-        Все готовые видео вашего аккаунта. Нажмите ▶️ чтобы посмотреть, 💾 чтобы скачать или 🗑️ чтобы удалить ненужные ролики.
+      <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4; margin-bottom: 10px;">
+        Все готовые видео вашего аккаунта. Нажмите ▶️ чтобы посмотреть, 💾 чтобы скачать или 🗑️ чтобы удалить.
       </p>
+
+      <!-- ПОИСКОВАЯ СТРОКА -->
+      <div class="lib-search-box">
+        <input type="text" id="lib-search-input" class="glass-input" placeholder="🔍 Поиск ролика по названию..." oninput="filterLibraryList()" style="padding: 10px 14px; font-size: 12.5px; margin-bottom: 8px;">
+      </div>
+
+      <!-- КАТЕГОРИИ РОЛИКОВ -->
+      <div class="lib-category-chips" id="lib-category-chips">
+        <div class="glass-chip active" onclick="setLibraryCategory('all')">🌟 Все</div>
+        <div class="glass-chip" onclick="setLibraryCategory('sashatanya')">🍿 СашаТаня</div>
+        <div class="glass-chip" onclick="setLibraryCategory('kukhnya')">👨‍🍳 Кухня</div>
+        <div class="glass-chip" onclick="setLibraryCategory('interny')">🏥 Интерны</div>
+        <div class="glass-chip" onclick="setLibraryCategory('police')">👮 Рублёвка</div>
+        <div class="glass-chip" onclick="setLibraryCategory('upvote')">📺 Апвоут</div>
+        <div class="glass-chip" onclick="setLibraryCategory('reddit')">🧼 Reddit</div>
+        <div class="glass-chip" onclick="setLibraryCategory('cinema')">🎬 Кино</div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin: 6px 0 10px 0;">
+        <span>Показано: <b id="library-filtered-count" style="color: #c084fc;">0</b> видео</span>
+        <span style="color: #4ade80;">● 1080x1920 HD</span>
+      </div>
 
       <div id="library-video-list">
         <div style="text-align: center; padding: 25px; color: var(--text-muted); font-size: 13px;">
@@ -1535,9 +1769,10 @@
     const GH_REPO = "fd44/tiktok-studio-app";
 
     let state = {
-      mode: 'upvote',
+      mode: 'sashatanya',
       count: 1,
       subtitleStyle: 'classic_white',
+      durationTier: 'standard',
       background: 'нарезка мыла',
       upvoteBackground: 'нарезка мыла'
     };
@@ -1575,7 +1810,7 @@
         c.classList.toggle('active', c.getAttribute('data-mode') === m);
       });
 
-      ['upvote', 'reddit', 'sashatanya', 'cinema'].forEach(k => {
+      ['sashatanya', 'kukhnya', 'interny', 'police', 'upvote', 'reddit', 'cinema'].forEach(k => {
         const p = document.getElementById('box-' + k);
         if (p) p.style.display = (k === m) ? 'block' : 'none';
       });
@@ -1584,9 +1819,20 @@
       updateStudioButton();
     }
 
+    function selectDuration(tier) {
+      state.durationTier = tier;
+      document.querySelectorAll('#duration-selector .duration-chip').forEach(c => {
+        c.classList.remove('active');
+      });
+      if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('active');
+      }
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    }
+
     function setQuery(mode, text) {
-      if (mode === 'upvote') document.getElementById('upvote-query').value = text;
-      if (mode === 'cinema') document.getElementById('cinema-query').value = text;
+      const el = document.getElementById(mode + '-query');
+      if (el) el.value = text;
       if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
     }
 
@@ -1720,19 +1966,26 @@
         mode: state.mode,
         count: state.count,
         subtitle_style: state.subtitleStyle,
+        duration_tier: state.durationTier || 'standard',
         chat_id: myId
       };
 
       if (origin === 'studio') {
-        if (state.mode === 'upvote') {
+        if (state.mode === 'sashatanya') {
+          payload.query = (document.getElementById('sashatanya-query').value || '').trim();
+        } else if (state.mode === 'kukhnya') {
+          payload.query = (document.getElementById('kukhnya-query').value || 'сериал Кухня смешные моменты').trim();
+        } else if (state.mode === 'interny') {
+          payload.query = (document.getElementById('interny-query').value || 'сериал Интерны Быков лучшие моменты').trim();
+        } else if (state.mode === 'police') {
+          payload.query = (document.getElementById('police-query').value || 'Полицейский с Рублёвки Яковлев Демон').trim();
+        } else if (state.mode === 'upvote') {
           payload.query = (document.getElementById('upvote-query').value || 'истории с реддита апвоут').trim();
           payload.background = state.upvoteBackground || 'нарезка мыла';
         } else if (state.mode === 'reddit') {
           payload.topic = (document.getElementById('reddit-topic').value || '').trim();
           payload.background = (state.background === 'custom') ?
             (document.getElementById('reddit-custom-bg').value || 'нарезка мыла').trim() : state.background;
-        } else if (state.mode === 'sashatanya') {
-          payload.query = (document.getElementById('sashatanya-query').value || '').trim();
         } else if (state.mode === 'cinema') {
           payload.query = (document.getElementById('cinema-query').value || 'популярные фильмы').trim();
         }
@@ -2037,7 +2290,85 @@
       }
     }
 
+    /* ================= 7-DAY CONTENT PLAN CALENDAR ================= */
+    const WEEKDAYS = [
+      { key: 'mon', name: 'Пн', time: '12:30' },
+      { key: 'tue', name: 'Вт', time: '18:30' },
+      { key: 'wed', name: 'Ср', time: '12:30' },
+      { key: 'thu', name: 'Чт', time: '18:30' },
+      { key: 'fri', name: 'Пт', time: '18:30' },
+      { key: 'sat', name: 'Сб', time: '12:30' },
+      { key: 'sun', name: 'Вс', time: '18:30' }
+    ];
+
+    function renderCalendarDays() {
+      const container = document.getElementById('calendar-days-container');
+      if (!container) return;
+      
+      const todayIndex = (new Date().getDay() + 6) % 7;
+      let checkedCount = 0;
+      let html = '';
+
+      WEEKDAYS.forEach((day, index) => {
+        const isChecked = localStorage.getItem(`cp_day_${day.key}`) === '1';
+        if (isChecked) checkedCount++;
+        const isToday = index === todayIndex;
+        
+        html += `
+          <div class="calendar-day-tile ${isChecked ? 'checked' : ''} ${isToday ? 'today' : ''}" onclick="toggleCalendarDay('${day.key}')" title="${isChecked ? 'Опубликовано' : 'Нажмите, чтобы отметить выкладку'}">
+            <div class="day-name">${day.name}</div>
+            <div class="day-time">${day.time}</div>
+            <div class="day-status-icon">${isChecked ? '✅' : (isToday ? '🎯' : '⚪')}</div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+
+      const progressText = document.getElementById('calendar-progress-text');
+      if (progressText) progressText.innerText = `${checkedCount} из 7 выложено`;
+      const progressBar = document.getElementById('calendar-progress-bar');
+      if (progressBar) progressBar.style.width = `${Math.round((checkedCount / 7) * 100)}%`;
+    }
+
+    function toggleCalendarDay(key) {
+      const cur = localStorage.getItem(`cp_day_${key}`) === '1';
+      localStorage.setItem(`cp_day_${key}`, cur ? '0' : '1');
+      if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+      renderCalendarDays();
+      showToast(!cur ? '✅ Отмечено: ролик выложен в TikTok!' : '⚪ Отметка снята');
+    }
+
+    /* ================= LIBRARY LOGIC ================= */
     let userLibraryVideos = [];
+    let currentLibCategory = 'all';
+    let currentLibSearch = '';
+
+    function setLibraryCategory(cat) {
+      currentLibCategory = cat;
+      document.querySelectorAll('#lib-category-chips .glass-chip').forEach(c => {
+        c.classList.remove('active');
+      });
+      if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.classList.add('active');
+      }
+      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      renderLibraryList();
+    }
+
+    function filterLibraryList() {
+      const input = document.getElementById('lib-search-input');
+      currentLibSearch = input ? input.value.toLowerCase().trim() : '';
+      renderLibraryList();
+    }
+
+    function navigateLibrary(direction) {
+      if (!userLibraryVideos || userLibraryVideos.length === 0) return;
+      const curName = latestVideoData?.name;
+      let curIndex = userLibraryVideos.findIndex(x => (x.video_name === curName || x.id === curName));
+      if (curIndex === -1) curIndex = 0;
+      let nextIndex = (curIndex + direction + userLibraryVideos.length) % userLibraryVideos.length;
+      selectLibraryVideo(userLibraryVideos[nextIndex].video_name);
+    }
 
     function loadMediaTabLatest(force) {
       const myId = String(tg?.initDataUnsafe?.user?.id || 1713725699);
@@ -2073,11 +2404,13 @@
     function renderLibraryList() {
       const listContainer = document.getElementById('library-video-list');
       const countElem = document.getElementById('library-count');
+      const filteredCountElem = document.getElementById('library-filtered-count');
       if (countElem) countElem.innerText = userLibraryVideos.length;
 
       if (!listContainer) return;
 
       if (!userLibraryVideos || userLibraryVideos.length === 0) {
+        if (filteredCountElem) filteredCountElem.innerText = '0';
         listContainer.innerHTML = `
           <div class="library-empty-state">
             <div style="font-size: 38px; margin-bottom: 8px;">🎬</div>
@@ -2095,13 +2428,40 @@
 
       const modeIcons = {
         'sashatanya': '🍿',
+        'kukhnya': '👨‍🍳',
+        'interny': '🏥',
+        'police': '👮',
         'upvote': '📺',
         'reddit': '🧼',
         'cinema': '🎬'
       };
 
+      // Фильтрация по выбранной категории и поисковому запросу
+      const filtered = userLibraryVideos.filter(v => {
+        const vMode = v.mode || 'sashatanya';
+        const matchCat = (currentLibCategory === 'all') || (vMode === currentLibCategory);
+        const titleStr = (v.title || v.video_name || '').toLowerCase();
+        const matchSearch = (!currentLibSearch) || titleStr.includes(currentLibSearch);
+        return matchCat && matchSearch;
+      });
+
+      if (filteredCountElem) filteredCountElem.innerText = filtered.length;
+
+      if (filtered.length === 0) {
+        listContainer.innerHTML = `
+          <div class="library-empty-state">
+            <div style="font-size: 32px; margin-bottom: 6px;">🔍</div>
+            <div style="font-weight: 700; color: #ffffff; font-size: 13.5px;">Ничего не найдено</div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+              Попробуйте сменить фильтр или поисковый запрос
+            </div>
+          </div>
+        `;
+        return;
+      }
+
       let html = '';
-      userLibraryVideos.forEach((v, index) => {
+      filtered.forEach((v, index) => {
         const vName = v.video_name || v.id || `video_${index}.mp4`;
         const vTitle = v.title || vName;
         const icon = modeIcons[v.mode] || '🎬';
@@ -2224,7 +2584,8 @@
         title: data.title || data.video_name,
         downloadUrl: data.download_url,
         duration: data.duration || 85,
-        size: data.size_mb || 16.5
+        size: data.size_mb || 16.5,
+        mode: data.mode || 'sashatanya'
       };
       const titleElem = document.getElementById('media-tab-video-name');
       const cleanName = data.title || (latestVideoData.name || 'Вирусный скетч').replace('.mp4', '').replace(/result_[a-f0-9]+/, 'Новый ролик');
@@ -2234,7 +2595,13 @@
       
       const copyElem = document.getElementById('media-copy-text');
       if (copyElem) {
-        copyElem.innerText = `🎬 ${cleanName} 🔥\n\n💬 Как бы вы поступили в такой ситуации? Пишите в комменты! 👇\n\n#сашатаня #юмор #кино #shorts #fyp #врек #вирусное`;
+        const hashTags = data.mode === 'kukhnya' ? '#кухня #шеф #сериалы #юмор #стс #fyp #врек #комедия'
+          : data.mode === 'interny' ? '#интерны #быков #лобанов #юмор #тнт #fyp #врек #комедия'
+          : data.mode === 'police' ? '#полицейскийсрублевки #яковлев #демон #тнт #fyp #врек #юмор'
+          : data.mode === 'upvote' ? '#апвоут #реддит #истории #upvote #асмр #fyp #врек'
+          : '#сашатаня #юмор #кино #shorts #fyp #врек #вирусное';
+
+        copyElem.innerText = `🎬 ${cleanName} 🔥\n\n💬 Как бы вы поступили в такой ситуации? Пишите в комменты! 👇\n\n${hashTags}`;
       }
       updateMediaTabPlayer();
     }
@@ -2243,15 +2610,28 @@
       const copyElem = document.getElementById('media-copy-text');
       if (!copyElem) return;
       const text = copyElem.innerText;
+      const btn = document.getElementById('copy-description-btn');
+      
+      const onSuccess = () => {
+        if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        if (btn) {
+          const origText = btn.innerHTML;
+          btn.innerHTML = '<span>✅ Скопировано в буфер обмена!</span>';
+          btn.style.filter = 'brightness(1.2)';
+          setTimeout(() => {
+            btn.innerHTML = origText;
+            btn.style.filter = '';
+          }, 2500);
+        }
+        showToast('✅ Описание и хэштеги скопированы!');
+      };
+
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-          if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-          showToast('✅ Описание и хэштеги скопированы!');
-        }).catch(() => {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
           showToast('Скопируйте текст вручную');
         });
       } else {
-        showToast('✅ Скопируйте текст из поля');
+        onSuccess();
       }
     }
 
@@ -2288,6 +2668,7 @@
 
     // Initialize
     updateStudioButton();
+    renderCalendarDays();
     loadMediaTabLatest();
   </script>
 </body>

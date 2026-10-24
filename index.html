@@ -2,6 +2,9 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>TikTok Autopilot Studio</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -536,20 +539,22 @@
     /* FLOATING BOTTOM NAV DOCK (PHOTO 2 STYLE) */
     .dock-container {
       position: fixed;
-      bottom: 14px;
+      bottom: calc(14px + env(safe-area-inset-bottom, 0px));
       left: 14px;
       right: 14px;
-      background: rgba(16, 9, 30, 0.88);
+      background: rgba(16, 9, 30, 0.92);
       backdrop-filter: blur(30px) saturate(200%);
       -webkit-backdrop-filter: blur(30px) saturate(200%);
-      border: 1px solid rgba(168, 85, 247, 0.35);
+      border: 1.5px solid rgba(168, 85, 247, 0.45);
       border-radius: 28px;
       padding: 8px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(168, 85, 247, 0.25), var(--glass-highlight);
-      z-index: 1000;
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.85), 0 0 25px rgba(168, 85, 247, 0.35), var(--glass-highlight);
+      z-index: 10000;
+      pointer-events: auto;
+      touch-action: manipulation;
     }
 
     .dock-item {
@@ -565,6 +570,11 @@
       transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
       position: relative;
       flex: 1;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      pointer-events: auto;
     }
 
     .dock-item .nav-icon {
@@ -1790,28 +1800,28 @@
   </div>
 
   <!-- ================= FLOATING LIQUID GLASS DOCK ================= -->
-  <div class="dock-container">
-    <div class="dock-item active" onclick="switchTab('studio')">
+  <div class="dock-container" id="main-dock-nav">
+    <div class="dock-item active" role="button" tabindex="0" onclick="switchTab('studio')">
       <div class="nav-icon">🎬</div>
       <div class="nav-label">Студия</div>
     </div>
 
-    <div class="dock-item" onclick="switchTab('ai')">
+    <div class="dock-item" role="button" tabindex="0" onclick="switchTab('ai')">
       <div class="nav-icon">🤖</div>
       <div class="nav-label">ИИ Помощник</div>
     </div>
 
-    <div class="dock-item" onclick="switchTab('media')">
+    <div class="dock-item" role="button" tabindex="0" onclick="switchTab('media')">
       <div class="nav-icon">📁</div>
       <div class="nav-label">Библиотека</div>
     </div>
 
-    <div class="dock-item" onclick="switchTab('status')">
+    <div class="dock-item" role="button" tabindex="0" onclick="switchTab('status')">
       <div class="nav-icon">📊</div>
       <div class="nav-label">Статус</div>
     </div>
 
-    <div class="dock-item" onclick="switchTab('system')">
+    <div class="dock-item" role="button" tabindex="0" onclick="switchTab('system')">
       <div class="nav-icon">⚙️</div>
       <div class="nav-label">Система</div>
     </div>
@@ -1975,7 +1985,10 @@
         if (dockItem) dockItem.classList.toggle('active', t === tabId);
       });
 
-      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      try {
+        if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      } catch (e) {}
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       if (tabId === 'media') {
@@ -1994,7 +2007,9 @@
         if (p) p.style.display = (k === m) ? 'block' : 'none';
       });
 
-      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      try {
+        if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      } catch (e) {}
       updateStudioButton();
     }
 
@@ -2006,7 +2021,9 @@
       if (window.event && window.event.currentTarget) {
         window.event.currentTarget.classList.add('active');
       }
-      if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      try {
+        if (tg?.HapticFeedback) tg.HapticFeedback.selectionChanged();
+      } catch (e) {}
     }
 
     function setQuery(mode, text) {

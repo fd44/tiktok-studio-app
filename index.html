@@ -1283,9 +1283,304 @@
       color: var(--text-muted);
       margin-top: 2px;
     }
+  
+    /* ==================== COSMIC SPLASH & BUBBLE-BUBBLE STYLING SYSTEM ==================== */
+    .clipmaker-splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999999;
+      background: radial-gradient(circle at 50% 40%, #170a32 0%, #070312 60%, #020108 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      touch-action: none;
+      cursor: pointer;
+      transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease, filter 0.6s ease;
+    }
+    .clipmaker-splash.splash-dismissed {
+      transform: translateY(-118%) scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+      filter: blur(8px);
+    }
+    .stars-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .splash-cosmic-glow {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(192, 132, 252, 0.35) 0%, rgba(129, 140, 248, 0.18) 45%, transparent 70%);
+      filter: blur(60px);
+      pointer-events: none;
+      animation: cosmicPulse 5s ease-in-out infinite alternate;
+    }
+    .splash-nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(75px);
+      pointer-events: none;
+      opacity: 0.45;
+    }
+    .nebula-1 {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      left: -50px;
+      background: #a855f7;
+      animation: floatNebula 12s ease-in-out infinite alternate;
+    }
+    .nebula-2 {
+      width: 320px;
+      height: 320px;
+      bottom: 12%;
+      right: -60px;
+      background: #6366f1;
+      animation: floatNebula 15s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes cosmicPulse {
+      0% { transform: scale(0.85); opacity: 0.6; }
+      100% { transform: scale(1.15); opacity: 0.95; }
+    }
+    @keyframes floatNebula {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(40px, 30px); }
+    }
+    .splash-center-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      max-width: 380px;
+      width: 90%;
+    }
+    .clipmaker-bubble-card {
+      position: relative;
+      width: 100%;
+      padding: 38px 26px 32px;
+      border-radius: 36px;
+      background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.24) 0%, rgba(32, 18, 62, 0.7) 60%, rgba(13, 7, 28, 0.9) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.32);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 
+                  0 0 45px rgba(192, 132, 252, 0.4),
+                  inset 0 3px 6px rgba(255, 255, 255, 0.45), 
+                  inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .clipmaker-bubble-card:hover {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 32px 75px rgba(0, 0, 0, 0.75), 
+                  0 0 55px rgba(192, 132, 252, 0.6),
+                  inset 0 3px 6px rgba(255, 255, 255, 0.6);
+    }
+    .clipmaker-bubble-card:active {
+      transform: scale(0.94);
+    }
+    .clipmaker-logo-orb {
+      width: 84px;
+      height: 84px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #c084fc, #9333ea 50%, #4f46e5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 30px rgba(168, 85, 247, 0.6),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.55),
+                  inset 0 -2px 4px rgba(0, 0, 0, 0.35);
+      margin-bottom: 18px;
+      font-size: 40px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      animation: bubblePulse 3s ease-in-out infinite;
+    }
+    @keyframes bubblePulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 12px 30px rgba(168, 85, 247, 0.5); }
+      50% { transform: scale(1.06); box-shadow: 0 18px 45px rgba(192, 132, 252, 0.85); }
+    }
+    .clipmaker-glamour-title {
+      font-size: 38px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin: 0 0 8px;
+      background: linear-gradient(135deg, #ffffff 0%, #e9d5ff 40%, #c084fc 80%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 4px 12px rgba(192, 132, 252, 0.45));
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Montserrat", sans-serif;
+    }
+    .clipmaker-badge-bubble {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #f3e8ff;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.25);
+      margin-bottom: 12px;
+    }
+    .bubble-dot-live {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 10px #34d399;
+      animation: liveBlink 1.8s infinite;
+    }
+    @keyframes liveBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+    .clipmaker-desc {
+      font-size: 13.5px;
+      color: rgba(233, 213, 255, 0.85);
+      margin: 0 0 24px;
+      font-weight: 500;
+    }
+    .swipe-up-action-bubble {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 22px;
+      border-radius: 9999px;
+      background: linear-gradient(135deg, #a855f7 0%, #7c3aed 60%, #4f46e5 100%);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 10px 28px rgba(124, 58, 237, 0.55),
+                  inset 0 2px 4px rgba(255, 255, 255, 0.5),
+                  inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .swipe-arrow-animated {
+      display: flex;
+      align-items: center;
+      animation: swipeArrowBounce 1.6s ease-in-out infinite;
+    }
+    @keyframes swipeArrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* ==================== BUBBLE-BUBBLE GLOBAL SYSTEM ==================== */
+    button, .btn, .btn-primary, .btn-secondary, .action-btn, 
+    .control-pill, .chip, .badge, .status-badge, .tab-bar-item, 
+    .preset-chip, .action-card-btn, .mini-btn, .counter-btn, .pill {
+      border-radius: 9999px !important;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.28), 
+                  inset 0 1.5px 3px rgba(255, 255, 255, 0.38), 
+                  inset 0 -2px 3px rgba(0, 0, 0, 0.25) !important;
+    }
+
+    .glass-card, .card, .mode-card, .control-card, .stat-card {
+      border-radius: 28px !important;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.42), 
+                  inset 0 1.5px 3px rgba(255, 255, 255, 0.2), 
+                  inset 0 -1.5px 3px rgba(0, 0, 0, 0.22) !important;
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+
+    button:hover, .btn:hover, .btn-primary:hover, .btn-secondary:hover, 
+    .action-btn:hover, .mode-card:hover, .glass-card:hover, .tab-bar-item:hover, .preset-chip:hover {
+      transform: translateY(-3.5px) scale(1.025) !important;
+      box-shadow: 0 12px 32px rgba(168, 85, 247, 0.48), 
+                  inset 0 2px 4px rgba(255, 255, 255, 0.55), 
+                  inset 0 -2px 4px rgba(0, 0, 0, 0.25) !important;
+      filter: brightness(1.08);
+    }
+
+    button:active, .btn:active, .btn-primary:active, .btn-secondary:active, 
+    .action-btn:active, .mode-card:active, .preset-chip:active, .tab-bar-item:active {
+      transform: scale(0.92) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 
+                  inset 0 2px 5px rgba(0, 0, 0, 0.4) !important;
+      transition: transform 0.12s ease !important;
+    }
+
+    @keyframes bubbleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+    .pro-chip, .status-badge {
+      animation: bubbleFloat 4s ease-in-out infinite;
+    }
+
+    /* Scroll Fade-In System */
+    .scroll-fade-ready {
+      opacity: 0;
+      transform: translateY(22px) scale(0.975);
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      will-change: opacity, transform;
+    }
+    .scroll-fade-ready.scroll-in-view {
+      opacity: 1 !important;
+      transform: translateY(0) scale(1) !important;
+    }
+
   </style>
 </head>
 <body>
+
+  <!-- ================= COSMIC CLIPMAKER INTRO SPLASH ================= -->
+  <div id="clipmakerSplash" class="clipmaker-splash" onclick="dismissSplash()">
+    <canvas id="starsCanvas" class="stars-canvas"></canvas>
+    <div class="splash-cosmic-glow"></div>
+    <div class="splash-nebula nebula-1"></div>
+    <div class="splash-nebula nebula-2"></div>
+
+    <div class="splash-center-content">
+      <div class="clipmaker-bubble-card" id="splashEnterBtn" onclick="event.stopPropagation(); dismissSplash();">
+        <div class="clipmaker-logo-orb">
+          <span class="clipmaker-emoji">🎬</span>
+        </div>
+        <h1 class="clipmaker-glamour-title">ClipMaker</h1>
+        <div class="clipmaker-badge-bubble">
+          <span class="bubble-dot-live"></span>
+          <span>AI TIKTOK STUDIO</span>
+        </div>
+        <p class="clipmaker-desc">Автопилот вирусных Shorts & Reels</p>
+
+        <div class="swipe-up-action-bubble">
+          <div class="swipe-arrow-animated">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 15l-6-6-6 6"/>
+            </svg>
+          </div>
+          <span>Нажмите или смахните вверх</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- LIVING AMBIENT MESH (FLOATING LIGHT ORBS) -->
   <div class="ambient-mesh">
@@ -2978,5 +3273,116 @@
     renderCalendarDays();
     loadMediaTabLatest();
   </script>
+
+<script>
+// ================= COSMIC STARS & SPLASH LOGIC =================
+(function initStars() {
+  const canvas = document.getElementById('starsCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let stars = [];
+  const STAR_COUNT = 150;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  for (let i = 0; i < STAR_COUNT; i++) {
+    stars.push({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: Math.random() * 2.2 + 0.6,
+      alpha: Math.random(),
+      speed: Math.random() * 0.02 + 0.006,
+      dir: Math.random() > 0.5 ? 1 : -1,
+      color: Math.random() > 0.3 ? '#ffffff' : (Math.random() > 0.5 ? '#c084fc' : '#818cf8')
+    });
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, width, height);
+    stars.forEach(s => {
+      s.alpha += s.speed * s.dir;
+      if (s.alpha > 1) { s.alpha = 1; s.dir = -1; }
+      if (s.alpha < 0.15) { s.alpha = 0.15; s.dir = 1; }
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fillStyle = s.color;
+      ctx.globalAlpha = s.alpha;
+      ctx.shadowBlur = s.size > 1.8 ? 8 : 2;
+      ctx.shadowColor = s.color;
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    requestAnimationFrame(render);
+  }
+  render();
+})();
+
+function dismissSplash() {
+  const splash = document.getElementById('clipmakerSplash');
+  if (!splash) return;
+  splash.classList.add('splash-dismissed');
+  try {
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+      window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+    }
+  } catch(e) {}
+}
+
+(function initSwipeUp() {
+  let startY = 0;
+  const splash = document.getElementById('clipmakerSplash');
+  if (!splash) return;
+  splash.addEventListener('touchstart', e => {
+    startY = e.touches[0].clientY;
+  }, { passive: true });
+  splash.addEventListener('touchend', e => {
+    const endY = e.changedTouches[0].clientY;
+    if (startY - endY > 35) {
+      dismissSplash();
+    }
+  }, { passive: true });
+})();
+
+// ================= SCROLL FADE-IN SYSTEM =================
+(function initScrollFade() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('scroll-in-view');
+      }
+    });
+  }, {
+    threshold: 0.08,
+    rootMargin: '0px 0px -30px 0px'
+  });
+
+  function attachScrollAnim() {
+    const targets = document.querySelectorAll(
+      '.glass-card, .card, .mode-card, .section, .control-card, .stat-card, .preset-grid, .btn-primary'
+    );
+    targets.forEach(el => {
+      if (!el.classList.contains('scroll-anim-attached')) {
+        el.classList.add('scroll-anim-attached', 'scroll-fade-ready');
+        observer.observe(el);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachScrollAnim);
+  } else {
+    attachScrollAnim();
+  }
+  setInterval(attachScrollAnim, 2000);
+})();
+</script>
+
 </body>
 </html>
